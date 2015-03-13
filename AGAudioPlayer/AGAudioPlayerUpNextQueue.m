@@ -11,6 +11,7 @@
 @interface AGAudioPlayerUpNextQueue ()
 
 @property (nonatomic) NSMutableArray *items;
+@property (nonatomic) NSMutableArray *shuffledItems;
 
 @end
 
@@ -41,6 +42,9 @@
     
     [self.items addObject:item];
     
+	[self.shuffledItems insertObject:item
+							 atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+	
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
@@ -63,7 +67,10 @@
     
     [self.items insertObject:item
                      atIndex:0];
-    
+	
+	[self.shuffledItems insertObject:item
+							 atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+	
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
@@ -91,6 +98,18 @@
 - (void)moveItemAtIndex:(NSInteger)from toIndex:(NSInteger)to {
     [self.items exchangeObjectAtIndex:from
                     withObjectAtIndex:to];
+	
+	// 0 length and 1 length cause an infinite loop
+	// swap two items randomly
+	if(self.items.count > 1) {
+		u_int32_t shuffle_from = arc4random_uniform((u_int32_t)self.items.count);
+		u_int32_t shuffle_to = UINT32_MAX;
+		
+		while((shuffle_to = arc4random_uniform((u_int32_t)self.items.count)) == shuffle_from);
+		
+		[self.shuffledItems exchangeObjectAtIndex:shuffle_from
+								withObjectAtIndex:shuffle_to];
+	}
 
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueSwappedItems];
@@ -165,6 +184,30 @@
                            atIndex:idx
                        withNewItem:obj];
     }
+}
+
+- (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx {
+	return self.shuffledItems[idx];
+}
+
+- (AGAudioItem *)unshuffledItemAtIndex:(NSUInteger)idx {
+	return self.items[idx];
+}
+
+- (NSArray *)queue {
+	return self.items;
+}
+
+- (NSArray *)shuffledQueue {
+	return self.shuffledItems;
+}
+
+- (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
+	if (shuffleEnabled) {
+		return self.shuffledItems;
+	}
+	
+	return self.items;
 }
 
 @end

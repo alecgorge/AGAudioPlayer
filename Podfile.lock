@@ -1,0 +1,12 @@
+PODS:
+  - OrigamiEngine (1.0.14):
+    - OrigamiEngine/Core (= 1.0.14)
+  - OrigamiEngine/Core (1.0.14)
+
+DEPENDENCIES:
+  - OrigamiEngine (~> 1.0)
+
+SPEC CHECKSUMS:
+  OrigamiEngine: f7d7970d0258c9fd48b4c884466337ea549176a3
+
+COCOAPODS: 0.36.0.rc.1

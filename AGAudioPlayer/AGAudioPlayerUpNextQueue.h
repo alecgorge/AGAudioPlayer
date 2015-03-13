@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Alec Gorge. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <Foundation/NSEnumerator.h>
 
 #import "AGAudioItem.h"
 
@@ -57,6 +58,9 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 @property (nonatomic, readonly) NSInteger count;
 
+@property (nonatomic, readonly) NSArray *queue;
+@property (nonatomic, readonly) NSArray *shuffledQueue;
+
 - (void)appendItem:(AGAudioItem *)item;
 - (void)appendItems:(NSArray *)items;
 
@@ -76,5 +80,10 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx;
 - (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx;
+
+- (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx;
+- (AGAudioItem *)unshuffledItemAtIndex:(NSUInteger)idx;
+
+- (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
 
 @end

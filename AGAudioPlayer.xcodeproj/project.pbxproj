@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C0D7BB91A44B48B00607581 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC250C21A4479D1009F91C8 /* libbass.a */; };
-		7C0D7BBA1A44B48C00607581 /* libbassmix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC250C81A4479EA009F91C8 /* libbassmix.a */; };
-		7C0D7BBB1A44B48E00607581 /* libbassflac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC250C61A4479EA009F91C8 /* libbassflac.a */; };
+		599A68EDD9AA02AE944838DF /* libPods-AGAudioPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */; };
 		7C0D7BC81A44B68600607581 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C0D7BC41A44B68600607581 /* LaunchScreen.xib */; };
 		7C0D7BC91A44B68600607581 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C0D7BC61A44B68600607581 /* Main.storyboard */; };
 		7C0D7BCD1A44BE5400607581 /* README.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 7C0D7BCC1A44BE5400607581 /* README.markdown */; };
@@ -35,10 +33,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7C0D7BBC1A44B5F200607581 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		7C0D7BBE1A44B5FB00607581 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		7C0D7BC01A44B60100607581 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		7C0D7BC21A44B60700607581 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AGAudioPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AGAudioPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AGAudioPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		7C0D7BC51A44B68600607581 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7C0D7BC71A44B68600607581 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7C0D7BCC1A44BE5400607581 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
@@ -57,16 +54,10 @@
 		7CC250B31A447901009F91C8 /* AGAudioPlayerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGAudioPlayerTests.m; sourceTree = "<group>"; };
 		7CC250BE1A44792F009F91C8 /* AGAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioPlayer.h; sourceTree = "<group>"; };
 		7CC250BF1A44792F009F91C8 /* AGAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioPlayer.m; sourceTree = "<group>"; };
-		7CC250C21A4479D1009F91C8 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
-		7CC250C61A4479EA009F91C8 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassflac.a; sourceTree = "<group>"; };
-		7CC250C81A4479EA009F91C8 /* libbassmix.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassmix.a; sourceTree = "<group>"; };
-		7CC250CB1A447A1F009F91C8 /* bass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
 		7CC250CC1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioPlayerUpNextQueue.h; sourceTree = "<group>"; };
 		7CC250CD1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioPlayerUpNextQueue.m; sourceTree = "<group>"; };
 		7CC250CF1A447AB0009F91C8 /* AGAudioItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioItem.h; sourceTree = "<group>"; };
 		7CC250D01A447AB0009F91C8 /* AGAudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioItem.m; sourceTree = "<group>"; };
-		7CEEB2781A44B065007C0FBE /* bassmix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bassmix.h; sourceTree = "<group>"; };
-		7CEEB2791A44B079007C0FBE /* bassflac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bassflac.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,9 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C0D7BBA1A44B48C00607581 /* libbassmix.a in Frameworks */,
-				7C0D7BB91A44B48B00607581 /* libbass.a in Frameworks */,
-				7C0D7BBB1A44B48E00607581 /* libbassflac.a in Frameworks */,
+				599A68EDD9AA02AE944838DF /* libPods-AGAudioPlayer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		611DADBAC9E9F54CCE4C248F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */,
+				591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		7C0D7BCA1A44BE3F00607581 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,14 +109,12 @@
 		7CC2508B1A447901009F91C8 = {
 			isa = PBXGroup;
 			children = (
-				7C0D7BC21A44B60700607581 /* Accelerate.framework */,
-				7C0D7BC01A44B60100607581 /* CFNetwork.framework */,
-				7C0D7BBE1A44B5FB00607581 /* SystemConfiguration.framework */,
-				7C0D7BBC1A44B5F200607581 /* AudioToolbox.framework */,
 				7CC250BD1A447910009F91C8 /* Example */,
 				7CC250961A447901009F91C8 /* AGAudioPlayer */,
 				7CC250B01A447901009F91C8 /* AGAudioPlayerTests */,
 				7CC250951A447901009F91C8 /* Products */,
+				611DADBAC9E9F54CCE4C248F /* Pods */,
+				80D42F16B827D769063109BD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,7 +131,6 @@
 			isa = PBXGroup;
 			children = (
 				7C0D7BCA1A44BE3F00607581 /* Vendor */,
-				7CC250C11A447945009F91C8 /* bass */,
 				7CC250BE1A44792F009F91C8 /* AGAudioPlayer.h */,
 				7CC250BF1A44792F009F91C8 /* AGAudioPlayer.m */,
 				7CC250CC1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.h */,
@@ -187,41 +182,12 @@
 			path = Example;
 			sourceTree = "<group>";
 		};
-		7CC250C11A447945009F91C8 /* bass */ = {
+		80D42F16B827D769063109BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7CC250C41A4479D4009F91C8 /* plugins */,
-				7CC250CB1A447A1F009F91C8 /* bass.h */,
-				7CC250C21A4479D1009F91C8 /* libbass.a */,
+				08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */,
 			);
-			path = bass;
-			sourceTree = "<group>";
-		};
-		7CC250C41A4479D4009F91C8 /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-				7CC250C51A4479EA009F91C8 /* bassflac */,
-				7CC250C71A4479EA009F91C8 /* bassmix */,
-			);
-			path = plugins;
-			sourceTree = "<group>";
-		};
-		7CC250C51A4479EA009F91C8 /* bassflac */ = {
-			isa = PBXGroup;
-			children = (
-				7CEEB2791A44B079007C0FBE /* bassflac.h */,
-				7CC250C61A4479EA009F91C8 /* libbassflac.a */,
-			);
-			path = bassflac;
-			sourceTree = "<group>";
-		};
-		7CC250C71A4479EA009F91C8 /* bassmix */ = {
-			isa = PBXGroup;
-			children = (
-				7CEEB2781A44B065007C0FBE /* bassmix.h */,
-				7CC250C81A4479EA009F91C8 /* libbassmix.a */,
-			);
-			path = bassmix;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,9 +197,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7CC250B71A447901009F91C8 /* Build configuration list for PBXNativeTarget "AGAudioPlayer" */;
 			buildPhases = (
+				2C0BECF58A00B79CEEAACDF0 /* Check Pods Manifest.lock */,
 				7CC250901A447901009F91C8 /* Sources */,
 				7CC250911A447901009F91C8 /* Frameworks */,
 				7CC250921A447901009F91C8 /* Resources */,
+				CF89837172F2500852EFC1B8 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -318,6 +286,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2C0BECF58A00B79CEEAACDF0 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CF89837172F2500852EFC1B8 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7CC250901A447901009F91C8 /* Sources */ = {
@@ -453,6 +454,7 @@
 		};
 		7CC250B81A447901009F91C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Example/Supporting Files/Info.plist";
@@ -463,13 +465,15 @@
 					"$(PROJECT_DIR)/AGAudioPlayer/bass/plugins/bassmix",
 					"$(PROJECT_DIR)/AGAudioPlayer/bass/plugins/bassflac",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LIBTOOLFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		7CC250B91A447901009F91C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Example/Supporting Files/Info.plist";
@@ -480,7 +484,8 @@
 					"$(PROJECT_DIR)/AGAudioPlayer/bass/plugins/bassmix",
 					"$(PROJECT_DIR)/AGAudioPlayer/bass/plugins/bassflac",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LIBTOOLFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

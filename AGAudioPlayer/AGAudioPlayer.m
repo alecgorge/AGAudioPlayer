@@ -10,23 +10,39 @@
 
 #import "MTRandom.h"
 
-#import "bass.h"
-#import "bassflac.h"
-#import "bassmix.h"
 #import <AVFoundation/AVFoundation.h>
+#import <OrigamiEngine/ORGMEngine.h>
 
-@interface AGAudioPlayer () <AVAudioSessionDelegate> {
-    HSTREAM _mainChannel;
-}
+@interface AGAudioPlayerHistoryItem : NSObject
 
-@property (nonatomic) NSMutableArray *playbackHistory;
-@property (nonatomic)
+@property (nonatomic) AGAudioPlayerUpNextQueue *queue;
+@property (nonatomic) NSInteger index;
+
+- (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue
+					 andIndex:(NSInteger)index;
 
 @end
 
-void CALLBACK ChannelEndedCallback(HSYNC handle, DWORD channel, DWORD data, void *user) {
-    AGAudioPlayer *player = (__bridge AGAudioPlayer *)(user);
+@implementation AGAudioPlayerHistoryItem
+
+- (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue
+					 andIndex:(NSInteger)index {
+	if (self = [super init]) {
+		self.queue = queue;
+		self.index = index;
+	}
+	
+	return self;
 }
+
+@end
+
+@interface AGAudioPlayer () <AVAudioSessionDelegate>
+
+@property (nonatomic) ORGMEngine *oriagmi;
+@property (nonatomic) NSMutableArray *playbackHistory;
+
+@end
 
 @implementation AGAudioPlayer
 
@@ -44,17 +60,17 @@ void CALLBACK ChannelEndedCallback(HSYNC handle, DWORD channel, DWORD data, void
 }
 
 - (void)setup {
-    [self setupBASS];
+    [self setupOrigami];
 }
 
 - (void)dealloc {
-    [self teardownBASS];
+    [self teardownOrigami];
 }
 
 #pragma mark - Playback Control
 
 - (BOOL)isPlaying {
-    return BASS_ChannelIsActive(_mainChannel) == BASS_ACTIVE_PLAYING;
+    return self.oriagmi.currentState == ORGMEngineStatePlaying;
 }
 
 - (void)setShuffle:(BOOL)shuffle {
@@ -71,24 +87,154 @@ void CALLBACK ChannelEndedCallback(HSYNC handle, DWORD channel, DWORD data, void
 
 - (void)setVolume:(CGFloat)volume {
     _volume = volume;
-    BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, volume * 10000.0);
 }
 
 - (void)resume {
-    BASS_ChannelPlay(_mainChannel, NO);
+	[self.oriagmi resume];
 }
 
 - (void)pause {
-    BASS_ChannelPause(_mainChannel);
+	[self.oriagmi pause];
 }
 
 - (void)stop {
-    BASS_ChannelStop(_mainChannel);
+	[self.oriagmi stop];
+}
+
+- (void)forward {
+	self.currentIndex = self.nextIndex;
+}
+
+- (void)backward {
+	if(self.elapsed < 5.0f) {
+		self.currentIndex = self.previousIndex;
+	}
+	else {
+		[self seekTo:0];
+	}
+}
+
+- (void)seekTo:(NSTimeInterval)i {
+	[self.oriagmi seekToTime:i];
+}
+
+- (void)seekToPercent:(CGFloat)per {
+	[self seekTo:per * self.duration];
 }
 
 #pragma mark - Playback Order
 
-- (NSInteger)nextIndex
+- (void)setCurrentIndex:(NSInteger)currentIndex {
+	[self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.currentQueue
+																		 andIndex:self.currentIndex]];
+	_currentIndex = currentIndex;
+	
+	[self stop];
+	
+	AGAudioItem *item = self.currentItem;
+	[item loadMetadata:^(AGAudioItem *item) {
+		[self.oriagmi setNextUrl:<#(NSURL *)#> withDataFlush:<#(BOOL)#>]
+	}];
+}
+
+- (AGAudioPlayerUpNextQueue *)currentQueue {
+	
+}
+
+- (AGAudioPlayerUpNextQueue *)nextQueue {
+	// looping a single track
+	if (self.loopItem) {
+		return self.currentQueue;
+	}
+	
+	// find the "other" queue
+	AGAudioPlayerUpNextQueue *altQueue = nil;
+	if(self.currentQueue == self.explicitUpcomingQueue) {
+		altQueue = self.implicitUpcomingQueue;
+	}
+	else {
+		altQueue = self.explicitUpcomingQueue;
+	}
+	
+	// last song in the current queue
+	if (self.currentIndex == self.currentQueue.count) {
+		// there isn't anything in the next queue
+		if(altQueue.count == 0) {
+			// start the current queue from the beginning
+			if(self.loopQueue) {
+				return self.currentQueue;
+			}
+			// reached the end of all tracks, accross both queues
+			else {
+				return nil;
+			}
+		}
+		// play the first track in the next queue
+		else {
+			return altQueue;
+		}
+	}
+	// there are still songs in the current queue
+	else {
+		return self.currentQueue;
+	}
+}
+
+- (NSInteger)nextIndex {
+	// looping a single track
+	if (self.loopItem) {
+		return self.currentIndex;
+	}
+	
+	// last song in the current queue
+	if (self.currentIndex == self.currentQueue.count) {
+		// there isn't anything in the next queue
+		if(self.nextQueue.count == 0) {
+			// start the current queue from the beginning
+			if(self.loopQueue) {
+				return 0;
+			}
+			// reached the end of all tracks, accross both queues
+			else {
+				return NSNotFound;
+			}
+		}
+		// play the first track in the next queue
+		else {
+			return 0;
+		}
+	}
+	// there are still songs in the current queue
+	else {
+		return self.currentIndex + 1;
+	}
+}
+
+- (AGAudioItem *)nextItem {
+	return [self.nextQueue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
+}
+
+- (AGAudioPlayerHistoryItem *)lastHistoryEntry {
+	return self.playbackHistory.lastObject;
+}
+
+- (NSInteger)previousIndex {
+	AGAudioPlayerHistoryItem *l = self.lastHistoryEntry;
+	if (l == nil) {
+		return NSNotFound;
+	}
+	
+	return l.index;
+}
+
+- (AGAudioItem *)previousItem {
+	return self.lastHistoryEntry.queue[self.lastHistoryEntry.index];
+}
+
+- (void)incrementIndex {
+	_currentIndex = self.nextIndex;
+	_currentQueue = self.nextQueue;
+}
 
 #pragma mark - History management
 
@@ -100,26 +246,30 @@ void CALLBACK ChannelEndedCallback(HSYNC handle, DWORD channel, DWORD data, void
     [self.playbackHistory removeAllObjects];
 }
 
-#pragma mark - BASS management
+#pragma mark - Origami Engine management
 
-- (void)setupBASS {
-    extern void BASSFLACplugin;
-    BASS_PluginLoad(&BASSFLACplugin, 0);
-    
-    BASS_Init(-1, 44100, 0, NULL, NULL);
-    
-    [NSNotificationCenter.defaultCenter addObserver:self
-                                           selector:@selector(audioInteruptionOccured:)
-                                               name:AVAudioSessionInterruptionNotification
-                                             object:nil];
-    
-    _volume = BASS_GetConfig(BASS_CONFIG_GVOL_STREAM) / 10000.0f;
+- (void)setupOrigami {
 }
 
-- (void)teardownBASS {
+- (void)teardownOrigami {
     [NSNotificationCenter.defaultCenter removeObserver:self];
-    
-    BASS_Free();
+}
+
+- (void)enqueueNextItem {
+	AGAudioItem *item = self.nextItem;
+	[item audioURL:^(NSURL *url, NSArray *headers) {
+		NSString *abs_url = url.absoluteString;
+		
+		if (headers.count > 0) {
+			abs_url = [NSString stringWithFormat:@"%@\r\n%@", url, [headers componentsJoinedByString:@"\r\n"]];
+		}
+		
+		const char *c_url = [abs_url cStringUsingEncoding:NSUTF8StringEncoding];
+		DWORD flags = BASS_STREAM_STATUS | BASS_STREAM_DECODE;
+		_nextChannel = BASS_StreamCreateURL(c_url, 0, flags, StreamDownloadProgressCallback, (void *)CFBridgingRetain(item));
+		
+		BASS_Mixer_StreamAddChannel(_mixer, _nextChannel, BASS_STREAM_AUTOFREE | BASS_MIXER_NORAMPIN);
+	}];
 }
 
 #pragma mark - Interruption Handling

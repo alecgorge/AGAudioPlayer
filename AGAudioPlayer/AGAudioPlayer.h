@@ -38,6 +38,25 @@ explicitAudioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 
 @end
 
+typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
+	AGAudioPlayerTrackCompleted,
+	AGAudioPlayerTrackProgressUpdated,
+	AGAudioPlayerTrackBuffering,
+	AGAudioPlayerTrackPlayed,
+	AGAudioPlayerTrackScrubbed,
+	AGAudioPlayerQueueChanged,
+	AGAudioPlayerMetadataReceived,
+};
+
+@protocol AGAudioPlayerDelegate <NSObject>
+
+- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
+
+@end
+
+// delegate for redraw with reason
+
 @interface AGAudioPlayer : NSObject
 
 - (instancetype)initWithExplicitQueue:(AGAudioPlayerUpNextQueue *)ex
@@ -47,17 +66,30 @@ explicitAudioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 @property (nonatomic) AGAudioPlayerUpNextQueue *implicitUpcomingQueue;
 
 @property (nonatomic, readonly) AGAudioPlayerUpNextQueue *currentQueue;
+
 @property (nonatomic, readonly) NSInteger currentIndex;
 @property (nonatomic, readonly) AGAudioItem *currentItem;
 
+// returns nil when last item is playing
 @property (nonatomic, readonly) AGAudioPlayerUpNextQueue *nextQueue;
+
+// returns NSNotFound when last item is playing
 @property (nonatomic, readonly) NSInteger nextIndex;
+
+// returns nil when last item is playing
 @property (nonatomic, readonly) AGAudioItem *nextItem;
 
+// returns NSNotFound when the first item playing
+@property (nonatomic, readonly) NSInteger previousIndex;
+
+// returns nil when the first item is playing
+@property (nonatomic, readonly) AGAudioItem *previousItem;
 
 // playback control
 @property (nonatomic, readonly) BOOL isPlaying;
 @property (nonatomic) BOOL shuffle;
+
+// loops across both queues
 @property (nonatomic) BOOL loopQueue;
 @property (nonatomic) BOOL loopItem;
 
@@ -77,6 +109,5 @@ explicitAudioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 @property (nonatomic, readonly) NSTimeInterval duration;
 @property (nonatomic) NSTimeInterval elapsed;
 @property (nonatomic) CGFloat percentElapsed;
-
 
 @end
