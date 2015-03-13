@@ -37,7 +37,7 @@
 
 @end
 
-@interface AGAudioPlayer () <AVAudioSessionDelegate>
+@interface AGAudioPlayer () <AVAudioSessionDelegate, ORGMEngineDelegate>
 
 @property (nonatomic) ORGMEngine *oriagmi;
 @property (nonatomic) NSMutableArray *playbackHistory;
@@ -48,11 +48,9 @@
 
 #pragma mark - Object Lifecycle
 
-- (instancetype)initWithExplicitQueue:(AGAudioPlayerUpNextQueue *)ex
-                     andImplicitQueue:(AGAudioPlayerUpNextQueue *)im {
+- (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue {
     if (self = [super init]) {
-        self.explicitUpcomingQueue = ex;
-        self.implicitUpcomingQueue = im;
+        self.queue = queue;
         
         [self setup];
     }
@@ -83,10 +81,6 @@
 
 - (void)setLoopQueue:(BOOL)loopQueue {
     _loopQueue = loopQueue;
-}
-
-- (void)setVolume:(CGFloat)volume {
-    _volume = volume;
 }
 
 - (void)resume {
@@ -125,7 +119,7 @@
 #pragma mark - Playback Order
 
 - (void)setCurrentIndex:(NSInteger)currentIndex {
-	[self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.currentQueue
+	[self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
 																		 andIndex:self.currentIndex]];
 	_currentIndex = currentIndex;
 	
@@ -133,51 +127,11 @@
 	
 	AGAudioItem *item = self.currentItem;
 	[item loadMetadata:^(AGAudioItem *item) {
-		[self.oriagmi setNextUrl:<#(NSURL *)#> withDataFlush:<#(BOOL)#>]
+		[self.oriagmi playUrl:item.playbackURL];
 	}];
-}
-
-- (AGAudioPlayerUpNextQueue *)currentQueue {
-	
-}
-
-- (AGAudioPlayerUpNextQueue *)nextQueue {
-	// looping a single track
-	if (self.loopItem) {
-		return self.currentQueue;
-	}
-	
-	// find the "other" queue
-	AGAudioPlayerUpNextQueue *altQueue = nil;
-	if(self.currentQueue == self.explicitUpcomingQueue) {
-		altQueue = self.implicitUpcomingQueue;
-	}
-	else {
-		altQueue = self.explicitUpcomingQueue;
-	}
-	
-	// last song in the current queue
-	if (self.currentIndex == self.currentQueue.count) {
-		// there isn't anything in the next queue
-		if(altQueue.count == 0) {
-			// start the current queue from the beginning
-			if(self.loopQueue) {
-				return self.currentQueue;
-			}
-			// reached the end of all tracks, accross both queues
-			else {
-				return nil;
-			}
-		}
-		// play the first track in the next queue
-		else {
-			return altQueue;
-		}
-	}
-	// there are still songs in the current queue
-	else {
-		return self.currentQueue;
-	}
+    
+    // preload metadata
+    [self prepareNextItem];
 }
 
 - (NSInteger)nextIndex {
@@ -187,22 +141,15 @@
 	}
 	
 	// last song in the current queue
-	if (self.currentIndex == self.currentQueue.count) {
-		// there isn't anything in the next queue
-		if(self.nextQueue.count == 0) {
-			// start the current queue from the beginning
-			if(self.loopQueue) {
-				return 0;
-			}
-			// reached the end of all tracks, accross both queues
-			else {
-				return NSNotFound;
-			}
-		}
-		// play the first track in the next queue
-		else {
-			return 0;
-		}
+	if (self.currentIndex == self.queue.count) {
+        // start the current queue from the beginning
+        if(self.loopQueue) {
+            return 0;
+        }
+        // reached the end of all tracks, accross both queues
+        else {
+            return NSNotFound;
+        }
 	}
 	// there are still songs in the current queue
 	else {
@@ -211,7 +158,7 @@
 }
 
 - (AGAudioItem *)nextItem {
-	return [self.nextQueue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
+	return [self.queue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
 }
 
 - (AGAudioPlayerHistoryItem *)lastHistoryEntry {
@@ -233,7 +180,6 @@
 
 - (void)incrementIndex {
 	_currentIndex = self.nextIndex;
-	_currentQueue = self.nextQueue;
 }
 
 #pragma mark - History management
@@ -249,27 +195,81 @@
 #pragma mark - Origami Engine management
 
 - (void)setupOrigami {
+    self.oriagmi = ORGMEngine.alloc.init;
+    self.oriagmi.delegate = self;
+    
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(audioInteruptionOccured:)
+                                               name:AVAudioSessionInterruptionNotification
+                                             object:nil];
 }
 
 - (void)teardownOrigami {
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (void)enqueueNextItem {
+- (void)prepareNextItem {
 	AGAudioItem *item = self.nextItem;
-	[item audioURL:^(NSURL *url, NSArray *headers) {
-		NSString *abs_url = url.absoluteString;
-		
-		if (headers.count > 0) {
-			abs_url = [NSString stringWithFormat:@"%@\r\n%@", url, [headers componentsJoinedByString:@"\r\n"]];
-		}
-		
-		const char *c_url = [abs_url cStringUsingEncoding:NSUTF8StringEncoding];
-		DWORD flags = BASS_STREAM_STATUS | BASS_STREAM_DECODE;
-		_nextChannel = BASS_StreamCreateURL(c_url, 0, flags, StreamDownloadProgressCallback, (void *)CFBridgingRetain(item));
-		
-		BASS_Mixer_StreamAddChannel(_mixer, _nextChannel, BASS_STREAM_AUTOFREE | BASS_MIXER_NORAMPIN);
-	}];
+    [item loadMetadata:^(AGAudioItem *item) {
+        // preloaded metadata
+    }];
+}
+
+#pragma mark - ORGMEngineDelegate
+
+- (NSURL *)engineExpectsNextUrl:(ORGMEngine *)engine {
+    [self debug: @"Engine: engineExpectsNextUrl"];
+    
+    AGAudioItem *next = self.nextItem;
+    [self incrementIndex];
+    
+    return next.playbackURL;
+}
+
+- (void)debug:(NSString *)str {
+    NSLog(@"[AGAudioPlayer] %@", str);
+}
+
+- (void)engine:(ORGMEngine *)engine
+didChangeState:(ORGMEngineState)state {
+    switch (state) {
+        case ORGMEngineStateStopped: {
+            [self debug:@"Engine: stopped"];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
+                             extraInfo:nil];
+            
+            break;
+        }
+        case ORGMEngineStatePaused: {
+            [self debug:@"Engine: paused"];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+                             extraInfo:nil];
+            
+            break;
+        }
+        case ORGMEngineStatePlaying: {
+            [self debug:@"Engine: playing"];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                             extraInfo:nil];
+            
+            break;
+        }
+        case ORGMEngineStateError:
+            [self debug:[NSString stringWithFormat:@"Engine: error: %@", self.oriagmi.currentError]];
+            
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerError
+                             extraInfo:@{@"error": self.oriagmi.currentError}];
+            
+            break;
+    }
 }
 
 #pragma mark - Interruption Handling
@@ -280,20 +280,33 @@
     
     switch (interruptionType) {
         case AVAudioSessionInterruptionTypeBegan: {
+            [self debug:@"AVAudioSession: interruption began"];
             
-//            if ([self.delegate respondsToSelector:@selector(playerBeginInterruption:)]) {
-//                [self.delegate playerBeginInterruption:self];
-//            }
+            if ([self.delegate respondsToSelector:@selector(audioPlayerBeginInterruption:)]) {
+                [self.delegate audioPlayerBeginInterruption:self];
+            }
+            else {
+                [self pause];
+            }
         }
             
             break;
         case AVAudioSessionInterruptionTypeEnded: {
             AVAudioSessionInterruptionOptions options = [interruptionDictionary[AVAudioSessionInterruptionOptionKey] integerValue];
             
-//            if ([self.delegate respondsToSelector:@selector(playerEndInterruption:shouldResume:)]) {
-//                [self.delegate playerEndInterruption:self
-//                                        shouldResume:options == AVAudioSessionInterruptionOptionShouldResume];
-//            }
+            BOOL resume = options == AVAudioSessionInterruptionOptionShouldResume;
+            
+            [self debug:[NSString stringWithFormat:@"AVAudioSession: interruption ended, should resume: %@", resume ? @"YES" : @"NO"]];
+            
+            if ([self.delegate respondsToSelector:@selector(audioPlayerEndInterruption:shouldResume:)]) {
+                [self.delegate audioPlayerEndInterruption:self
+                                             shouldResume:resume];
+            }
+            else {
+                if(resume) {
+                    [self resume];
+                }
+            }
         }
             break;
             

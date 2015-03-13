@@ -19,7 +19,8 @@
 		self.duration		= [aDecoder decodeDoubleForKey:@"duration"];
 		self.displayText	= [aDecoder decodeObjectForKey:@"displayText"];
 		self.displaySubtext = [aDecoder decodeObjectForKey:@"displaySubtext"];
-		self.albumArt		= [aDecoder decodeObjectForKey:@"albumArt"];
+        self.albumArt		= [aDecoder decodeObjectForKey:@"albumArt"];
+        self.playbackURL	= [aDecoder decodeObjectForKey:@"playbackURL"];
 	}
 	
 	return self;
@@ -46,9 +47,12 @@
 	
 	[aCoder encodeObject:self.displaySubtext
 				  forKey:@"displaySubtext"];
-	
-	[aCoder encodeObject:self.albumArt
-				  forKey:@"albumArt"];
+    
+    [aCoder encodeObject:self.albumArt
+                  forKey:@"albumArt"];
+    
+    [aCoder encodeObject:self.playbackURL
+                  forKey:@"playbackURL"];
 }
 
 - (BOOL)metadataLoaded {
@@ -70,6 +74,14 @@
 - (void)shareURLWithTime:(NSTimeInterval)shareTime
 				callback:(void (^)(NSURL *))urlFound {
 	NSAssert(NO, @"This method must be overriden");
+}
+
+- (NSUInteger)hash {
+    if (self.playbackURL) {
+        return self.playbackURL.hash;
+    }
+    
+    return [NSString stringWithFormat:@"%d%@%@%@", (int)self.trackNumber, self.title, self.artist, self.album].hash;
 }
 
 @end

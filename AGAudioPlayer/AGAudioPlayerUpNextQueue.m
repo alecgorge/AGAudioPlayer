@@ -126,6 +126,7 @@
 
 - (void)clear {
     [self.items removeAllObjects];
+    [self.shuffledItems removeAllObjects];
 
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueRemovedAllItems];
@@ -150,6 +151,9 @@
     AGAudioItem *old_value = self.items[indx];
     [self.items removeObjectAtIndex:indx];
     
+    // not by
+    [self.shuffledItems removeObject:old_value];
+    
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueRemovedItem];
     }
@@ -163,27 +167,6 @@
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
     return self.items[idx];
-}
-
-- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx {
-    if (![obj isKindOfClass:AGAudioItem.class]) {
-        [NSException raise:@"Invalid assignment value"
-                    format:@"%@ is not an instance or instance of a subclass of AGAudioItem", obj];
-    }
-
-    AGAudioItem *old_value = self.items[idx];
-    self.items[idx] = obj;
-
-    if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
-        [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueChangedItem];
-    }
-    
-    if([self.delegate respondsToSelector:@selector(upNextQueue:updatedItem:atIndex:withNewItem:)]) {
-        [self.delegate upNextQueue:self
-                       updatedItem:old_value
-                           atIndex:idx
-                       withNewItem:obj];
-    }
 }
 
 - (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx {

@@ -10,8 +10,6 @@
 		599A68EDD9AA02AE944838DF /* libPods-AGAudioPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */; };
 		7C0D7BC81A44B68600607581 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C0D7BC41A44B68600607581 /* LaunchScreen.xib */; };
 		7C0D7BC91A44B68600607581 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C0D7BC61A44B68600607581 /* Main.storyboard */; };
-		7C0D7BCD1A44BE5400607581 /* README.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 7C0D7BCC1A44BE5400607581 /* README.markdown */; };
-		7C0D7BD01A44BE5B00607581 /* MTRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0D7BCF1A44BE5B00607581 /* MTRandom.m */; };
 		7CC2509A1A447901009F91C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC250991A447901009F91C8 /* main.m */; };
 		7CC2509D1A447901009F91C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC2509C1A447901009F91C8 /* AppDelegate.m */; };
 		7CC250A01A447901009F91C8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC2509F1A447901009F91C8 /* ViewController.m */; };
@@ -38,9 +36,6 @@
 		591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AGAudioPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		7C0D7BC51A44B68600607581 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7C0D7BC71A44B68600607581 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7C0D7BCC1A44BE5400607581 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
-		7C0D7BCE1A44BE5B00607581 /* MTRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTRandom.h; sourceTree = "<group>"; };
-		7C0D7BCF1A44BE5B00607581 /* MTRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTRandom.m; sourceTree = "<group>"; };
 		7CC250941A447901009F91C8 /* AGAudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AGAudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC250981A447901009F91C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CC250991A447901009F91C8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -88,24 +83,6 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		7C0D7BCA1A44BE3F00607581 /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				7C0D7BCB1A44BE4400607581 /* MTRandom */,
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
-		7C0D7BCB1A44BE4400607581 /* MTRandom */ = {
-			isa = PBXGroup;
-			children = (
-				7C0D7BCE1A44BE5B00607581 /* MTRandom.h */,
-				7C0D7BCF1A44BE5B00607581 /* MTRandom.m */,
-				7C0D7BCC1A44BE5400607581 /* README.markdown */,
-			);
-			name = MTRandom;
-			sourceTree = "<group>";
-		};
 		7CC2508B1A447901009F91C8 = {
 			isa = PBXGroup;
 			children = (
@@ -130,7 +107,6 @@
 		7CC250961A447901009F91C8 /* AGAudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				7C0D7BCA1A44BE3F00607581 /* Vendor */,
 				7CC250BE1A44792F009F91C8 /* AGAudioPlayer.h */,
 				7CC250BF1A44792F009F91C8 /* AGAudioPlayer.m */,
 				7CC250CC1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.h */,
@@ -329,10 +305,8 @@
 				7CC250A01A447901009F91C8 /* ViewController.m in Sources */,
 				7CC250C01A44792F009F91C8 /* AGAudioPlayer.m in Sources */,
 				7CC2509D1A447901009F91C8 /* AppDelegate.m in Sources */,
-				7C0D7BCD1A44BE5400607581 /* README.markdown in Sources */,
 				7CC2509A1A447901009F91C8 /* main.m in Sources */,
 				7CC250D11A447AB0009F91C8 /* AGAudioItem.m in Sources */,
-				7C0D7BD01A44BE5B00607581 /* MTRandom.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

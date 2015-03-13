@@ -18,40 +18,39 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerBackwardStyle) {
 
 @class AGAudioPlayer;
 
-@protocol AGAudioPlayerImplicitUpcomingQueueDelegate <NSObject>
+@protocol AGAudioPlayerUpcomingQueueDelegate <NSObject>
 
 - (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
-numberOfImplicitUpcomingTracks:upcomingTracks;
+numberOfUpcomingTracks:upcomingTracks;
 
 - (AGAudioItem *)audioPlayer:(AGAudioPlayer *)audioPlayer
-implicitAudioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
-
-@end
-
-@protocol AGAudioPlayerExplicitUpcomingQueueDelegate <NSObject>
-
-- (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
-numberOfExplicitUpcomingTracks:upcomingTracks;
-
-- (AGAudioItem *)audioPlayer:(AGAudioPlayer *)audioPlayer
-explicitAudioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
+audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 
 @end
 
 typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
-	AGAudioPlayerTrackCompleted,
 	AGAudioPlayerTrackProgressUpdated,
 	AGAudioPlayerTrackBuffering,
-	AGAudioPlayerTrackPlayed,
-	AGAudioPlayerTrackScrubbed,
-	AGAudioPlayerQueueChanged,
-	AGAudioPlayerMetadataReceived,
+	AGAudioPlayerTrackPlaying,
+    AGAudioPlayerTrackStopped,
+    AGAudioPlayerTrackPaused,
+    AGAudioPlayerError,
 };
 
 @protocol AGAudioPlayerDelegate <NSObject>
 
 - (void)audioPlayer:(AGAudioPlayer *)audioPlayer
-uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
+uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
+          extraInfo:(NSDictionary *)dict;
+
+@optional
+
+// OPTIONAL: if not implemented, will pause playback
+- (void)audioPlayerBeginInterruption:(AGAudioPlayer *)audioPlayer;
+
+// OPTIONAL: if not implemented, will resume playback if resume == YES
+- (void)audioPlayerEndInterruption:(AGAudioPlayer *)audioPlayer
+                      shouldResume:(BOOL)resume;
 
 @end
 
@@ -59,19 +58,14 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
 
 @interface AGAudioPlayer : NSObject
 
-- (instancetype)initWithExplicitQueue:(AGAudioPlayerUpNextQueue *)ex
-                     andImplicitQueue:(AGAudioPlayerUpNextQueue *)im;
+- (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue;
 
-@property (nonatomic) AGAudioPlayerUpNextQueue *explicitUpcomingQueue;
-@property (nonatomic) AGAudioPlayerUpNextQueue *implicitUpcomingQueue;
+@property (nonatomic, weak) id<AGAudioPlayerDelegate> delegate;
 
-@property (nonatomic, readonly) AGAudioPlayerUpNextQueue *currentQueue;
+@property (nonatomic) AGAudioPlayerUpNextQueue *queue;
 
 @property (nonatomic, readonly) NSInteger currentIndex;
 @property (nonatomic, readonly) AGAudioItem *currentItem;
-
-// returns nil when last item is playing
-@property (nonatomic, readonly) AGAudioPlayerUpNextQueue *nextQueue;
 
 // returns NSNotFound when last item is playing
 @property (nonatomic, readonly) NSInteger nextIndex;
@@ -89,11 +83,9 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
 @property (nonatomic, readonly) BOOL isPlaying;
 @property (nonatomic) BOOL shuffle;
 
-// loops across both queues
+// loops
 @property (nonatomic) BOOL loopQueue;
 @property (nonatomic) BOOL loopItem;
-
-@property (nonatomic) CGFloat volume;
 
 - (void)resume;
 - (void)pause;

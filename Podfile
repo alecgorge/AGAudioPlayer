@@ -2,7 +2,7 @@
 # platform :ios, '6.0'
 
 target 'AGAudioPlayer' do
-	pod 'OrigamiEngine', '~> 1.0'
+	pod 'OrigamiEngine', :head
 end
 
 target 'AGAudioPlayerTests' do
