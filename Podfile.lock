@@ -1,12 +1,19 @@
 PODS:
+  - ASValueTrackingSlider (0.9.3)
   - OrigamiEngine (HEAD based on 1.0.14):
     - OrigamiEngine/Core (= HEAD based on 1.0.14)
   - OrigamiEngine/Core (HEAD based on 1.0.14)
 
 DEPENDENCIES:
+  - ASValueTrackingSlider (from `../ASValueTrackingSlider`)
   - OrigamiEngine (HEAD)
 
+EXTERNAL SOURCES:
+  ASValueTrackingSlider:
+    :path: ../ASValueTrackingSlider
+
 SPEC CHECKSUMS:
+  ASValueTrackingSlider: 34d03d97e8d974438c2725d17ef77a15dc3dd7b0
   OrigamiEngine: f7d7970d0258c9fd48b4c884466337ea549176a3
 
 COCOAPODS: 0.36.0

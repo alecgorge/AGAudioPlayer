@@ -3,6 +3,7 @@
 
 target 'AGAudioPlayer' do
 	pod 'OrigamiEngine', :head
+	pod 'ASValueTrackingSlider', :path => "../ASValueTrackingSlider"
 end
 
 target 'AGAudioPlayerTests' do

@@ -8,8 +8,6 @@
 
 #import "AGAudioPlayer.h"
 
-#import "MTRandom.h"
-
 #import <AVFoundation/AVFoundation.h>
 #import <OrigamiEngine/ORGMEngine.h>
 
@@ -100,7 +98,7 @@
 }
 
 - (void)backward {
-	if(self.elapsed < 5.0f) {
+	if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
 		self.currentIndex = self.previousIndex;
 	}
 	else {

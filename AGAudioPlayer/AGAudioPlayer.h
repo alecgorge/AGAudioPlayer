@@ -87,6 +87,8 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 @property (nonatomic) BOOL loopQueue;
 @property (nonatomic) BOOL loopItem;
 
+@property (nonatomic) AGAudioPlayerBackwardStyle backwardStyle;
+
 - (void)resume;
 - (void)pause;
 - (void)stop;
