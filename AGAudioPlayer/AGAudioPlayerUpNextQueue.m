@@ -37,7 +37,7 @@
     return self.items.count;
 }
 
-- (void)appendItem:(AGAudioItem *)item {
+- (void)appendItem:(id<AGAudioItem>)item {
     if(item == nil) return;
     
     [self.items addObject:item];
@@ -57,12 +57,12 @@
 }
 
 - (void)appendItems:(NSArray *)items {
-    for (AGAudioItem *i in items) {
+    for (id<AGAudioItem> i in items) {
         [self appendItem:i];
     }
 }
 
-- (void)prependItem:(AGAudioItem *)item {
+- (void)prependItem:(id<AGAudioItem>)item {
     if(item == nil) return;
     
     [self.items insertObject:item
@@ -83,12 +83,12 @@
 }
 
 - (void)prependItems:(NSArray *)items {
-    for (AGAudioItem *i in items) {
+    for (id<AGAudioItem> i in items) {
         [self prependItem:i];
     }
 }
 
-- (void)moveItem:(AGAudioItem *)item
+- (void)moveItem:(id<AGAudioItem>)item
          toIndex:(NSInteger)to {
     NSInteger from = [self.items indexOfObjectIdenticalTo:item];
     [self moveItemAtIndex:from
@@ -137,7 +137,7 @@
     }
 }
 
-- (void)removeItem:(AGAudioItem *)item {
+- (void)removeItem:(id<AGAudioItem>)item {
     if(item == nil) return;
     
     NSInteger idx = [self.items indexOfObjectIdenticalTo:item];
@@ -148,7 +148,7 @@
 }
 
 - (void)removeItemAtIndex:(NSInteger)indx {
-    AGAudioItem *old_value = self.items[indx];
+    id<AGAudioItem> old_value = self.items[indx];
     [self.items removeObjectAtIndex:indx];
     
     // not by
@@ -169,11 +169,11 @@
     return self.items[idx];
 }
 
-- (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx {
+- (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx {
 	return self.shuffledItems[idx];
 }
 
-- (AGAudioItem *)unshuffledItemAtIndex:(NSUInteger)idx {
+- (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx {
 	return self.items[idx];
 }
 

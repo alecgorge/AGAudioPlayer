@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerBackwardStyle) {
 - (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
 numberOfUpcomingTracks:upcomingTracks;
 
-- (AGAudioItem *)audioPlayer:(AGAudioPlayer *)audioPlayer
+- (id<AGAudioItem>)audioPlayer:(AGAudioPlayer *)audioPlayer
 audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 
 @end
@@ -65,22 +65,25 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 @property (nonatomic) AGAudioPlayerUpNextQueue *queue;
 
 @property (nonatomic, readonly) NSInteger currentIndex;
-@property (nonatomic, readonly) AGAudioItem *currentItem;
+@property (nonatomic, readonly) id<AGAudioItem> currentItem;
 
 // returns NSNotFound when last item is playing
 @property (nonatomic, readonly) NSInteger nextIndex;
 
 // returns nil when last item is playing
-@property (nonatomic, readonly) AGAudioItem *nextItem;
+@property (nonatomic, readonly) id<AGAudioItem> nextItem;
 
 // returns NSNotFound when the first item playing
 @property (nonatomic, readonly) NSInteger previousIndex;
 
 // returns nil when the first item is playing
-@property (nonatomic, readonly) AGAudioItem *previousItem;
+@property (nonatomic, readonly) id<AGAudioItem> previousItem;
 
 // playback control
 @property (nonatomic, readonly) BOOL isPlaying;
+@property (nonatomic, readonly) BOOL isPlayingFirstItem;
+@property (nonatomic, readonly) BOOL isPlayingLastItem;
+
 @property (nonatomic) BOOL shuffle;
 
 // loops

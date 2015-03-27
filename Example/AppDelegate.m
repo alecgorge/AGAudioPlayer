@@ -7,7 +7,10 @@
 //
 
 #import "AppDelegate.h"
+
 #import "AGAudioPlayer.h"
+#import "AGAudioPlayerViewController.h"
+#import "AGAudioPlayerUpNextQueue.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +20,26 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	UISlider.appearance.tintColor = UIColor.greenColor;
+	
+	self.window = [UIWindow.alloc initWithFrame:UIScreen.mainScreen.bounds];
+	
+	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:@[]];
+	AGAudioPlayer *player = [AGAudioPlayer.alloc initWithQueue:queue];
+	
+	AGAudioPlayerViewController *vc = [AGAudioPlayerViewController.alloc initWithAudioPlayer:player];
+	vc.foregroundColor = UIColor.blackColor;
+	vc.backgroundColor = UIColor.whiteColor;
+	vc.lightForegroundColor = UIColor.lightGrayColor;
+	vc.darkForegroundColor = UIColor.lightGrayColor;
+	vc.tintColor = UIColor.greenColor;
+	
+	UINavigationController *nav = [UINavigationController.alloc initWithRootViewController:vc];
+	
+	self.window.rootViewController = nav;
+	
+	[self.window makeKeyAndVisible];
+	
     return YES;
 }
 

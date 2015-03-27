@@ -8,7 +8,10 @@
 
 #import "AGAudioItem.h"
 
-@implementation AGAudioItem
+@implementation AGAudioItemBase
+
+@synthesize cacheKey, trackNumber, title, artist, album, metadataLoaded, collection,
+            duration, displayText, displaySubtext, albumArt, playbackURL;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
@@ -59,7 +62,7 @@
 	return YES;
 }
 
-- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback {
+- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback {
 	NSAssert(NO, @"This method must be overriden");
 }
 
