@@ -40,23 +40,23 @@
 
 /* Begin PBXFileReference section */
 		08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AGAudioPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AGAudioPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer.debug.xcconfig"; sourceTree = "<group>"; };
-		591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AGAudioPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AGAudioPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AGAudioPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		7C0D7BC51A44B68600607581 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7C3FE4451AB3B69900A52266 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7C3FF8231AB3C33E003BAE01 /* AGDurationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGDurationHelper.h; sourceTree = "<group>"; };
 		7C3FF8241AB3C33E003BAE01 /* AGDurationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGDurationHelper.m; sourceTree = "<group>"; };
-		7C3FF8261AB6231E003BAE01 /* AGScrubber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGScrubber.h; path = UI/AGScrubber.h; sourceTree = "<group>"; };
-		7C3FF8271AB6231E003BAE01 /* AGScrubber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AGScrubber.m; path = UI/AGScrubber.m; sourceTree = "<group>"; };
-		7C3FF82E1AB6675D003BAE01 /* AGAudioPlayerItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGAudioPlayerItemCell.h; path = UI/AGAudioPlayerItemCell.h; sourceTree = "<group>"; };
-		7C3FF82F1AB6675D003BAE01 /* AGAudioPlayerItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AGAudioPlayerItemCell.m; path = UI/AGAudioPlayerItemCell.m; sourceTree = "<group>"; };
-		7C3FF8301AB6675D003BAE01 /* AGAudioPlayerItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AGAudioPlayerItemCell.xib; path = UI/AGAudioPlayerItemCell.xib; sourceTree = "<group>"; };
+		7C3FF8261AB6231E003BAE01 /* AGScrubber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGScrubber.h; sourceTree = "<group>"; };
+		7C3FF8271AB6231E003BAE01 /* AGScrubber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGScrubber.m; sourceTree = "<group>"; };
+		7C3FF82E1AB6675D003BAE01 /* AGAudioPlayerItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioPlayerItemCell.h; sourceTree = "<group>"; };
+		7C3FF82F1AB6675D003BAE01 /* AGAudioPlayerItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioPlayerItemCell.m; sourceTree = "<group>"; };
+		7C3FF8301AB6675D003BAE01 /* AGAudioPlayerItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGAudioPlayerItemCell.xib; sourceTree = "<group>"; };
 		7C3FF8341AB6723B003BAE01 /* AGAudioItemCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioItemCollection.h; sourceTree = "<group>"; };
 		7C3FF8351AB6723B003BAE01 /* AGAudioItemCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioItemCollection.m; sourceTree = "<group>"; };
 		7C3FF8381AB67FE6003BAE01 /* AGCachable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGCachable.h; path = AGAudioPlayer/AGCachable.h; sourceTree = "<group>"; };
-		7C4B52491AB3840C00A57843 /* AGAudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGAudioPlayerViewController.h; path = UI/AGAudioPlayerViewController.h; sourceTree = "<group>"; };
-		7C4B524A1AB3840C00A57843 /* AGAudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AGAudioPlayerViewController.m; path = UI/AGAudioPlayerViewController.m; sourceTree = "<group>"; };
-		7C4B524C1AB384AC00A57843 /* AGAudioPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AGAudioPlayerViewController.xib; path = UI/AGAudioPlayerViewController.xib; sourceTree = "<group>"; };
+		7C4B52491AB3840C00A57843 /* AGAudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGAudioPlayerViewController.h; sourceTree = "<group>"; };
+		7C4B524A1AB3840C00A57843 /* AGAudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGAudioPlayerViewController.m; sourceTree = "<group>"; };
+		7C4B524C1AB384AC00A57843 /* AGAudioPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AGAudioPlayerViewController.xib; sourceTree = "<group>"; };
 		7C4B52521AB38CBC00A57843 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		7CC250941A447901009F91C8 /* AGAudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AGAudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC250981A447901009F91C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,14 +103,14 @@
 				50881887F485B9884E95BF69 /* Pods-AGAudioPlayer.debug.xcconfig */,
 				591045D6671C755CA06C3D92 /* Pods-AGAudioPlayer.release.xcconfig */,
 			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		7C3FF8331AB67093003BAE01 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			name = Cache;
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		7C4B52481AB383C800A57843 /* UI */ = {
@@ -126,7 +126,7 @@
 				7C3FF82F1AB6675D003BAE01 /* AGAudioPlayerItemCell.m */,
 				7C3FF8301AB6675D003BAE01 /* AGAudioPlayerItemCell.xib */,
 			);
-			name = UI;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		7CC2508B1A447901009F91C8 = {

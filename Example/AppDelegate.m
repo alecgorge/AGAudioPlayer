@@ -28,11 +28,11 @@
 	AGAudioPlayer *player = [AGAudioPlayer.alloc initWithQueue:queue];
 	
 	AGAudioPlayerViewController *vc = [AGAudioPlayerViewController.alloc initWithAudioPlayer:player];
-	vc.foregroundColor = UIColor.blackColor;
-	vc.backgroundColor = UIColor.whiteColor;
-	vc.lightForegroundColor = UIColor.lightGrayColor;
-	vc.darkForegroundColor = UIColor.lightGrayColor;
-	vc.tintColor = UIColor.greenColor;
+	vc.foregroundColor = UIColor.whiteColor;
+	vc.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:128.0/255.0 blue:95.0/255.0 alpha:1.0];
+	vc.lightForegroundColor = UIColor.whiteColor;
+	vc.darkForegroundColor = [UIColor colorWithRed:0.0/255.0 green:99.0/255.0 blue:74.0/255.0 alpha:0.8];
+	vc.tintColor = UIColor.whiteColor;
 	
 	UINavigationController *nav = [UINavigationController.alloc initWithRootViewController:vc];
 	

@@ -33,10 +33,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dDs-XB-LgO" userLabel="Album Art or Queue">
-                    <rect key="frame" x="16" y="16" width="568" height="326"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="336"/>
                     <subviews>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6H-Lzc" userLabel="Playback Queue">
-                            <rect key="frame" x="0.0" y="0.0" width="568" height="326"/>
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="336"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
                                 <rect key="frame" x="0.0" y="0.0" width="368" height="266"/>
@@ -47,9 +47,13 @@
                             <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="0.0"/>
                             </variation>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="QuP-H4-BBY"/>
+                                <outlet property="delegate" destination="-1" id="3Q6-DA-h7i"/>
+                            </connections>
                         </tableView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xJq-ZH-PXL" userLabel="Album Art">
-                            <rect key="frame" x="121" y="0.0" width="326" height="326"/>
+                            <rect key="frame" x="132" y="0.0" width="336" height="336"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Dav-rZ-r0q"/>
@@ -82,7 +86,7 @@
                     </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trg-GJ-cpZ" userLabel="Controls Container">
-                    <rect key="frame" x="0.0" y="342" width="600" height="214"/>
+                    <rect key="frame" x="0.0" y="336" width="600" height="220"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xOs-d0-oCT" userLabel="Top Controls Container">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="66"/>
@@ -242,10 +246,10 @@
                             </variation>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z2e-VU-BxH" customClass="MPVolumeView">
-                            <rect key="frame" x="0.0" y="190" width="600" height="24"/>
+                            <rect key="frame" x="15" y="190" width="570" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="24" id="6zY-81-0WV"/>
+                                <constraint firstAttribute="height" constant="30" id="6zY-81-0WV"/>
                             </constraints>
                             <variation key="widthClass=compact" ambiguous="YES">
                                 <rect key="frame" x="0.0" y="210" width="368" height="44"/>
@@ -257,13 +261,13 @@
                         <constraint firstItem="37W-Wq-ab9" firstAttribute="leading" secondItem="trg-GJ-cpZ" secondAttribute="leading" id="4q5-nG-UYs"/>
                         <constraint firstAttribute="trailing" secondItem="37W-Wq-ab9" secondAttribute="trailing" id="5l8-xD-cVa"/>
                         <constraint firstItem="oVq-HW-16t" firstAttribute="leading" secondItem="trg-GJ-cpZ" secondAttribute="leading" id="Ary-ui-mlQ"/>
-                        <constraint firstItem="z2e-VU-BxH" firstAttribute="leading" secondItem="trg-GJ-cpZ" secondAttribute="leading" id="CM9-iP-pff"/>
+                        <constraint firstItem="z2e-VU-BxH" firstAttribute="leading" secondItem="trg-GJ-cpZ" secondAttribute="leading" constant="15" id="CM9-iP-pff"/>
                         <constraint firstItem="xOs-d0-oCT" firstAttribute="top" secondItem="trg-GJ-cpZ" secondAttribute="top" id="IMv-x3-pRy"/>
                         <constraint firstAttribute="trailing" secondItem="xOs-d0-oCT" secondAttribute="trailing" id="Kq1-le-W08"/>
-                        <constraint firstAttribute="height" constant="214" id="OdU-q5-P48"/>
+                        <constraint firstAttribute="height" constant="220" id="OdU-q5-P48"/>
                         <constraint firstItem="xOs-d0-oCT" firstAttribute="leading" secondItem="trg-GJ-cpZ" secondAttribute="leading" id="Ruo-y2-ZYf"/>
                         <constraint firstItem="37W-Wq-ab9" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="bottom" id="Trd-TT-EiE"/>
-                        <constraint firstAttribute="trailing" secondItem="z2e-VU-BxH" secondAttribute="trailing" id="YzL-tR-JPo"/>
+                        <constraint firstAttribute="trailing" secondItem="z2e-VU-BxH" secondAttribute="trailing" constant="15" id="YzL-tR-JPo"/>
                         <constraint firstItem="z2e-VU-BxH" firstAttribute="top" secondItem="oVq-HW-16t" secondAttribute="bottom" id="d8v-F0-bUl"/>
                         <constraint firstItem="37W-Wq-ab9" firstAttribute="bottom" secondItem="oVq-HW-16t" secondAttribute="top" id="qKR-51-1LN"/>
                         <constraint firstAttribute="trailing" secondItem="oVq-HW-16t" secondAttribute="trailing" id="vcg-LJ-gmO"/>
@@ -307,13 +311,13 @@
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="trg-GJ-cpZ" firstAttribute="top" secondItem="dDs-XB-LgO" secondAttribute="bottom" id="26e-Ua-V0I"/>
-                <constraint firstItem="dDs-XB-LgO" firstAttribute="leading" secondItem="keY-bo-KO8" secondAttribute="leading" constant="16" id="ARf-dg-COU"/>
+                <constraint firstItem="dDs-XB-LgO" firstAttribute="leading" secondItem="keY-bo-KO8" secondAttribute="leading" id="ARf-dg-COU"/>
                 <constraint firstItem="AEl-VZ-41z" firstAttribute="top" secondItem="trg-GJ-cpZ" secondAttribute="bottom" id="Abp-AZ-x8R"/>
-                <constraint firstAttribute="trailing" secondItem="dDs-XB-LgO" secondAttribute="trailing" constant="16" id="RQK-fQ-VMe"/>
+                <constraint firstAttribute="trailing" secondItem="dDs-XB-LgO" secondAttribute="trailing" id="RQK-fQ-VMe"/>
                 <constraint firstAttribute="trailing" secondItem="trg-GJ-cpZ" secondAttribute="trailing" id="ZXO-qt-msz"/>
                 <constraint firstItem="trg-GJ-cpZ" firstAttribute="leading" secondItem="keY-bo-KO8" secondAttribute="leading" id="ZqJ-Vt-TNo"/>
                 <constraint firstAttribute="bottom" secondItem="AEl-VZ-41z" secondAttribute="bottom" id="iAI-Qc-twB"/>
-                <constraint firstItem="dDs-XB-LgO" firstAttribute="top" secondItem="keY-bo-KO8" secondAttribute="top" constant="16" id="nZ1-3t-ILI"/>
+                <constraint firstItem="dDs-XB-LgO" firstAttribute="top" secondItem="keY-bo-KO8" secondAttribute="top" id="nZ1-3t-ILI"/>
                 <constraint firstItem="AEl-VZ-41z" firstAttribute="leading" secondItem="keY-bo-KO8" secondAttribute="leading" id="skU-K5-i49"/>
                 <constraint firstAttribute="trailing" secondItem="AEl-VZ-41z" secondAttribute="trailing" id="yco-zC-PGd"/>
             </constraints>

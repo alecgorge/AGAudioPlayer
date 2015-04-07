@@ -3,26 +3,28 @@ PODS:
   - LLACircularProgressView (0.1.1)
   - MarqueeLabel (2.2.1)
   - NAKPlaybackIndicatorView (0.0.3)
-  - OrigamiEngine (HEAD based on 1.0.14):
-    - OrigamiEngine/Core (= HEAD based on 1.0.14)
-  - OrigamiEngine/Core (HEAD based on 1.0.14)
+  - OrigamiEngine (1.0.14):
+    - OrigamiEngine/Core (= 1.0.14)
+  - OrigamiEngine/Core (1.0.14)
 
 DEPENDENCIES:
   - ASValueTrackingSlider (from `../ASValueTrackingSlider`)
   - LLACircularProgressView
   - MarqueeLabel
   - NAKPlaybackIndicatorView
-  - OrigamiEngine (HEAD)
+  - OrigamiEngine (from `../OrigamiEngine`)
 
 EXTERNAL SOURCES:
   ASValueTrackingSlider:
     :path: ../ASValueTrackingSlider
+  OrigamiEngine:
+    :path: ../OrigamiEngine
 
 SPEC CHECKSUMS:
   ASValueTrackingSlider: 34d03d97e8d974438c2725d17ef77a15dc3dd7b0
-  LLACircularProgressView: 97fb4c9f115367b50c67a1fbafc5c881e7d745ec
-  MarqueeLabel: bc105ed113f79e51fb68d1fa3983238c0dcda47f
-  NAKPlaybackIndicatorView: 3211fff8fbc229661d4de69e86cef1b9b2e49e41
-  OrigamiEngine: f7d7970d0258c9fd48b4c884466337ea549176a3
+  LLACircularProgressView: e179b0728217e9013cd07c2fadc7caa0c35b9199
+  MarqueeLabel: c024bab67a1558e8e127132be3b6d66a702405fe
+  NAKPlaybackIndicatorView: 794dd97576fe074bb1844c19ebcbf7509384a47f
+  OrigamiEngine: 74b097326260597f1498790795cc2cdd604c199a
 
-COCOAPODS: 0.36.0.rc.1
+COCOAPODS: 0.36.3

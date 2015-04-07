@@ -11,6 +11,7 @@
 #import "AGAudioPlayer.h"
 #import "AGDurationHelper.h"
 #import "AGScrubber.h"
+#import "AGAudioPlayerItemCell.h"
 
 #import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
@@ -18,7 +19,7 @@
 
 #import <ASValueTrackingSlider/ASValueTrackingSlider.h>
 
-@interface AGAudioPlayerViewController () <ASValueTrackingSliderDataSource, AGAudioPlayerDelegate>
+@interface AGAudioPlayerViewController () <ASValueTrackingSliderDataSource, AGAudioPlayerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *uiQueueTable;
 @property (weak, nonatomic) IBOutlet UIImageView *uiAlbumArtImage;
@@ -96,6 +97,10 @@
 	self.titleLabel = [UILabel.alloc initWithFrame:CGRectMake(0, 0, 200, 44)];
 	self.titleLabel.textAlignment = NSTextAlignmentCenter;
 	self.navigationItem.titleView = self.titleLabel;
+    
+    [self.uiQueueTable registerNib:[UINib nibWithNibName:NSStringFromClass(AGAudioPlayerItemCell.class)
+                                                  bundle:nil]
+            forCellReuseIdentifier:@"cell"];
 	
 	[self redrawUI];
 }
@@ -158,6 +163,7 @@
 	}
 	
 	self.uiProgressSlider.minimumTrackTintColor = lightForegroundColor;
+    self.uiProgressSlider.textColor = self.lightForegroundColor;
 }
 
 - (void)setDarkForegroundColor:(UIColor *)darkForegroundColor {
@@ -168,17 +174,20 @@
 	}
 	
 	self.uiProgressSlider.maximumTrackTintColor = darkForegroundColor;
+    self.uiProgressSlider.popUpViewColor = self.darkForegroundColor;
 }
 
 - (void)setTintColor:(UIColor *)tintColor {
 	_tintColor = tintColor;
 
+    [UIToolbar appearanceWhenContainedIn:self.class, nil].tintColor = tintColor;
+    [UISlider appearanceWhenContainedIn:self.class, nil].tintColor = tintColor;
+    
 	if(self.uiToolbar == nil) {
 		return;
 	}
-	
+    
 	self.uiProgressSlider.tintColor = tintColor;
-	self.uiToolbar.tintColor = tintColor;
 }
 
 - (void)setupColorDefaults {
@@ -285,6 +294,10 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 }
 
 - (void)updateTitleView {
+    if (self.audioPlayer.queue.count == 0) {
+        self.titleLabel.attributedText = nil;
+    }
+    
 	NSMutableAttributedString *s = NSMutableAttributedString.new;
 	[s appendAttributedString:[NSAttributedString.alloc initWithString:@(self.audioPlayer.currentIndex + 1).stringValue
 															attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f]}]];
@@ -303,9 +316,23 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
     return [AGDurationHelper formattedTimeWithInterval:self.audioPlayer.duration * value];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Playback Queue Management
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.audioPlayer.queue.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    AGAudioPlayerItemCell *cell = (AGAudioPlayerItemCell *)[tableView dequeueReusableCellWithIdentifier:@"cell"
+                                                                                           forIndexPath:indexPath];
+    
+    [cell updateCellWithAudioItem:self.audioPlayer.queue[indexPath.row]];
+    
+    return cell;
 }
 
 @end
