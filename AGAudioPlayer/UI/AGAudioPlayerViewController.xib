@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -8,11 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AGAudioPlayerViewController">
             <connections>
-                <outlet property="uiLoopButton" destination="6Yf-Jk-Ivz" id="uqp-ct-EKI"/>
-                <outlet property="uiLoopHighlightView" destination="QTU-vX-zPQ" id="uwR-Wv-l2n"/>
                 <outlet property="uiProgressSlider" destination="Q3j-1b-4w9" id="kru-4S-Zwf"/>
-                <outlet property="uiShuffleButton" destination="EIH-q4-VVU" id="BVm-bs-Opz"/>
-                <outlet property="uiShuffleHighlightView" destination="Ig5-G9-g9h" id="rUl-Xk-yl9"/>
                 <outlet property="uiVolumeView" destination="z2e-VU-BxH" id="QwZ-gN-hPv"/>
                 <outlet property="view" destination="keY-bo-KO8" id="o9E-T1-5A6"/>
             </connections>
@@ -30,6 +26,14 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dDs-XB-LgO" userLabel="Album Art or Queue">
                         <rect key="frame" x="16" y="28" width="568" height="332"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xJq-ZH-PXL" userLabel="Album Art">
+                                <rect key="frame" x="118" y="0.0" width="332" height="332"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Dav-rZ-r0q"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="tTT-k8-0pr"/>
+                                    <constraint firstAttribute="width" secondItem="xJq-ZH-PXL" secondAttribute="height" multiplier="1:1" id="ywz-8B-v2S"/>
+                                </constraints>
+                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="K3e-6H-Lzc" userLabel="Playback Queue">
                                 <rect key="frame" x="0.0" y="0.0" width="568" height="332"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,14 +44,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="0.0"/>
                                 </variation>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xJq-ZH-PXL" userLabel="Album Art">
-                                <rect key="frame" x="118" y="0.0" width="332" height="332"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Dav-rZ-r0q"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="tTT-k8-0pr"/>
-                                    <constraint firstAttribute="width" secondItem="xJq-ZH-PXL" secondAttribute="height" multiplier="1:1" id="ywz-8B-v2S"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -75,26 +71,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xOs-d0-oCT" userLabel="Top Controls Container">
                                 <rect key="frame" x="0.0" y="0.0" width="568" height="66"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Yf-Jk-Ivz" userLabel="Loop">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="66"/>
-                                        <accessibility key="accessibilityConfiguration" label="Loop"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="35" id="E4I-gb-DVK"/>
-                                        </constraints>
-                                        <state key="normal" image="loop">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QTU-vX-zPQ" userLabel="Loop Highlight">
-                                        <rect key="frame" x="6" y="22" width="24" height="22"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="22" id="DIl-Nz-Ggq"/>
-                                            <constraint firstAttribute="width" constant="24" id="vf2-Ur-eAR"/>
-                                        </constraints>
-                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99:99" textAlignment="right" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ps7-iq-l8J" userLabel="Time Elapsed">
-                                        <rect key="frame" x="35" y="0.0" width="48" height="66"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="48" height="66"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="Oyk-Xy-7eW"/>
                                         </constraints>
@@ -103,7 +81,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Q3j-1b-4w9" userLabel="Progress Slider" customClass="ASValueTrackingSlider">
-                                        <rect key="frame" x="81" y="0.0" width="406" height="61"/>
+                                        <rect key="frame" x="46" y="0.0" width="476" height="61"/>
                                         <color key="minimumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="maximumTrackTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="thumbTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -115,7 +93,7 @@
                                         </variation>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99:99" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVE-u2-RMU" userLabel="Time Remaining">
-                                        <rect key="frame" x="485" y="0.0" width="48" height="66"/>
+                                        <rect key="frame" x="520" y="0.0" width="48" height="66"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="1Qg-qZ-8ZK"/>
                                         </constraints>
@@ -129,59 +107,19 @@
                                             <rect key="frame" x="656" y="0.0" width="48" height="66"/>
                                         </variation>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EIH-q4-VVU" userLabel="Shuffle">
-                                        <rect key="frame" x="533" y="0.0" width="35" height="66"/>
-                                        <accessibility key="accessibilityConfiguration" label="Loop"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="35" id="BcJ-OJ-DtD"/>
-                                        </constraints>
-                                        <state key="normal" image="shuffle">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <variation key="widthClass=regular" ambiguous="YES">
-                                            <rect key="frame" x="704" y="0.0" width="64" height="66"/>
-                                        </variation>
-                                        <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
-                                            <rect key="frame" x="704" y="0.0" width="64" height="66"/>
-                                        </variation>
-                                    </button>
-                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ig5-G9-g9h" userLabel="Shuffle Highlight">
-                                        <rect key="frame" x="539" y="22" width="24" height="22"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="24" id="n9d-OI-Lgo"/>
-                                            <constraint firstAttribute="height" constant="22" id="tZ6-w4-BKs"/>
-                                        </constraints>
-                                        <variation key="widthClass=regular" ambiguous="YES">
-                                            <rect key="frame" x="725" y="22" width="22" height="22"/>
-                                        </variation>
-                                        <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
-                                            <rect key="frame" x="725" y="22" width="22" height="22"/>
-                                        </variation>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="EIH-q4-VVU" firstAttribute="centerY" secondItem="Ig5-G9-g9h" secondAttribute="centerY" id="1lw-jq-icp"/>
-                                    <constraint firstItem="EIH-q4-VVU" firstAttribute="leading" secondItem="DVE-u2-RMU" secondAttribute="trailing" id="2tm-tg-szE"/>
+                                    <constraint firstItem="ps7-iq-l8J" firstAttribute="leading" secondItem="xOs-d0-oCT" secondAttribute="leading" id="5FJ-42-K8c"/>
                                     <constraint firstItem="ps7-iq-l8J" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="top" id="77w-2L-gJq"/>
                                     <constraint firstAttribute="bottom" secondItem="Q3j-1b-4w9" secondAttribute="bottom" constant="6" id="7hY-Bw-wK2"/>
                                     <constraint firstItem="DVE-u2-RMU" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="top" id="95v-D1-qeK"/>
                                     <constraint firstAttribute="bottom" secondItem="DVE-u2-RMU" secondAttribute="bottom" id="Bov-Oe-Uvg"/>
-                                    <constraint firstItem="6Yf-Jk-Ivz" firstAttribute="centerX" secondItem="QTU-vX-zPQ" secondAttribute="centerX" id="Dc6-ym-SkF"/>
-                                    <constraint firstItem="EIH-q4-VVU" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="top" id="DhV-b5-QEH"/>
                                     <constraint firstAttribute="bottom" secondItem="ps7-iq-l8J" secondAttribute="bottom" id="F01-SG-Kjg"/>
-                                    <constraint firstAttribute="bottom" secondItem="EIH-q4-VVU" secondAttribute="bottom" id="IM1-vS-PIp"/>
-                                    <constraint firstItem="EIH-q4-VVU" firstAttribute="centerX" secondItem="Ig5-G9-g9h" secondAttribute="centerX" id="QQH-tq-u0e"/>
-                                    <constraint firstItem="6Yf-Jk-Ivz" firstAttribute="leading" secondItem="xOs-d0-oCT" secondAttribute="leading" id="XOc-yl-RQP"/>
-                                    <constraint firstItem="6Yf-Jk-Ivz" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="top" id="XWi-H5-gYN"/>
                                     <constraint firstItem="Q3j-1b-4w9" firstAttribute="top" secondItem="xOs-d0-oCT" secondAttribute="top" id="Y5x-hE-uqx"/>
-                                    <constraint firstItem="6Yf-Jk-Ivz" firstAttribute="centerY" secondItem="QTU-vX-zPQ" secondAttribute="centerY" id="bME-c7-OCS"/>
-                                    <constraint firstAttribute="bottom" secondItem="6Yf-Jk-Ivz" secondAttribute="bottom" id="f1e-hM-yAK"/>
-                                    <constraint firstAttribute="trailing" secondItem="EIH-q4-VVU" secondAttribute="trailing" id="i2I-Yx-zbZ"/>
                                     <constraint firstAttribute="height" constant="66" id="lmY-VM-fJW"/>
                                     <constraint firstItem="DVE-u2-RMU" firstAttribute="leading" secondItem="Q3j-1b-4w9" secondAttribute="trailing" id="p6R-UU-8jC"/>
-                                    <constraint firstItem="ps7-iq-l8J" firstAttribute="leading" secondItem="6Yf-Jk-Ivz" secondAttribute="trailing" id="swO-7a-KhS"/>
+                                    <constraint firstAttribute="trailing" secondItem="DVE-u2-RMU" secondAttribute="trailing" id="ruW-zT-hMW"/>
                                     <constraint firstItem="Q3j-1b-4w9" firstAttribute="leading" secondItem="ps7-iq-l8J" secondAttribute="trailing" id="uzB-wA-QR7"/>
                                 </constraints>
                                 <variation key="widthClass=regular" ambiguous="YES">
@@ -277,7 +215,11 @@
                         </constraints>
                         <items>
                             <barButtonItem width="2" style="plain" systemItem="fixedSpace" id="wKe-bw-d6H"/>
-                            <barButtonItem title="Item" id="5Yf-bO-K0e"/>
+                            <barButtonItem title="Repeat" id="5Yf-bO-K0e"/>
+                            <barButtonItem style="plain" systemItem="flexibleSpace" id="xRb-c0-ZBU"/>
+                            <barButtonItem title="Share" id="W4Z-fD-wm9"/>
+                            <barButtonItem style="plain" systemItem="flexibleSpace" id="gOH-vO-5BN"/>
+                            <barButtonItem title="Shuffle" id="B1z-wS-AfF"/>
                             <barButtonItem width="2" style="plain" systemItem="fixedSpace" id="Jdj-Kl-bDj"/>
                         </items>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -304,9 +246,7 @@
     <resources>
         <image name="backward" width="24" height="24"/>
         <image name="forward" width="24" height="24"/>
-        <image name="loop" width="16" height="16"/>
         <image name="pause" width="24" height="24"/>
         <image name="play" width="24" height="24"/>
-        <image name="shuffle" width="16" height="16"/>
     </resources>
 </document>
