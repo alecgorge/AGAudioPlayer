@@ -8,11 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class AGAudioPlayer;
+
 @interface AGAudioPlayerViewController : UIViewController
 
 @property (nonatomic) UIColor *backgroundColor;
 @property (nonatomic) UIColor *foregroundColor;
+@property (nonatomic) UIColor *foregroundHighlightColor;
 @property (nonatomic) UIColor *lightForegroundColor;
 @property (nonatomic) UIColor *darkForegroundColor;
+
+- (instancetype)initWithAudioPlayer:(AGAudioPlayer *)audioPlayer;
+
+@property (nonatomic) AGAudioPlayer *audioPlayer;
+@property (nonatomic) UIColor *tintColor;
 
 @end

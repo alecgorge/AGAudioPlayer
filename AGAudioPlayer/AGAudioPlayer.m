@@ -69,6 +69,14 @@
     return self.oriagmi.currentState == ORGMEngineStatePlaying;
 }
 
+- (BOOL)isPlayingFirstItem {
+	return self.currentIndex == 0;
+}
+
+- (BOOL)isPlayingLastItem {
+	return self.currentIndex == self.queue.count - 1;
+}
+
 - (void)setShuffle:(BOOL)shuffle {
     _shuffle = shuffle;
 }
@@ -99,7 +107,9 @@
 
 - (void)backward {
 	if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
-		self.currentIndex = self.previousIndex;
+		NSInteger lastIndex = self.previousIndex;
+		[self.playbackHistory removeLastObject];
+		self.currentIndex = lastIndex;
 	}
 	else {
 		[self seekTo:0];
@@ -123,8 +133,8 @@
 	
 	[self stop];
 	
-	AGAudioItem *item = self.currentItem;
-	[item loadMetadata:^(AGAudioItem *item) {
+	id<AGAudioItem> item = self.currentItem;
+	[item loadMetadata:^(id<AGAudioItem> item) {
 		[self.oriagmi playUrl:item.playbackURL];
 	}];
     
@@ -155,7 +165,7 @@
 	}
 }
 
-- (AGAudioItem *)nextItem {
+- (id<AGAudioItem>)nextItem {
 	return [self.queue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
 }
 
@@ -172,7 +182,7 @@
 	return l.index;
 }
 
-- (AGAudioItem *)previousItem {
+- (id<AGAudioItem>)previousItem {
 	return self.lastHistoryEntry.queue[self.lastHistoryEntry.index];
 }
 
@@ -207,8 +217,8 @@
 }
 
 - (void)prepareNextItem {
-	AGAudioItem *item = self.nextItem;
-    [item loadMetadata:^(AGAudioItem *item) {
+	id<AGAudioItem> item = self.nextItem;
+    [item loadMetadata:^(id<AGAudioItem> item) {
         // preloaded metadata
     }];
 }
@@ -218,7 +228,7 @@
 - (NSURL *)engineExpectsNextUrl:(ORGMEngine *)engine {
     [self debug: @"Engine: engineExpectsNextUrl"];
     
-    AGAudioItem *next = self.nextItem;
+    id<AGAudioItem> next = self.nextItem;
     [self incrementIndex];
     
     return next.playbackURL;

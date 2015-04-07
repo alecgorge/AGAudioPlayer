@@ -2,8 +2,11 @@
 # platform :ios, '6.0'
 
 target 'AGAudioPlayer' do
-	pod 'OrigamiEngine', :head
+	pod 'OrigamiEngine', :path => "../OrigamiEngine"
 	pod 'ASValueTrackingSlider', :path => "../ASValueTrackingSlider"
+	pod 'MarqueeLabel'
+	pod 'NAKPlaybackIndicatorView'
+	pod 'LLACircularProgressView'
 end
 
 target 'AGAudioPlayerTests' do

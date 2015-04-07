@@ -28,17 +28,17 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (void)upNextQueueChanged:(AGAudioPlayerUpNextQueueChanged)changeType;
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-          addedItem:(AGAudioItem *)item
+          addedItem:(id<AGAudioItem>)item
             atIndex:(NSInteger)idx;
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-        removedItem:(AGAudioItem *)item
+        removedItem:(id<AGAudioItem>)item
           fromIndex:(NSInteger)idx;
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-        swappedItem:(AGAudioItem *)item
+        swappedItem:(id<AGAudioItem>)item
             atIndex:(NSInteger)oldIndex
-           withItem:(AGAudioItem *)item2
+           withItem:(id<AGAudioItem>)item2
             atIndex:(NSInteger)oldIndex2;
 
 - (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue;
@@ -56,13 +56,13 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 @property (nonatomic, readonly) NSArray *queue;
 @property (nonatomic, readonly) NSArray *shuffledQueue;
 
-- (void)appendItem:(AGAudioItem *)item;
+- (void)appendItem:(id<AGAudioItem>)item;
 - (void)appendItems:(NSArray *)items;
 
-- (void)prependItem:(AGAudioItem *)item;
+- (void)prependItem:(id<AGAudioItem>)item;
 - (void)prependItems:(NSArray *)items;
 
-- (void)moveItem:(AGAudioItem *)item
+- (void)moveItem:(id<AGAudioItem>)item
          toIndex:(NSInteger)to;
 
 - (void)moveItemAtIndex:(NSInteger)from
@@ -70,13 +70,13 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (void)clear;
 
-- (void)removeItem:(AGAudioItem *)item;
+- (void)removeItem:(id<AGAudioItem>)item;
 - (void)removeItemAtIndex:(NSInteger)indx;
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx;
 
-- (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx;
-- (AGAudioItem *)unshuffledItemAtIndex:(NSUInteger)idx;
+- (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx;
+- (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx;
 
 - (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
 

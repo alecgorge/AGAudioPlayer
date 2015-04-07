@@ -8,7 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AGAudioItem : NSObject<NSCoding>
+#import "AGAudioItemCollection.h"
+#import "AGCachable.h"
+
+@protocol AGAudioItem <AGCachable>
+
+@property (nonatomic, readonly) NSString *cacheKey;
+
+@property (nonatomic) id<AGAudioItemCollection> collection;
 
 @property (nonatomic) NSInteger trackNumber;
 @property (nonatomic) NSString *title;
@@ -22,16 +29,20 @@
 
 @property (nonatomic) NSURL *albumArt;
 @property (nonatomic) NSURL *playbackURL;
-@property (nonatomic) NSDictionary *playbackRequestHTTPHeaders;
+// @property (nonatomic) NSDictionary *playbackRequestHTTPHeaders;
 
 @property (nonatomic) BOOL metadataLoaded;
 
-- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback;
+- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback;
 
 - (void)shareText:(void(^)(NSString *))stringBuilt;
 - (void)shareURL:(void(^)(NSURL *))urlFound;
 
 - (void)shareURLWithTime:(NSTimeInterval)shareTime
 				callback:(void(^)(NSURL *))urlFound;
+
+@end
+
+@interface AGAudioItemBase : NSObject <AGAudioItem>
 
 @end
