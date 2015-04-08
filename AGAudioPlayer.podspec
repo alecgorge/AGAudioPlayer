@@ -17,10 +17,8 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'AGAudioPlayer/**/*'
-  s.resource_bundles = {
-    '${POD_NAME}' => ['AGAudioPlayer/UI/Icons.xcassets/*']
-  }
+  s.source_files = 'AGAudioPlayer/**/*.{h,m}'
+  s.resources = 'AGAudioPlayer/**/*.{xib}', 'AGAudioPlayer/UI/Icons.xcassets/*'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'MediaPlayer'
