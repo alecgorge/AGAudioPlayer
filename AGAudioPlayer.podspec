@@ -17,14 +17,9 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'AGAudioPlayer/**/*.{h,m}'
-  s.resources = 'AGAudioPlayer/**/*.{xib}', 'AGAudioPlayer/UI/Icons.xcassets/*'
+  s.source_files = 'AGAudioPlayer/*.{h,m}'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'MediaPlayer'
-  s.dependency 'OrigamiEngine'
-  s.dependency 'ASValueTrackingSlider'
-  s.dependency 'MarqueeLabel'
-  s.dependency 'NAKPlaybackIndicatorView'
-  s.dependency 'LLACircularProgressView'
+  s.dependency 'FreeStreamer'
 end

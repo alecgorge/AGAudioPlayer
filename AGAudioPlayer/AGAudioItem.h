@@ -17,6 +17,8 @@
 
 @property (nonatomic) id<AGAudioItemCollection> collection;
 
+@property (nonatomic) NSInteger id;
+
 @property (nonatomic) NSInteger trackNumber;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *artist;
@@ -33,6 +35,7 @@
 
 @property (nonatomic) BOOL metadataLoaded;
 
+// this should only load new metadata if it isn't loaded yet or it needs to be updated
 - (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback;
 
 - (void)shareText:(void(^)(NSString *))stringBuilt;

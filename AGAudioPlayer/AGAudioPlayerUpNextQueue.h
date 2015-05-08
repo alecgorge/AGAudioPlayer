@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 @end
 
-@interface AGAudioPlayerUpNextQueue : NSObject
+@interface AGAudioPlayerUpNextQueue : NSObject<NSCoding>
 
 - (instancetype)initWithItems:(NSArray *)items;
 
@@ -70,6 +70,8 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (void)clear;
 
+- (void)clearAndReplaceWithItems:(NSArray *)items;
+
 - (void)removeItem:(id<AGAudioItem>)item;
 - (void)removeItemAtIndex:(NSInteger)indx;
 
@@ -79,5 +81,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx;
 
 - (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
+
+- (NSUInteger)indexOfURL:(NSURL *)url;
 
 @end

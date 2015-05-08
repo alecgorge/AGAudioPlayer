@@ -62,9 +62,11 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 
 @property (nonatomic, weak) id<AGAudioPlayerDelegate> delegate;
 
+@property (nonatomic) NSTimeInterval playbackUpdateTimeInterval;
+
 @property (nonatomic) AGAudioPlayerUpNextQueue *queue;
 
-@property (nonatomic, readonly) NSInteger currentIndex;
+@property (nonatomic) NSInteger currentIndex;
 @property (nonatomic, readonly) id<AGAudioItem> currentItem;
 
 // returns NSNotFound when last item is playing
@@ -81,6 +83,7 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 
 // playback control
 @property (nonatomic, readonly) BOOL isPlaying;
+@property (nonatomic, readonly) BOOL isBuffering;
 @property (nonatomic, readonly) BOOL isPlayingFirstItem;
 @property (nonatomic, readonly) BOOL isPlayingLastItem;
 
@@ -102,9 +105,11 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 - (void)seekTo:(NSTimeInterval)i;
 - (void)seekToPercent:(CGFloat)per;
 
+- (void)playItemAtIndex:(NSUInteger)idx;
+
 // info
 @property (nonatomic, readonly) NSTimeInterval duration;
-@property (nonatomic) NSTimeInterval elapsed;
-@property (nonatomic) CGFloat percentElapsed;
+@property (nonatomic, readonly) NSTimeInterval elapsed;
+@property (nonatomic, readonly) CGFloat percentElapsed;
 
 @end

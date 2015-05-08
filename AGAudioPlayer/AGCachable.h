@@ -9,5 +9,6 @@
 @protocol AGCachable <NSCoding>
 
 @property (nonatomic, readonly) NSString *cacheKey;
+@property (nonatomic, readonly) BOOL isCached;
 
 @end

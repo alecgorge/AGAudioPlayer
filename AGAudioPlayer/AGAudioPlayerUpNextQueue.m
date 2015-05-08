@@ -33,6 +33,24 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        self.items = NSMutableArray.array;
+        
+        [self appendItems:[aDecoder decodeObjectForKey:@"items"]];
+
+        for (id<AGAudioItem> item in self.items) {
+            [self.shuffledItems insertObject:item
+                                     atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+        }
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.items forKey:@"items"];
+}
+
 - (NSInteger)count {
     return self.items.count;
 }
@@ -137,6 +155,11 @@
     }
 }
 
+- (void)clearAndReplaceWithItems:(NSArray *)items {
+    [self clear];
+    [self appendItems:items];
+}
+
 - (void)removeItem:(id<AGAudioItem>)item {
     if(item == nil) return;
     
@@ -191,6 +214,15 @@
 	}
 	
 	return self.items;
+}
+
+- (NSUInteger)indexOfURL:(NSURL *)url {
+    for(NSInteger i = 0; i < self.count; i++) {
+        if ([[[self unshuffledItemAtIndex:i] playbackURL] isEqual:url]) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 @end

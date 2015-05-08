@@ -9,10 +9,37 @@
 #import "AppDelegate.h"
 
 #import "AGAudioPlayer.h"
-#import "AGAudioPlayerViewController.h"
+//#import "AGAudioPlayerViewController.h"
 #import "AGAudioPlayerUpNextQueue.h"
 
+@interface TestAudioItem : AGAudioItemBase
+
+- (instancetype)initWithTitle:(NSString *)str
+                          url:(NSString *)url;
+
+@end
+
+@implementation TestAudioItem
+
+- (instancetype)initWithTitle:(NSString *)str url:(NSString *)url {
+    if (self = [super init]) {
+        self.displayText = self.title = str;
+        self.playbackURL = [NSURL URLWithString:url];
+        self.metadataLoaded = YES;
+    }
+    
+    return self;
+}
+
+- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback {
+    metadataCallback(self);
+}
+
+@end
+
 @interface AppDelegate ()
+
+@property (nonatomic, strong) AGAudioPlayer *player;
 
 @end
 
@@ -24,23 +51,51 @@
 	
 	self.window = [UIWindow.alloc initWithFrame:UIScreen.mainScreen.bounds];
 	
-	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:@[]];
-	AGAudioPlayer *player = [AGAudioPlayer.alloc initWithQueue:queue];
-	
+    NSArray *pl = @[
+                    [TestAudioItem.alloc initWithTitle:@"Run Like an Antelope"
+                                                   url:@"http://phish.in/audio/000/013/626/13626.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"Tela"
+                                                   url:@"http://phish.in/audio/000/013/627/13627.mp3"]
+                    ];
+    
+	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:pl];
+	self.player = [AGAudioPlayer.alloc initWithQueue:queue];
+
+    /*
 	AGAudioPlayerViewController *vc = [AGAudioPlayerViewController.alloc initWithAudioPlayer:player];
 	vc.foregroundColor = UIColor.whiteColor;
 	vc.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:128.0/255.0 blue:95.0/255.0 alpha:1.0];
 	vc.lightForegroundColor = UIColor.whiteColor;
 	vc.darkForegroundColor = [UIColor colorWithRed:0.0/255.0 green:99.0/255.0 blue:74.0/255.0 alpha:0.8];
 	vc.tintColor = UIColor.whiteColor;
+     
 	
 	UINavigationController *nav = [UINavigationController.alloc initWithRootViewController:vc];
 	
 	self.window.rootViewController = nav;
+     */
+    
+    self.player.currentIndex = 0;
+    
+    [NSTimer scheduledTimerWithTimeInterval:5.0
+                                     target:self
+                                   selector:@selector(playbackInfo)
+                                   userInfo:nil
+                                    repeats:YES];
+    
+    [self playbackInfo];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.player seekToPercent:0.8];
+    });
 	
 	[self.window makeKeyAndVisible];
 	
     return YES;
+}
+
+- (void)playbackInfo {
+    NSLog(@"%@", self.player);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

@@ -9,7 +9,9 @@
 #import "AGAudioPlayer.h"
 
 #import <AVFoundation/AVFoundation.h>
-#import <OrigamiEngine/ORGMEngine.h>
+
+#import <FreeStreamer/FSAudioController.h>
+#import <FreeStreamer/FSPlaylistItem.h>
 
 @interface AGAudioPlayerHistoryItem : NSObject
 
@@ -35,10 +37,23 @@
 
 @end
 
-@interface AGAudioPlayer () <AVAudioSessionDelegate, ORGMEngineDelegate>
+@interface FSAudioController ()
 
-@property (nonatomic) ORGMEngine *oriagmi;
+@property (nonatomic,assign) NSUInteger currentPlaylistItemIndex;
+@property (nonatomic,strong) NSMutableArray *playlistItems;
+
+@end
+
+@interface AGAudioPlayer () <AVAudioSessionDelegate, FSAudioControllerDelegate>
+
+@property BOOL registeredAudioSession;
+
+@property (nonatomic) FSAudioController *freeStreamer;
+@property (nonatomic) FSAudioStreamState state;
+
 @property (nonatomic) NSMutableArray *playbackHistory;
+
+@property (nonatomic) NSTimer *playbackUpdateTimer;
 
 @end
 
@@ -56,17 +71,23 @@
 }
 
 - (void)setup {
-    [self setupOrigami];
+    [self setupFreeStreamer];
+    
+    self.playbackUpdateTimeInterval = 1.0f;
 }
 
 - (void)dealloc {
-    [self teardownOrigami];
+    [self teardownFreeStreamer];
 }
 
 #pragma mark - Playback Control
 
 - (BOOL)isPlaying {
-    return self.oriagmi.currentState == ORGMEngineStatePlaying;
+    return self.freeStreamer.isPlaying;
+}
+
+- (BOOL)isBuffering {
+    return self.state == kFsAudioStreamBuffering || self.state == kFsAudioStreamSeeking || self.state == kFsAudioStreamRetrievingURL;
 }
 
 - (BOOL)isPlayingFirstItem {
@@ -79,26 +100,31 @@
 
 - (void)setShuffle:(BOOL)shuffle {
     _shuffle = shuffle;
+    [self replaceNextItemIfNecessary];
 }
 
 - (void)setLoopItem:(BOOL)loopItem {
     _loopItem = loopItem;
+    [self replaceNextItemIfNecessary];
 }
 
 - (void)setLoopQueue:(BOOL)loopQueue {
     _loopQueue = loopQueue;
+    [self replaceNextItemIfNecessary];
 }
 
 - (void)resume {
-	[self.oriagmi resume];
+    if(self.state == kFsAudioStreamPaused) {
+        [self.freeStreamer pause];
+    }
 }
 
 - (void)pause {
-	[self.oriagmi pause];
+	[self.freeStreamer pause];
 }
 
 - (void)stop {
-	[self.oriagmi stop];
+	[self.freeStreamer stop];
 }
 
 - (void)forward {
@@ -117,11 +143,31 @@
 }
 
 - (void)seekTo:(NSTimeInterval)i {
-	[self.oriagmi seekToTime:i];
+    FSStreamPosition pos = {0};
+    
+    pos.position = i / self.duration;
+    
+	[self.freeStreamer.activeStream seekToPosition:pos];
 }
 
 - (void)seekToPercent:(CGFloat)per {
-	[self seekTo:per * self.duration];
+    FSStreamPosition pos = {0};
+    
+    pos.position = per;
+    
+    [self.freeStreamer.activeStream seekToPosition:pos];
+}
+
+- (NSTimeInterval)duration {
+    return self.freeStreamer.activeStream.duration.minute * 60 + self.freeStreamer.activeStream.duration.second;
+}
+
+- (NSTimeInterval)elapsed {
+    return self.freeStreamer.activeStream.currentTimePlayed.playbackTimeInSeconds;
+}
+
+- (CGFloat)percentElapsed {
+    return self.freeStreamer.activeStream.currentTimePlayed.position;
 }
 
 #pragma mark - Playback Order
@@ -135,11 +181,27 @@
 	
 	id<AGAudioItem> item = self.currentItem;
 	[item loadMetadata:^(id<AGAudioItem> item) {
-		[self.oriagmi playUrl:item.playbackURL];
+        [self registerAudioSession];
+		[self.freeStreamer addItem:[self playlistItemForAudioItem:item]];
+        [self.freeStreamer playItemAtIndex:self.freeStreamer.countOfItems - 1];
+        [self replaceNextItemIfNecessary];
 	}];
     
-    // preload metadata
-    [self prepareNextItem];
+    [self.nextItem loadMetadata:^(id<AGAudioItem> item) {
+        
+    }];
+}
+
+- (void)playItemAtIndex:(NSUInteger)idx {
+    self.currentIndex = idx;
+}
+
+- (id<AGAudioItem>)currentItem {
+    if(self.currentIndex >= self.queue.count) {
+        return nil;
+    }
+    
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][self.currentIndex];
 }
 
 - (NSInteger)nextIndex {
@@ -190,6 +252,10 @@
 	_currentIndex = self.nextIndex;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@<%p>:\n    state: %@\n    shuffle: %d, loop: %d\n    currentItem (index: %d): %@\n    playback: %.2f/%.2f (%.2f%%)", NSStringFromClass(self.class), self, [self stringForState:self.state], self.shuffle, self.loopItem || self.loopQueue, self.currentIndex, self.currentItem, self.elapsed, self.duration, self.percentElapsed * 100.0f];
+}
+
 #pragma mark - History management
 
 - (void)setupHistory {
@@ -200,11 +266,65 @@
     [self.playbackHistory removeAllObjects];
 }
 
-#pragma mark - Origami Engine management
+#pragma mark - Playback Updates
 
-- (void)setupOrigami {
-    self.oriagmi = ORGMEngine.alloc.init;
-    self.oriagmi.delegate = self;
+- (void)startPlaybackUpdatesWithInterval:(NSTimeInterval)i {
+    if (self.playbackUpdateTimer) {
+        [self.playbackUpdateTimer invalidate];
+    }
+    
+    self.playbackUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:i
+                                                                target:self
+                                                              selector:@selector(sendPlaybackUpdate)
+                                                              userInfo:nil
+                                                               repeats:YES];
+    
+    [self sendPlaybackUpdate];
+}
+
+- (void)stopPlaybackUpdates {
+    [self.playbackUpdateTimer invalidate];
+}
+
+- (void)sendPlaybackUpdate {
+    [self.delegate audioPlayer:self
+uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+                     extraInfo:nil];
+}
+
+#pragma mark - FreeStreamer management
+
+- (void)setupFreeStreamer {
+    FSStreamConfiguration *config = FSStreamConfiguration.new;
+    config.maxPrebufferedByteCount = 1024 * 1024 * 10;
+    
+    self.freeStreamer = FSAudioController.new;
+    self.freeStreamer.enableDebugOutput = YES;
+    self.freeStreamer.delegate = self;
+    
+    __weak typeof(self) wself = self;
+    
+    [self.freeStreamer setOnFailure:^(FSAudioStreamError error, NSString *errorMessage) {
+        [wself debug:@"FreeStreamer: Error: %@. %@", [wself stringForErrorCode:error], errorMessage];
+        
+        [wself.delegate audioPlayer:wself
+            uiNeedsRedrawForReason:AGAudioPlayerError
+                         extraInfo:@{@"error": [wself stringForErrorCode:error]}];
+    }];
+    
+    [self.freeStreamer setOnStateChange:^(FSAudioStreamState state) {
+        [wself debug:@"FreeStreamer: Old state: %@. New state: %@", [wself stringForState: wself.state], [wself stringForState:state]];
+        
+        [wself willChangeValueForKey:@"state"];
+        wself.state = state;
+        [wself didChangeValueForKey:@"state"];
+        
+        [wself didChangeState:wself.state];
+    }];
+    
+    [self.freeStreamer setOnMetaDataAvailable:^(NSDictionary *meta) {
+        [wself debug:@"FreeStreamer: Metadata Available: %@", meta];
+    }];
     
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(audioInteruptionOccured:)
@@ -212,75 +332,223 @@
                                              object:nil];
 }
 
-- (void)teardownOrigami {
+- (void)teardownFreeStreamer {
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (void)prepareNextItem {
-	id<AGAudioItem> item = self.nextItem;
+- (NSString *)stringForState:(FSAudioStreamState)status {
+    switch (status) {
+        case kFsAudioStreamRetrievingURL:
+            return @"Retrieving URL";
+        case kFsAudioStreamStopped:
+            return @"Stopped";
+        case kFsAudioStreamBuffering:
+            return @"Buffering";
+        case kFsAudioStreamPlaying:
+            return @"Playing";
+        case kFsAudioStreamPaused:
+            return @"Paused";
+        case kFsAudioStreamSeeking:
+            return @"Seeking";
+        case kFSAudioStreamEndOfFile:
+            return @"Got Stream EOF";
+        case kFsAudioStreamFailed:
+            return @"Stream Failed";
+        case kFsAudioStreamRetryingStarted:
+            return @"Stream Retrying: Started";
+        case kFsAudioStreamRetryingSucceeded:
+            return @"Stream Retrying: Success";
+        case kFsAudioStreamRetryingFailed:
+            return @"Stream Retrying: Failed";
+        case kFsAudioStreamPlaybackCompleted:
+            return @"Playback Complete";
+        case kFsAudioStreamUnknownState:
+            return @"Unknown!?";
+    }
+}
+
+- (NSString *)stringForErrorCode:(FSAudioStreamError)status {
+    switch (status) {
+        case kFsAudioStreamErrorNone:
+            return @"No Error";
+        case kFsAudioStreamErrorOpen:
+            return @"Error: open";
+        case kFsAudioStreamErrorStreamParse:
+            return @"Error: stream parse";
+        case kFsAudioStreamErrorNetwork:
+            return @"Error: network";
+        case kFsAudioStreamErrorUnsupportedFormat:
+            return @"Error: unsupported format";
+        case kFsAudioStreamErrorStreamBouncing:
+            return @"Error: stream bouncing";
+    }
+}
+
+- (void)replaceNextItemIfNecessary {
+    id<AGAudioItem> item = self.nextItem;
+
+    if(!item) {
+        [self debug:@"there is no next item"];
+        return;
+    }
+
     [item loadMetadata:^(id<AGAudioItem> item) {
-        // preloaded metadata
+        [self debug:@"preloaded next metadata"];
+        
+        FSPlaylistItem *pitem = [self playlistItemForAudioItem: item];
+        
+        if(!self.freeStreamer.hasNextItem) {
+            [self.freeStreamer addItem:pitem];
+        }
+        else {
+            FSPlaylistItem *apitem = self.freeStreamer.playlistItems[self.freeStreamer.currentPlaylistItemIndex + 1];
+            if(![apitem.url isEqual:item.playbackURL]) {
+                [self.freeStreamer replaceItemAtIndex:self.freeStreamer.currentPlaylistItemIndex + 1
+                                             withItem:pitem];
+            }
+        }
     }];
 }
 
-#pragma mark - ORGMEngineDelegate
-
-- (NSURL *)engineExpectsNextUrl:(ORGMEngine *)engine {
-    [self debug: @"Engine: engineExpectsNextUrl"];
+- (FSPlaylistItem *)playlistItemForAudioItem:(id<AGAudioItem>) item {
+    FSPlaylistItem *i = FSPlaylistItem.new;
     
-    id<AGAudioItem> next = self.nextItem;
-    [self incrementIndex];
+    i.title = item.displayText;
+    i.url = item.playbackURL;
     
-    return next.playbackURL;
+    return i;
 }
 
-- (void)debug:(NSString *)str {
-    NSLog(@"[AGAudioPlayer] %@", str);
+- (void)debug:(NSString *)str, ... {
+    va_list args;
+    va_start(args, str);
+    NSString *s = [NSString.alloc initWithFormat:str
+                                       arguments:args];
+    NSLog(@"[AGAudioPlayer] %@", s);
+    va_end(args);
 }
 
-- (void)engine:(ORGMEngine *)engine
-didChangeState:(ORGMEngineState)state {
+#pragma mark - FSAudioControllerDelegate
+
+- (void)audioController:(FSAudioController *)audioController
+preloadStartedForStream:(FSAudioStream *)stream {
+    [self debug:@"FreeStreamer: preloadStartedForStream: %@", stream];
+}
+
+- (BOOL)audioController:(FSAudioController *)audioController
+allowPreloadingForStream:(FSAudioStream *)stream {
+    return YES;
+}
+
+- (void)didChangeState:(FSAudioStreamState)state {
+    _currentIndex = [self.queue indexOfURL:self.freeStreamer.currentPlaylistItem.url];
+    
     switch (state) {
-        case ORGMEngineStateStopped: {
-            [self debug:@"Engine: stopped"];
+        case kFsAudioStreamRetrievingURL: {
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
             
+            break;
+        }
+        case kFsAudioStreamStopped: {
             [self.delegate audioPlayer:self
                 uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
                              extraInfo:nil];
             
+            [self stopPlaybackUpdates];
+
             break;
         }
-        case ORGMEngineStatePaused: {
-            [self debug:@"Engine: paused"];
-            
+        case kFsAudioStreamBuffering: {
             [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
                              extraInfo:nil];
             
             break;
         }
-        case ORGMEngineStatePlaying: {
-            [self debug:@"Engine: playing"];
-            
+        case kFsAudioStreamPlaying: {
             [self.delegate audioPlayer:self
                 uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
                              extraInfo:nil];
             
+            [self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
+
             break;
         }
-        case ORGMEngineStateError:
-            [self debug:[NSString stringWithFormat:@"Engine: error: %@", self.oriagmi.currentError]];
-            
-            
+        case kFsAudioStreamPaused: {
             [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerError
-                             extraInfo:@{@"error": self.oriagmi.currentError}];
+                uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+                             extraInfo:nil];
             
+            [self stopPlaybackUpdates];
+
             break;
+        }
+        case kFsAudioStreamSeeking: {
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
+
+            break;
+        }
+        case kFSAudioStreamEndOfFile: {
+//            [self prepareNextItem];
+            break;
+        }
+        case kFsAudioStreamFailed: {
+            break;
+        }
+        case kFsAudioStreamRetryingStarted: {
+            break;
+        }
+        case kFsAudioStreamRetryingSucceeded: {
+            break;
+        }
+        case kFsAudioStreamRetryingFailed: {
+            break;
+        }
+        case kFsAudioStreamPlaybackCompleted: {
+            break;
+        }
+        case kFsAudioStreamUnknownState: {
+            break;
+        }
     }
 }
 
 #pragma mark - Interruption Handling
+
+- (void)registerAudioSession {
+    if (!self.registeredAudioSession) {
+//        [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryPlayback
+//                                             error:nil];
+//        
+//        [AVAudioSession.sharedInstance setActive:YES
+//                                           error:nil];
+        
+        
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(audioRouteChanged:)
+                                                   name:AVAudioSessionRouteChangeNotification
+                                                 object:nil];
+        
+        self.registeredAudioSession = YES;
+        
+//        [NSNotificationCenter.defaultCenter addObserver:self
+//                                               selector:@selector(audioInteruptionOccured:)
+//                                                   name:AVAudioSessionInterruptionNotification
+//                                                 object:nil];
+    }
+}
+
+- (void)audioRouteChanged:(NSNotification *)notification {
+    NSNumber *reason = notification.userInfo[AVAudioSessionRouteChangeReasonKey];
+    
+    if(reason.integerValue == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+        [self pause];
+    }
+}
 
 - (void)audioInteruptionOccured:(NSNotification *)notification {
     NSDictionary *interruptionDictionary = notification.userInfo;
@@ -304,7 +572,7 @@ didChangeState:(ORGMEngineState)state {
             
             BOOL resume = options == AVAudioSessionInterruptionOptionShouldResume;
             
-            [self debug:[NSString stringWithFormat:@"AVAudioSession: interruption ended, should resume: %@", resume ? @"YES" : @"NO"]];
+            [self debug:@"AVAudioSession: interruption ended, should resume: %@", resume ? @"YES" : @"NO"];
             
             if ([self.delegate respondsToSelector:@selector(audioPlayerEndInterruption:shouldResume:)]) {
                 [self.delegate audioPlayerEndInterruption:self

@@ -1,15 +1,8 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '6.0'
+platform :ios, '8.0'
+
+link_with 'AGAudioPlayer'
 
 target 'AGAudioPlayer' do
-	pod 'OrigamiEngine', :path => "../OrigamiEngine"
-	pod 'ASValueTrackingSlider', :path => "../ASValueTrackingSlider"
-	pod 'MarqueeLabel'
-	pod 'NAKPlaybackIndicatorView'
-	pod 'LLACircularProgressView'
+	pod 'FreeStreamer', '~> 2.12'
 end
-
-target 'AGAudioPlayerTests' do
-
-end
-

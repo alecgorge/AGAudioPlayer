@@ -11,11 +11,12 @@
 @implementation AGAudioItemBase
 
 @synthesize cacheKey, trackNumber, title, artist, album, metadataLoaded, collection,
-            duration, displayText, displaySubtext, albumArt, playbackURL;
+            duration, displayText, displaySubtext, albumArt, playbackURL, id, isCached;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.trackNumber	= [aDecoder decodeIntegerForKey:@"trackNumber"];
+        self.id             = [aDecoder decodeIntegerForKey:@"id"];
+        self.trackNumber	= [aDecoder decodeIntegerForKey:@"trackNumber"];
 		self.title			= [aDecoder decodeObjectForKey:@"title"];
 		self.artist			= [aDecoder decodeObjectForKey:@"artist"];
 		self.album			= [aDecoder decodeObjectForKey:@"album"];
@@ -30,9 +31,12 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.trackNumber
-				   forKey:@"trackNumber"];
-	
+    [aCoder encodeInteger:self.trackNumber
+                   forKey:@"trackNumber"];
+    
+    [aCoder encodeInteger:self.id
+                   forKey:@"id"];
+    
 	[aCoder encodeObject:self.title
 				  forKey:@"title"];
 	
