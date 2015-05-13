@@ -21,5 +21,5 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'MediaPlayer'
-  s.dependency 'FreeStreamer'
+  s.dependency 'HysteriaPlayer'
 end

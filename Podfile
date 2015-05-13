@@ -4,5 +4,5 @@ platform :ios, '8.0'
 link_with 'AGAudioPlayer'
 
 target 'AGAudioPlayer' do
-	pod 'FreeStreamer', '~> 2.12'
+	pod 'HysteriaPlayer', :head
 end

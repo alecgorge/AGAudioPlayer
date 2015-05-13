@@ -1,13 +1,10 @@
 PODS:
-  - FreeStreamer (2.12.11):
-    - Reachability (~> 3.0)
-  - Reachability (3.2)
+  - HysteriaPlayer (HEAD based on 2.1.0)
 
 DEPENDENCIES:
-  - FreeStreamer (~> 2.12)
+  - HysteriaPlayer (HEAD)
 
 SPEC CHECKSUMS:
-  FreeStreamer: 37e0c8fe1e9fa6ced7349a9b01aaac81b013a814
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  HysteriaPlayer: 23cae4e2f1ebe303a8eeff4e85b12c9b6e662476
 
 COCOAPODS: 0.37.1
