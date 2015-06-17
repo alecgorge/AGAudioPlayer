@@ -55,7 +55,6 @@
 - (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue {
     if (self = [super init]) {
         self.queue = queue;
-        
         [self setup];
     }
     return self;
@@ -391,19 +390,22 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 
 - (void)hysteriaPlayerCurrentItemPreloaded:(CMTime)time {
 	[self debug:@"Hysteria: current item preloaded to: %f", CMTimeGetSeconds(time)];
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
 }
 
 - (void)hysteriaPlayerReadyToPlay:(HysteriaPlayerReadyToPlay)identifier {
 	[self debug:@"Hysteria: ready to play: %d", identifier];
-
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
 	
+	if(identifier == HysteriaPlayerReadyToPlayPlayer) {
+		[self.delegate audioPlayer:self
+			uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+						 extraInfo:nil];
+	}
+	else {
+		[self.delegate audioPlayer:self
+			uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+						 extraInfo:nil];
+	}
+
 	[self resume];
 }
 
