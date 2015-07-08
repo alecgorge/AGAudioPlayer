@@ -36,7 +36,7 @@
 
 @end
 
-@interface AGAudioPlayer () <AVAudioSessionDelegate, HysteriaPlayerDelegate, HysteriaPlayerDataSource>
+@interface AGAudioPlayer () <AVAudioSessionDelegate, HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
 
 @property BOOL registeredAudioSession;
 
@@ -55,6 +55,7 @@
 - (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue {
     if (self = [super init]) {
         self.queue = queue;
+        self.queue.delegate = self;
         [self setup];
     }
     return self;
@@ -329,6 +330,10 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 }
 
 #pragma mark - Hysteria Datasource
+
+- (void)upNextQueueChanged:(AGAudioPlayerUpNextQueueChanged)changeType {
+    [self.hPlayer removeAllItems];
+}
 
 - (NSUInteger)hysteriaPlayerNumberOfItems {
 	return self.queue.count;
