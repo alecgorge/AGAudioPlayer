@@ -39,6 +39,7 @@
 @interface AGAudioPlayer () <AVAudioSessionDelegate, HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
 
 @property BOOL registeredAudioSession;
+@property BOOL wasPlayingDuringInterruption;
 
 @property (nonatomic) HysteriaPlayer *hPlayer;
 
@@ -455,6 +456,8 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
         case AVAudioSessionInterruptionTypeBegan: {
             [self debug:@"AVAudioSession: interruption began"];
             
+            self.wasPlayingDuringInterruption = self.isPlaying;
+            
             if ([self.delegate respondsToSelector:@selector(audioPlayerBeginInterruption:)]) {
                 [self.delegate audioPlayerBeginInterruption:self];
             }
@@ -467,9 +470,9 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
         case AVAudioSessionInterruptionTypeEnded: {
             AVAudioSessionInterruptionOptions options = [interruptionDictionary[AVAudioSessionInterruptionOptionKey] integerValue];
             
-            BOOL resume = options == AVAudioSessionInterruptionOptionShouldResume;
+            BOOL resume = options == AVAudioSessionInterruptionOptionShouldResume && self.wasPlayingDuringInterruption;
             
-            [self debug:@"AVAudioSession: interruption ended, should resume: %@", resume ? @"YES" : @"NO"];
+            [self debug:@"AVAudioSession: interruption ended, should resume: %@", resume ? @"YES" : @"NO"];
             
             if ([self.delegate respondsToSelector:@selector(audioPlayerEndInterruption:shouldResume:)]) {
                 [self.delegate audioPlayerEndInterruption:self

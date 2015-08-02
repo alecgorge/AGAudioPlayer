@@ -11,6 +11,8 @@
 #import "AGAudioItemCollection.h"
 #import "AGCachable.h"
 
+@class MPMediaItemArtwork;
+
 @protocol AGAudioItem <AGCachable>
 
 @property (nonatomic, readonly) NSString *cacheKey;
@@ -32,6 +34,8 @@
 @property (nonatomic) NSURL *albumArt;
 @property (nonatomic) NSURL *playbackURL;
 // @property (nonatomic) NSDictionary *playbackRequestHTTPHeaders;
+
+@property (nonatomic, readonly) MPMediaItemArtwork *artwork;
 
 @property (nonatomic) BOOL metadataLoaded;
 
