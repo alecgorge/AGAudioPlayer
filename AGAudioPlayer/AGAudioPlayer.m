@@ -284,6 +284,8 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 	self.hPlayer = HysteriaPlayer.sharedInstance;
 	self.hPlayer.delegate = self;
 	self.hPlayer.datasource = self;
+    self.hPlayer.disableLogs = NO;
+    [self.hPlayer setPlayerRepeatMode:HysteriaPlayerRepeatModeOff];
     
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(audioInteruptionOccured:)
