@@ -214,6 +214,12 @@
 }
 
 - (id<AGAudioItem>)nextItem {
+    NSInteger nextIndex = self.nextIndex;
+    
+    if(nextIndex == NSNotFound || nextIndex >= self.queue.count) {
+        return nil;
+    }
+    
 	return self.queue[self.nextIndex];
 }
 
@@ -338,11 +344,11 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
     [self.hPlayer removeAllItems];
 }
 
-- (NSUInteger)hysteriaPlayerNumberOfItems {
+- (NSInteger)hysteriaPlayerNumberOfItems {
 	return self.queue.count;
 }
 
-- (NSURL *)hysteriaPlayerURLForItemAtIndex:(NSUInteger)index
+- (NSURL *)hysteriaPlayerURLForItemAtIndex:(NSInteger)index
 								 preBuffer:(BOOL)preBuffer {
 	return [self.queue[index] playbackURL];
 }
@@ -358,7 +364,7 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 					 extraInfo:nil];
 }
 
-- (void)hysteriaPlayerWillChangedAtIndex:(NSUInteger)index {
+- (void)hysteriaPlayerWillChangedAtIndex:(NSInteger)index {
 	[self debug:@"Hysteria: Player will changed at index: %d", index];
 	
 	_currentIndex = index;
