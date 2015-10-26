@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Alec Gorge. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#endif
 
 #import "AGAudioItem.h"
 #import "AGAudioPlayerUpNextQueue.h"
@@ -21,7 +23,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerBackwardStyle) {
 @protocol AGAudioPlayerUpcomingQueueDelegate <NSObject>
 
 - (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
-numberOfUpcomingTracks:upcomingTracks;
+  numberOfUpcomingTracks:upcomingTracks;
 
 - (id<AGAudioItem>)audioPlayer:(AGAudioPlayer *)audioPlayer
 audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
@@ -29,9 +31,9 @@ audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 @end
 
 typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
-	AGAudioPlayerTrackProgressUpdated,
-	AGAudioPlayerTrackBuffering,
-	AGAudioPlayerTrackPlaying,
+    AGAudioPlayerTrackProgressUpdated,
+    AGAudioPlayerTrackBuffering,
+    AGAudioPlayerTrackPlaying,
     AGAudioPlayerTrackStopped,
     AGAudioPlayerTrackPaused,
     AGAudioPlayerError,
