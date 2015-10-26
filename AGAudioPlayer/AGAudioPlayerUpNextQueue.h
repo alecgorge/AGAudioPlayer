@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Alec Gorge. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#endif
+
 #import <Foundation/NSEnumerator.h>
 
 #import "AGAudioItem.h"

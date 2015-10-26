@@ -18,25 +18,29 @@
 @property (nonatomic) NSInteger index;
 
 - (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue
-					 andIndex:(NSInteger)index;
+                     andIndex:(NSInteger)index;
 
 @end
 
 @implementation AGAudioPlayerHistoryItem
 
 - (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue
-					 andIndex:(NSInteger)index {
-	if (self = [super init]) {
-		self.queue = queue;
-		self.index = index;
-	}
-	
-	return self;
+                     andIndex:(NSInteger)index {
+    if (self = [super init]) {
+        self.queue = queue;
+        self.index = index;
+    }
+    
+    return self;
 }
 
 @end
 
+#if TARGET_OS_IPHONE
 @interface AGAudioPlayer () <AVAudioSessionDelegate, HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
+#else
+@interface AGAudioPlayer () <HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
+#endif
 
 @property BOOL registeredAudioSession;
 @property BOOL wasPlayingDuringInterruption;
@@ -83,77 +87,77 @@
 }
 
 - (BOOL)isPlayingFirstItem {
-	return self.currentIndex == 0;
+    return self.currentIndex == 0;
 }
 
 - (BOOL)isPlayingLastItem {
-	return self.currentIndex == self.queue.count - 1;
+    return self.currentIndex == self.queue.count - 1;
 }
 
 - (void)setShuffle:(BOOL)shuffle {
     _shuffle = shuffle;
-	[self.hPlayer setPlayerShuffleMode:shuffle ? HysteriaPlayerShuffleModeOn : HysteriaPlayerShuffleModeOff];
+    [self.hPlayer setPlayerShuffleMode:shuffle ? HysteriaPlayerShuffleModeOn : HysteriaPlayerShuffleModeOff];
 }
 
 - (void)setLoopItem:(BOOL)loopItem {
     _loopItem = loopItem;
-	[self.hPlayer setPlayerRepeatMode:loopItem ? HysteriaPlayerRepeatModeOnce : HysteriaPlayerRepeatModeOff];
+    [self.hPlayer setPlayerRepeatMode:loopItem ? HysteriaPlayerRepeatModeOnce : HysteriaPlayerRepeatModeOff];
 }
 
 - (void)setLoopQueue:(BOOL)loopQueue {
     _loopQueue = loopQueue;
-	[self.hPlayer setPlayerRepeatMode:loopQueue ? HysteriaPlayerRepeatModeOn : HysteriaPlayerRepeatModeOff];
+    [self.hPlayer setPlayerRepeatMode:loopQueue ? HysteriaPlayerRepeatModeOn : HysteriaPlayerRepeatModeOff];
 }
 
 - (void)resume {
-	if(!self.hPlayer.isPlaying) {
-		[self.hPlayer pausePlayerForcibly:NO];
-		[self.hPlayer play];
-	}
+    if(!self.hPlayer.isPlaying) {
+        [self.hPlayer pausePlayerForcibly:NO];
+        [self.hPlayer play];
+    }
 }
 
 - (void)pause {
-	if (self.hPlayer.isPlaying)	{
-		[self.hPlayer pausePlayerForcibly:YES];
-		[self.hPlayer pause];
-	}
+    if (self.hPlayer.isPlaying)	{
+        [self.hPlayer pausePlayerForcibly:YES];
+        [self.hPlayer pause];
+    }
 }
 
 - (void)stop {
-	[self pause];
+    [self pause];
 }
 
 - (void)forward {
-	[self.hPlayer playNext];
-//	self.currentIndex = self.nextIndex;
+    [self.hPlayer playNext];
+    //	self.currentIndex = self.nextIndex;
 }
 
 - (void)backward {
-	if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
-		[self.hPlayer playPrevious];
-//		NSInteger lastIndex = self.previousIndex;
-//		[self.playbackHistory removeLastObject];
-//		self.currentIndex = lastIndex;
-	}
-	else {
-		[self seekTo:0];
-	}
+    if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
+        [self.hPlayer playPrevious];
+        //		NSInteger lastIndex = self.previousIndex;
+        //		[self.playbackHistory removeLastObject];
+        //		self.currentIndex = lastIndex;
+    }
+    else {
+        [self seekTo:0];
+    }
 }
 
 - (void)seekTo:(NSTimeInterval)i {
-	[self.hPlayer seekToTime:i];
+    [self.hPlayer seekToTime:i];
 }
 
 - (void)seekToPercent:(CGFloat)per {
-	[self.hPlayer seekToTime:per * self.duration];
+    [self.hPlayer seekToTime:per * self.duration];
 }
 
 - (NSTimeInterval)duration {
-	return self.hPlayer.getPlayingItemDurationTime;
+    return self.hPlayer.getPlayingItemDurationTime;
 }
 
 - (NSTimeInterval)elapsed {
-	return self.hPlayer.getPlayingItemCurrentTime;
+    return self.hPlayer.getPlayingItemCurrentTime;
 }
 
 - (CGFloat)percentElapsed {
@@ -163,19 +167,19 @@
 #pragma mark - Playback Order
 
 - (void)setCurrentIndex:(NSInteger)currentIndex {
-	[self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
-																		 andIndex:self.currentIndex]];
-	_currentIndex = currentIndex;
-	
-	[self stop];
-	
-	[self.currentItem loadMetadata:^(id<AGAudioItem> i) {
-		[self.hPlayer fetchAndPlayPlayerItem:currentIndex];
-	}];
-	
-	[self.nextItem loadMetadata:^(id<AGAudioItem> i) {
-		
-	}];
+    [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
+                                                                         andIndex:self.currentIndex]];
+    _currentIndex = currentIndex;
+    
+    [self stop];
+    
+    [self.currentItem loadMetadata:^(id<AGAudioItem> i) {
+        [self.hPlayer fetchAndPlayPlayerItem:currentIndex];
+    }];
+    
+    [self.nextItem loadMetadata:^(id<AGAudioItem> i) {
+        
+    }];
 }
 
 - (void)playItemAtIndex:(NSUInteger)idx {
@@ -191,13 +195,13 @@
 }
 
 - (NSInteger)nextIndex {
-	// looping a single track
-	if (self.loopItem) {
-		return self.currentIndex;
-	}
-	
-	// last song in the current queue
-	if (self.currentIndex == self.queue.count) {
+    // looping a single track
+    if (self.loopItem) {
+        return self.currentIndex;
+    }
+    
+    // last song in the current queue
+    if (self.currentIndex == self.queue.count) {
         // start the current queue from the beginning
         if(self.loopQueue) {
             return 0;
@@ -206,11 +210,11 @@
         else {
             return NSNotFound;
         }
-	}
-	// there are still songs in the current queue
-	else {
-		return self.currentIndex + 1;
-	}
+    }
+    // there are still songs in the current queue
+    else {
+        return self.currentIndex + 1;
+    }
 }
 
 - (id<AGAudioItem>)nextItem {
@@ -220,28 +224,28 @@
         return nil;
     }
     
-	return self.queue[self.nextIndex];
+    return self.queue[self.nextIndex];
 }
 
 - (AGAudioPlayerHistoryItem *)lastHistoryEntry {
-	return self.playbackHistory.lastObject;
+    return self.playbackHistory.lastObject;
 }
 
 - (NSInteger)previousIndex {
-	AGAudioPlayerHistoryItem *l = self.lastHistoryEntry;
-	if (l == nil) {
-		return NSNotFound;
-	}
-	
-	return l.index;
+    AGAudioPlayerHistoryItem *l = self.lastHistoryEntry;
+    if (l == nil) {
+        return NSNotFound;
+    }
+    
+    return l.index;
 }
 
 - (id<AGAudioItem>)previousItem {
-	return self.lastHistoryEntry.queue[self.lastHistoryEntry.index];
+    return self.lastHistoryEntry.queue[self.lastHistoryEntry.index];
 }
 
 - (void)incrementIndex {
-	_currentIndex = self.nextIndex;
+    _currentIndex = self.nextIndex;
 }
 
 - (NSString *)description {
@@ -280,23 +284,26 @@
 
 - (void)sendPlaybackUpdate {
     [self.delegate audioPlayer:self
-uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
                      extraInfo:nil];
 }
 
 #pragma mark - Hysteria management
 
 - (void)setupHysteria {
-	self.hPlayer = HysteriaPlayer.sharedInstance;
-	self.hPlayer.delegate = self;
-	self.hPlayer.datasource = self;
+    self.hPlayer = HysteriaPlayer.sharedInstance;
+    self.hPlayer.delegate = self;
+    self.hPlayer.datasource = self;
     self.hPlayer.disableLogs = NO;
     [self.hPlayer setPlayerRepeatMode:HysteriaPlayerRepeatModeOff];
     
+#if TARGET_OS_IPHONE
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(audioInteruptionOccured:)
                                                name:AVAudioSessionInterruptionNotification
                                              object:nil];
+#endif
+    
 }
 
 - (void)teardownHysteria {
@@ -324,8 +331,8 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
             return @"Error: Player";
         case HysteriaPlayerFailedCurrentItem:
             return @"Error: Current item";
-		default:
-			return @"Error: unknown";
+        default:
+            return @"Error: unknown";
     }
 }
 
@@ -345,118 +352,122 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 }
 
 - (NSInteger)hysteriaPlayerNumberOfItems {
-	return self.queue.count;
+    return self.queue.count;
 }
 
 - (NSURL *)hysteriaPlayerURLForItemAtIndex:(NSInteger)index
-								 preBuffer:(BOOL)preBuffer {
-	return [self.queue[index] playbackURL];
+                                 preBuffer:(BOOL)preBuffer {
+    return [self.queue[index] playbackURL];
 }
 
 #pragma mark - Hysteria Delegate
 
 - (void)hysteriaPlayerDidFailed:(HysteriaPlayerFailed)identifier
-						  error:(NSError *)error {
-	[self debug:@"Hysteria: error: %@", error];
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
+                          error:(NSError *)error {
+    [self debug:@"Hysteria: error: %@", error];
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+                     extraInfo:nil];
 }
 
 - (void)hysteriaPlayerWillChangedAtIndex:(NSInteger)index {
-	[self debug:@"Hysteria: Player will changed at index: %d", index];
-	
-	_currentIndex = index;
-
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-					 extraInfo:nil];
+    [self debug:@"Hysteria: Player will changed at index: %d", index];
+    
+    _currentIndex = index;
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                     extraInfo:nil];
 }
 
 - (void)hysteriaPlayerCurrentItemChanged:(AVPlayerItem *)item {
-	[self debug:@"Hysteria: Current item changed: %@", item];
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
+    [self debug:@"Hysteria: Current item changed: %@", item];
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+                     extraInfo:nil];
 }
 
 - (void)hysteriaPlayerRateChanged:(BOOL)isPlaying {
-	[self debug:@"Hysteria: playing: %d", isPlaying];
-	
-	if(isPlaying) {
-		[self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
-	}
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:isPlaying ? AGAudioPlayerTrackPlaying : AGAudioPlayerTrackPaused
-					 extraInfo:nil];
+    [self debug:@"Hysteria: playing: %d", isPlaying];
+    
+    if(isPlaying) {
+        [self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
+    }
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:isPlaying ? AGAudioPlayerTrackPlaying : AGAudioPlayerTrackPaused
+                     extraInfo:nil];
 }
 
 - (void)hysteriaPlayerDidReachEnd {
-	[self debug:@"Hysteria: did reach end"];
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
+    [self debug:@"Hysteria: did reach end"];
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+                     extraInfo:nil];
 }
 
 - (void)hysteriaPlayerCurrentItemPreloaded:(CMTime)time {
-	[self debug:@"Hysteria: current item preloaded to: %f", CMTimeGetSeconds(time)];
+    [self debug:@"Hysteria: current item preloaded to: %f", CMTimeGetSeconds(time)];
 }
 
 - (void)hysteriaPlayerReadyToPlay:(HysteriaPlayerReadyToPlay)identifier {
-	[self debug:@"Hysteria: ready to play: %d", identifier];
-	
-	if(identifier == HysteriaPlayerReadyToPlayPlayer) {
-		[self.delegate audioPlayer:self
-			uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
-						 extraInfo:nil];
-	}
-	else {
-		[self.delegate audioPlayer:self
-			uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-						 extraInfo:nil];
-	}
-
-	[self resume];
+    [self debug:@"Hysteria: ready to play: %d", identifier];
+    
+    if(identifier == HysteriaPlayerReadyToPlayPlayer) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+                         extraInfo:nil];
+    }
+    else {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                         extraInfo:nil];
+    }
+    
+    [self resume];
 }
 
 #pragma mark - Interruption Handling
 
 - (void)registerAudioSession {
     if (!self.registeredAudioSession) {
-//        [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryPlayback
-//                                             error:nil];
-//        
-//        [AVAudioSession.sharedInstance setActive:YES
-//                                           error:nil];
+        //        [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryPlayback
+        //                                             error:nil];
+        //
+        //        [AVAudioSession.sharedInstance setActive:YES
+        //                                           error:nil];
         
-        
+#if TARGET_OS_IPHONE
         [NSNotificationCenter.defaultCenter addObserver:self
                                                selector:@selector(audioRouteChanged:)
                                                    name:AVAudioSessionRouteChangeNotification
                                                  object:nil];
+#endif
         
         self.registeredAudioSession = YES;
         
-//        [NSNotificationCenter.defaultCenter addObserver:self
-//                                               selector:@selector(audioInteruptionOccured:)
-//                                                   name:AVAudioSessionInterruptionNotification
-//                                                 object:nil];
+        //        [NSNotificationCenter.defaultCenter addObserver:self
+        //                                               selector:@selector(audioInteruptionOccured:)
+        //                                                   name:AVAudioSessionInterruptionNotification
+        //                                                 object:nil];
     }
 }
 
 - (void)audioRouteChanged:(NSNotification *)notification {
+#if TARGET_OS_IPHONE
     NSNumber *reason = notification.userInfo[AVAudioSessionRouteChangeReasonKey];
     
     if(reason.integerValue == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
         [self pause];
     }
+#endif
 }
 
 - (void)audioInteruptionOccured:(NSNotification *)notification {
+#if TARGET_OS_IPHONE
     NSDictionary *interruptionDictionary = notification.userInfo;
     AVAudioSessionInterruptionType interruptionType = [interruptionDictionary[AVAudioSessionInterruptionTypeKey] integerValue];
     
@@ -497,6 +508,7 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
         default:
             break;
     }
+#endif
 }
 
 @end

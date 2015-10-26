@@ -38,7 +38,7 @@
         self.items = NSMutableArray.array;
         
         [self appendItems:[aDecoder decodeObjectForKey:@"items"]];
-
+        
         for (id<AGAudioItem> item in self.items) {
             [self.shuffledItems insertObject:item
                                      atIndex:arc4random_uniform((u_int32_t)self.items.count)];
@@ -60,9 +60,9 @@
     
     [self.items addObject:item];
     
-	[self.shuffledItems insertObject:item
-							 atIndex:arc4random_uniform((u_int32_t)self.items.count)];
-	
+    [self.shuffledItems insertObject:item
+                             atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+    
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
@@ -85,10 +85,10 @@
     
     [self.items insertObject:item
                      atIndex:0];
-	
-	[self.shuffledItems insertObject:item
-							 atIndex:arc4random_uniform((u_int32_t)self.items.count)];
-	
+    
+    [self.shuffledItems insertObject:item
+                             atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+    
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
@@ -116,19 +116,19 @@
 - (void)moveItemAtIndex:(NSInteger)from toIndex:(NSInteger)to {
     [self.items exchangeObjectAtIndex:from
                     withObjectAtIndex:to];
-	
-	// 0 length and 1 length cause an infinite loop
-	// swap two items randomly
-	if(self.items.count > 1) {
-		u_int32_t shuffle_from = arc4random_uniform((u_int32_t)self.items.count);
-		u_int32_t shuffle_to = UINT32_MAX;
-		
-		while((shuffle_to = arc4random_uniform((u_int32_t)self.items.count)) == shuffle_from);
-		
-		[self.shuffledItems exchangeObjectAtIndex:shuffle_from
-								withObjectAtIndex:shuffle_to];
-	}
-
+    
+    // 0 length and 1 length cause an infinite loop
+    // swap two items randomly
+    if(self.items.count > 1) {
+        u_int32_t shuffle_from = arc4random_uniform((u_int32_t)self.items.count);
+        u_int32_t shuffle_to = UINT32_MAX;
+        
+        while((shuffle_to = arc4random_uniform((u_int32_t)self.items.count)) == shuffle_from);
+        
+        [self.shuffledItems exchangeObjectAtIndex:shuffle_from
+                                withObjectAtIndex:shuffle_to];
+    }
+    
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueSwappedItems];
     }
@@ -145,7 +145,7 @@
 - (void)clear {
     [self.items removeAllObjects];
     [self.shuffledItems removeAllObjects];
-
+    
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueRemovedAllItems];
     }
@@ -193,27 +193,27 @@
 }
 
 - (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx {
-	return self.shuffledItems[idx];
+    return self.shuffledItems[idx];
 }
 
 - (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx {
-	return self.items[idx];
+    return self.items[idx];
 }
 
 - (NSArray *)queue {
-	return self.items;
+    return self.items;
 }
 
 - (NSArray *)shuffledQueue {
-	return self.shuffledItems;
+    return self.shuffledItems;
 }
 
 - (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
-	if (shuffleEnabled) {
-		return self.shuffledItems;
-	}
-	
-	return self.items;
+    if (shuffleEnabled) {
+        return self.shuffledItems;
+    }
+    
+    return self.items;
 }
 
 - (NSUInteger)indexOfURL:(NSURL *)url {
