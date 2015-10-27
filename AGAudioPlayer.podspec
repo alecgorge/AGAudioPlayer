@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.source_files = 'AGAudioPlayer/*.{h,m}'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'MediaPlayer'
+  s.ios.frameworks = 'MediaPlayer'
   s.dependency 'HysteriaPlayer'
 end
