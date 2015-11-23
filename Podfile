@@ -1,8 +1,15 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '8.0'
+source 'https://github.com/CocoaPods/Specs.git'
+inhibit_all_warnings!
 
-link_with 'AGAudioPlayer'
+target :ios do
+    platform :ios, '8.0'
+    link_with 'AGAudioPlayer'
+    pod 'HysteriaPlayer', :head
+end
 
-target 'AGAudioPlayer' do
-	pod 'HysteriaPlayer', :head
+target :osx do
+    platform :osx, '10.10'
+    link_with 'AGAudioPlayerOSX'
+    pod 'HysteriaPlayer', :head
 end

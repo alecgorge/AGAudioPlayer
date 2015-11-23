@@ -1,10 +1,10 @@
 PODS:
-  - HysteriaPlayer (HEAD based on 2.1.2)
+  - HysteriaPlayer (HEAD based on 2.1.4)
 
 DEPENDENCIES:
   - HysteriaPlayer (HEAD)
 
 SPEC CHECKSUMS:
-  HysteriaPlayer: 638e16d27386da1dede8c069d09289497c870b30
+  HysteriaPlayer: 81433239fa79ca7c446ccb994d91d34eaa533ab3
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0
