@@ -341,7 +341,8 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 #pragma mark - Hysteria Datasource
 
 - (void)upNextQueueChanged:(AGAudioPlayerUpNextQueueChanged)changeType {
-    [self.hPlayer removeAllItems];
+    // [self.hPlayer removeAllItems];
+    // Causes bugs in the case of multi-artist queue
 }
 
 - (NSInteger)hysteriaPlayerNumberOfItems {
@@ -366,8 +367,8 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 
 - (void)hysteriaPlayerWillChangedAtIndex:(NSInteger)index {
 	[self debug:@"Hysteria: Player will changed at index: %d", index];
-	
-	_currentIndex = index;
+    
+    _currentIndex = index;
 
 	[self.delegate audioPlayer:self
 		uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
@@ -395,7 +396,7 @@ uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
 }
 
 - (void)hysteriaPlayerDidReachEnd {
-	[self debug:@"Hysteria: did reach end"];
+    [self debug:@"Hysteria: did reach end"];
 	
 	[self.delegate audioPlayer:self
 		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
