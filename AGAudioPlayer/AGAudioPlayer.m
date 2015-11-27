@@ -296,6 +296,7 @@
     self.hPlayer.datasource = self;
     self.hPlayer.disableLogs = NO;
     [self.hPlayer setPlayerRepeatMode:HysteriaPlayerRepeatModeOff];
+    self.player = self.hPlayer.audioPlayer;
     
 #if TARGET_OS_IPHONE
     [NSNotificationCenter.defaultCenter addObserver:self

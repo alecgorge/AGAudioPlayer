@@ -67,6 +67,7 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 @property (nonatomic) NSTimeInterval playbackUpdateTimeInterval;
 
 @property (nonatomic) AGAudioPlayerUpNextQueue *queue;
+@property (nonatomic) AVQueuePlayer *player;
 
 @property (nonatomic) NSInteger currentIndex;
 @property (nonatomic, readonly) id<AGAudioItem> currentItem;
