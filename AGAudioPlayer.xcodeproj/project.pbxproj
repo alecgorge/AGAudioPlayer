@@ -24,6 +24,7 @@
 		7CE24AB01BDDD83800ABD545 /* Pods-osx.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7CE24AAE1BDDD83800ABD545 /* Pods-osx.release.xcconfig */; };
 		7CE24AB31BDDD84B00ABD545 /* Pods-ios.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7CE24AB11BDDD84B00ABD545 /* Pods-ios.debug.xcconfig */; };
 		7CE24AB41BDDD84B00ABD545 /* Pods-ios.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7CE24AB21BDDD84B00ABD545 /* Pods-ios.release.xcconfig */; };
+		C122A1CB1C083B1800DE7E07 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122A1CA1C083B1800DE7E07 /* AVFoundation.framework */; };
 		C1511AB51BDD9F6E003B4E6C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1511AB41BDD9F6E003B4E6C /* AppDelegate.m */; };
 		C1511AB81BDD9F6E003B4E6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1511AB71BDD9F6E003B4E6C /* main.m */; };
 		C1511ABA1BDD9F6E003B4E6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1511AB91BDD9F6E003B4E6C /* Assets.xcassets */; };
@@ -68,6 +69,7 @@
 		7CE24AB21BDDD84B00ABD545 /* Pods-ios.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-ios.release.xcconfig"; path = "Target Support Files/Pods-ios/Pods-ios.release.xcconfig"; sourceTree = "<group>"; };
 		A3829033FA47B36B170D3B26 /* libPods-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4D9110121AB5C97A5CF12FF /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C122A1CA1C083B1800DE7E07 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		C1511AB11BDD9F6E003B4E6C /* AGAudioPlayerOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AGAudioPlayerOSX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1511AB31BDD9F6E003B4E6C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C1511AB41BDD9F6E003B4E6C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C122A1CB1C083B1800DE7E07 /* AVFoundation.framework in Frameworks */,
 				0FAA5F3DE0E9DB52A4B618FD /* libPods-osx.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +211,7 @@
 		80D42F16B827D769063109BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C122A1CA1C083B1800DE7E07 /* AVFoundation.framework */,
 				C1511ACA1BDDA420003B4E6C /* libPods-osx-HysteriaPlayer.a */,
 				7C3FE4451AB3B69900A52266 /* MediaPlayer.framework */,
 				08E5B13B43A031BA666E5C2A /* libPods-AGAudioPlayer.a */,
