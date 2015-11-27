@@ -8,8 +8,6 @@
 
 #import "AGAudioPlayer.h"
 
-#import <AVFoundation/AVFoundation.h>
-
 #import <HysteriaPlayer/HysteriaPlayer.h>
 
 @interface AGAudioPlayerHistoryItem : NSObject

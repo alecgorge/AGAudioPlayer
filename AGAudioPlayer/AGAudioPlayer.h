@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #endif
 
+#import <AVFoundation/AVFoundation.h>
 #import "AGAudioItem.h"
 #import "AGAudioPlayerUpNextQueue.h"
 
