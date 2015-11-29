@@ -22,5 +22,5 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.ios.frameworks = 'MediaPlayer'
-  s.dependency 'HysteriaPlayer'
+  s.dependency 'HysteriaPlayer', :head
 end
