@@ -123,6 +123,10 @@
 
 - (void)stop {
     [self pause];
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
+                     extraInfo:nil];
 }
 
 - (void)forward {
@@ -185,7 +189,7 @@
 }
 
 - (id<AGAudioItem>)currentItem {
-    if(self.currentIndex >= self.queue.count) {
+    if(self.currentIndex == -1 || self.currentIndex >= self.queue.count) {
         return nil;
     }
     
@@ -294,7 +298,6 @@
     self.hPlayer.datasource = self;
     self.hPlayer.disableLogs = NO;
     [self.hPlayer setPlayerRepeatMode:HysteriaPlayerRepeatModeOff];
-    self.player = self.hPlayer.audioPlayer;
     
 #if TARGET_OS_IPHONE
     [NSNotificationCenter.defaultCenter addObserver:self
@@ -303,6 +306,10 @@
                                              object:nil];
 #endif
     
+}
+
+- (AVQueuePlayer *)player {
+    return self.hPlayer.audioPlayer;
 }
 
 - (void)teardownHysteria {
@@ -346,9 +353,25 @@
 
 #pragma mark - Hysteria Datasource
 
-- (void)upNextQueueChanged:(AGAudioPlayerUpNextQueueChanged)changeType {
-    // [self.hPlayer removeAllItems];
-    // Causes bugs in the case of multi-artist queue
+- (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue {
+    _currentIndex = -1;
+    
+    [self stop];
+}
+
+-(void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
+       swappedItem:(id<AGAudioItem>)item
+           atIndex:(NSInteger)oldIndex
+          withItem:(id<AGAudioItem>)item2
+           atIndex:(NSInteger)oldIndex2 {
+    [self.hPlayer moveItemFromIndex:oldIndex
+                            toIndex:oldIndex2];
+}
+
+- (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
+        removedItem:(id<AGAudioItem>)item
+          fromIndex:(NSInteger)idx {
+    [self.hPlayer removeItemAtIndex:idx];
 }
 
 - (NSInteger)hysteriaPlayerNumberOfItems {
@@ -394,6 +417,9 @@
     
     if(isPlaying) {
         [self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
+    }
+    else {
+        [self stopPlaybackUpdates];
     }
     
     [self.delegate audioPlayer:self
