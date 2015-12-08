@@ -168,6 +168,10 @@
 
 #pragma mark - Playback Order
 
+- (void)setIndex:(NSInteger)index {
+    _currentIndex = index;
+}
+
 - (void)setCurrentIndex:(NSInteger)currentIndex {
     [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
                                                                          andIndex:self.currentIndex]];

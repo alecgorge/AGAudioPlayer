@@ -99,6 +99,8 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 
 @property (nonatomic) AGAudioPlayerBackwardStyle backwardStyle;
 
+- (void)setIndex:(NSInteger)index;
+
 - (void)resume;
 - (void)pause;
 - (void)stop;

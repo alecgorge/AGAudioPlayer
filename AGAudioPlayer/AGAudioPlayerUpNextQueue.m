@@ -114,8 +114,9 @@
 }
 
 - (void)moveItemAtIndex:(NSInteger)from toIndex:(NSInteger)to {
-    [self.items exchangeObjectAtIndex:from
-                    withObjectAtIndex:to];
+    id object = [self.items objectAtIndex:from];
+    [self.items removeObjectAtIndex:from];
+    [self.items insertObject:object atIndex:to];
     
     // 0 length and 1 length cause an infinite loop
     // swap two items randomly
