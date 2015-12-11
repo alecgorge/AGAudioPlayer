@@ -360,6 +360,8 @@
 - (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue {
     _currentIndex = -1;
     
+    [self.hPlayer removeAllItems];
+    
     [self stop];
 }
 
