@@ -139,12 +139,11 @@
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueSwappedItems];
     }
     
-    if([self.delegate respondsToSelector:@selector(upNextQueue:swappedItem:atIndex:withItem:atIndex:)]) {
+    if([self.delegate respondsToSelector:@selector(upNextQueue:movedItem:fromIndex:toIndex:)]) {
         [self.delegate upNextQueue:self
-                       swappedItem:self.items[to] // swap has already taken place so use flipped indices
-                           atIndex:from
-                          withItem:self.items[from]
-                           atIndex:to];
+                         movedItem:self.items[to] // swap has already taken place so use flipped indices
+                         fromIndex:from
+                           toIndex:to];
     }
 }
 

@@ -363,13 +363,10 @@
     [self stop];
 }
 
--(void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-       swappedItem:(id<AGAudioItem>)item
-           atIndex:(NSInteger)oldIndex
-          withItem:(id<AGAudioItem>)item2
-           atIndex:(NSInteger)oldIndex2 {
-    [self.hPlayer moveItemFromIndex:oldIndex
-                            toIndex:oldIndex2];
+- (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
+          addedItem:(id<AGAudioItem>)item
+            atIndex:(NSInteger)idx {
+    [self.hPlayer removeQueuesAtPlayer];
 }
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
@@ -378,13 +375,50 @@
     [self.hPlayer removeItemAtIndex:idx];
 }
 
+-(void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
+         movedItem:(id<AGAudioItem>)item
+         fromIndex:(NSInteger)oldIndex
+           toIndex:(NSInteger)newIndex {
+    [self debug:@"old currentIndex: %d", self.currentIndex];
+    
+    if(oldIndex == self.currentIndex) {
+        _currentIndex = newIndex;
+
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                         extraInfo:nil];
+    }
+    else if(oldIndex < self.currentIndex && newIndex > self.currentIndex) {
+        _currentIndex--;
+        
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                         extraInfo:nil];
+    }
+    else if(oldIndex > self.currentIndex && newIndex <= self.currentIndex) {
+        _currentIndex++;
+        
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                         extraInfo:nil];
+    }
+    
+    
+    [self.hPlayer moveItemFromIndex:oldIndex
+                            toIndex:newIndex];
+
+    [self debug:@"new currentIndex: %d", self.currentIndex];
+}
+
 - (NSInteger)hysteriaPlayerNumberOfItems {
     return self.queue.count;
 }
 
 - (NSURL *)hysteriaPlayerURLForItemAtIndex:(NSInteger)index
                                  preBuffer:(BOOL)preBuffer {
-    return [self.queue[index] playbackURL];
+    id<AGAudioItem> item = self.queue[index];
+    [self debug:@"[AGAudioPlayer] requested URL for: %02d: %@", index, item.title ];
+    return item.playbackURL;
 }
 
 #pragma mark - Hysteria Delegate
