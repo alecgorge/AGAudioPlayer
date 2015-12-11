@@ -65,6 +65,8 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (void)prependItem:(id<AGAudioItem>)item;
 - (void)prependItems:(NSArray *)items;
 
+- (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx;
+
 - (void)moveItem:(id<AGAudioItem>)item
          toIndex:(NSInteger)to;
 

@@ -106,6 +106,11 @@
     }
 }
 
+- (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx {
+    [self.items insertObject:item atIndex:idx];
+    [self.shuffledItems insertObject:item atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+}
+
 - (void)moveItem:(id<AGAudioItem>)item
          toIndex:(NSInteger)to {
     NSInteger from = [self.items indexOfObjectIdenticalTo:item];
