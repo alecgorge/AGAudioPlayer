@@ -181,6 +181,10 @@
     
     [self.currentItem loadMetadata:^(id<AGAudioItem> i) {
         [self.hPlayer fetchAndPlayPlayerItem:currentIndex];
+        
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackChanged
+                         extraInfo:nil];
     }];
     
     [self.nextItem loadMetadata:^(id<AGAudioItem> i) {
@@ -374,7 +378,12 @@
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
         removedItem:(id<AGAudioItem>)item
           fromIndex:(NSInteger)idx {
-    [self.hPlayer removeItemAtIndex:idx];
+    if(idx == self.currentIndex) {
+        [self playItemAtIndex:idx];
+    }
+    else {
+        [self.hPlayer removeQueuesAtPlayer];
+    }
 }
 
 -(void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue

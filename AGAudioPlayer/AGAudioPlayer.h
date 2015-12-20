@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
     AGAudioPlayerTrackStopped,
     AGAudioPlayerTrackPaused,
     AGAudioPlayerError,
+    AGAudioPlayerTrackChanged,
 };
 
 @protocol AGAudioPlayerDelegate <NSObject>
