@@ -59,10 +59,10 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 @property (nonatomic, readonly) NSArray *shuffledQueue;
 
 - (void)appendItem:(id<AGAudioItem>)item;
-- (void)appendItems:(NSArray *)items;
+- (void)appendItems:(NSArray<id<AGAudioItem>> *)items;
 
 - (void)prependItem:(id<AGAudioItem>)item;
-- (void)prependItems:(NSArray *)items;
+- (void)prependItems:(NSArray<id<AGAudioItem>> *)items;
 
 - (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx;
 
@@ -74,7 +74,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (void)clear;
 
-- (void)clearAndReplaceWithItems:(NSArray *)items;
+- (void)clearAndReplaceWithItems:(NSArray<id<AGAudioItem>> *)items;
 
 - (void)removeItem:(id<AGAudioItem>)item;
 - (void)removeItemAtIndex:(NSInteger)indx;
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx;
 - (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx;
 
-- (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
+- (NSArray<id<AGAudioItem>> *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
 
 - (NSUInteger)indexOfURL:(NSURL *)url;
 

@@ -10,8 +10,8 @@
 
 @interface AGAudioPlayerUpNextQueue ()
 
-@property (nonatomic) NSMutableArray *items;
-@property (nonatomic) NSMutableArray *shuffledItems;
+@property (nonatomic) NSMutableArray<id<AGAudioItem>> *items;
+@property (nonatomic) NSMutableArray<id<AGAudioItem>> *shuffledItems;
 
 @end
 
@@ -20,6 +20,7 @@
 - (id)init {
     if (self = [super init]) {
         self.items = NSMutableArray.array;
+        self.shuffledItems = NSMutableArray.array;
     }
     return self;
 }
@@ -27,6 +28,7 @@
 - (instancetype)initWithItems:(NSArray *)items {
     if (self = [super init]) {
         self.items = NSMutableArray.array;
+        self.shuffledItems = NSMutableArray.array;
         
         [self appendItems:items];
     }
@@ -131,8 +133,9 @@
         
         while((shuffle_to = arc4random_uniform((u_int32_t)self.items.count)) == shuffle_from);
         
-        [self.shuffledItems exchangeObjectAtIndex:shuffle_from
-                                withObjectAtIndex:shuffle_to];
+        id obj = [self.items objectAtIndex:shuffle_from];
+        [self.shuffledItems removeObjectAtIndex:shuffle_from];
+        [self.shuffledItems insertObject:obj atIndex:to];
     }
     
     if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
@@ -213,7 +216,7 @@
     return self.shuffledItems;
 }
 
-- (NSArray *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
+- (NSArray<id<AGAudioItem>> *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
     if (shuffleEnabled) {
         return self.shuffledItems;
     }

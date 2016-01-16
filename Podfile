@@ -2,14 +2,16 @@
 source 'https://github.com/CocoaPods/Specs.git'
 inhibit_all_warnings!
 
-target :ios do
+target "AGAudioPlayer" do
     platform :ios, '8.0'
-    link_with 'AGAudioPlayer'
-    pod 'HysteriaPlayer', :head
+
+    pod 'FreeStreamer', :git => "https://github.com/alecgorge/FreeStreamer.git"
+    # pod 'HysteriaPlayer', :head
 end
 
-target :osx do
+target "AGAudioPlayerOSX" do
     platform :osx, '10.10'
-    link_with 'AGAudioPlayerOSX'
-    pod 'HysteriaPlayer', :head
+    
+    pod 'FreeStreamer', :git => "https://github.com/alecgorge/FreeStreamer.git"
+    # pod 'HysteriaPlayer', :head
 end

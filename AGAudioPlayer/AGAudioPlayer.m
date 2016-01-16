@@ -8,7 +8,9 @@
 
 #import "AGAudioPlayer.h"
 
-#import <HysteriaPlayer/HysteriaPlayer.h>
+#import <FreeStreamer/FSAudioStream.h>
+#import <FreeStreamer/FSAudioController.h>
+#import <FreeStreamer/FSPlaylistItem.h>
 
 @interface AGAudioPlayerHistoryItem : NSObject
 
@@ -35,17 +37,21 @@
 @end
 
 #if TARGET_OS_IPHONE
-@interface AGAudioPlayer () <AVAudioSessionDelegate, HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
+@interface AGAudioPlayer () <AVAudioSessionDelegate, AGAudioPlayerUpNextQueueDelegate>
 #else
-@interface AGAudioPlayer () <HysteriaPlayerDelegate, HysteriaPlayerDataSource, AGAudioPlayerUpNextQueueDelegate>
+@interface AGAudioPlayer () <AGAudioPlayerUpNextQueueDelegate>
 #endif
+{
+    BOOL _isBuffering;
+    FSAudioStreamState _state;
+}
 
 @property BOOL registeredAudioSession;
 @property BOOL wasPlayingDuringInterruption;
 
-@property (nonatomic) HysteriaPlayer *hPlayer;
+@property (nonatomic) FSAudioController *fsAudio;
 
-@property (nonatomic) NSMutableArray *playbackHistory;
+@property (nonatomic) NSMutableArray<AGAudioPlayerHistoryItem *> *playbackHistory;
 
 @property (nonatomic) NSTimer *playbackUpdateTimer;
 
@@ -65,23 +71,23 @@
 }
 
 - (void)setup {
-    [self setupHysteria];
-    
+    [self setupFreeStreamer];
+
     self.playbackUpdateTimeInterval = 1.0f;
 }
 
 - (void)dealloc {
-    [self teardownHysteria];
+    [self teardownFreeStreamer];
 }
 
 #pragma mark - Playback Control
 
 - (BOOL)isPlaying {
-    return self.hPlayer.isPlaying;
+    return self.fsAudio.isPlaying;
 }
 
 - (BOOL)isBuffering {
-    return self.hPlayer.getHysteriaPlayerStatus == HysteriaPlayerStatusBuffering;
+    return _isBuffering;
 }
 
 - (BOOL)isPlayingFirstItem {
@@ -94,52 +100,39 @@
 
 - (void)setShuffle:(BOOL)shuffle {
     _shuffle = shuffle;
-    [self.hPlayer setPlayerShuffleMode:shuffle ? HysteriaPlayerShuffleModeOn : HysteriaPlayerShuffleModeOff];
 }
 
 - (void)setLoopItem:(BOOL)loopItem {
     _loopItem = loopItem;
-    [self.hPlayer setPlayerRepeatMode:loopItem ? HysteriaPlayerRepeatModeOnce : HysteriaPlayerRepeatModeOff];
 }
 
 - (void)setLoopQueue:(BOOL)loopQueue {
     _loopQueue = loopQueue;
-    [self.hPlayer setPlayerRepeatMode:loopQueue ? HysteriaPlayerRepeatModeOn : HysteriaPlayerRepeatModeOff];
 }
 
 - (void)resume {
-    if(!self.hPlayer.isPlaying) {
-        [self.hPlayer pausePlayerForcibly:NO];
-        [self.hPlayer play];
+    if(!self.isPlaying) {
+        [self.fsAudio pause];
     }
 }
 
 - (void)pause {
-    if (self.hPlayer.isPlaying)	{
-        [self.hPlayer pausePlayerForcibly:YES];
-        [self.hPlayer pause];
+    if (self.isPlaying)	{
+        [self.fsAudio pause];
     }
 }
 
 - (void)stop {
-    [self pause];
-    
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
-                     extraInfo:nil];
+    [self.fsAudio stop];
 }
 
 - (void)forward {
-    [self.hPlayer playNext];
-    //	self.currentIndex = self.nextIndex;
+    self.currentIndex = self.nextIndex;
 }
 
 - (void)backward {
     if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
-        [self.hPlayer playPrevious];
-        //		NSInteger lastIndex = self.previousIndex;
-        //		[self.playbackHistory removeLastObject];
-        //		self.currentIndex = lastIndex;
+        self.currentIndex = self.previousIndex;
     }
     else {
         [self seekTo:0];
@@ -147,19 +140,21 @@
 }
 
 - (void)seekTo:(NSTimeInterval)i {
-    [self.hPlayer seekToTime:i];
+    [self seekToPercent:i / self.duration];
 }
 
 - (void)seekToPercent:(CGFloat)per {
-    [self.hPlayer seekToTime:per * self.duration];
+    FSStreamPosition pos;
+    pos.position = per;
+    [self.fsAudio.activeStream seekToPosition:pos];
 }
 
 - (NSTimeInterval)duration {
-    return self.hPlayer.getPlayingItemDurationTime;
+    return self.fsAudio.activeStream.duration.playbackTimeInSeconds;
 }
 
 - (NSTimeInterval)elapsed {
-    return self.hPlayer.getPlayingItemCurrentTime;
+    return self.fsAudio.activeStream.currentTimePlayed.playbackTimeInSeconds;
 }
 
 - (CGFloat)percentElapsed {
@@ -177,19 +172,11 @@
                                                                          andIndex:self.currentIndex]];
     _currentIndex = currentIndex;
     
-    [self stop];
+    [self.fsAudio playItemAtIndex:currentIndex];
     
-    [self.currentItem loadMetadata:^(id<AGAudioItem> i) {
-        [self.hPlayer fetchAndPlayPlayerItem:currentIndex];
-        
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackChanged
-                         extraInfo:nil];
-    }];
-    
-    [self.nextItem loadMetadata:^(id<AGAudioItem> i) {
-        
-    }];
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerTrackChanged
+                     extraInfo:nil];
 }
 
 - (void)playItemAtIndex:(NSUInteger)idx {
@@ -201,7 +188,7 @@
         return nil;
     }
     
-    return self.queue[self.currentIndex];
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][self.currentIndex];
 }
 
 - (NSInteger)nextIndex {
@@ -234,7 +221,7 @@
         return nil;
     }
     
-    return self.queue[self.nextIndex];
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
 }
 
 - (AGAudioPlayerHistoryItem *)lastHistoryEntry {
@@ -259,7 +246,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@<%p>:\n    state: %@\n    shuffle: %d, loop: %d\n    currentItem (index: %ld): %@\n    playback: %.2f/%.2f (%.2f%%)", NSStringFromClass(self.class), self, [self stringForState:self.hPlayer.getHysteriaPlayerStatus], self.shuffle, self.loopItem || self.loopQueue, (long)self.currentIndex, self.currentItem, self.elapsed, self.duration, self.percentElapsed * 100.0f];
+    return [NSString stringWithFormat:@"%@<%p>:\n    state: %@\n    shuffle: %d, loop: %d\n    currentItem (index: %ld): %@\n    playback: %.2f/%.2f (%.2f%%)", NSStringFromClass(self.class), self, [self stringForState:_state], self.shuffle, self.loopItem || self.loopQueue, (long)self.currentIndex, self.currentItem, self.elapsed, self.duration, self.percentElapsed * 100.0f];
 }
 
 #pragma mark - History management
@@ -298,55 +285,97 @@
                      extraInfo:nil];
 }
 
-#pragma mark - Hysteria management
+#pragma mark - FreeStreamer management
 
-- (void)setupHysteria {
-    self.hPlayer = HysteriaPlayer.sharedInstance;
-    self.hPlayer.delegate = self;
-    self.hPlayer.datasource = self;
-    self.hPlayer.disableLogs = NO;
-    [self.hPlayer setPlayerRepeatMode:HysteriaPlayerRepeatModeOff];
+- (void)setupFreeStreamer {
+    self.fsAudio = FSAudioController.new;
     
-#if TARGET_OS_IPHONE
-    [NSNotificationCenter.defaultCenter addObserver:self
-                                           selector:@selector(audioInteruptionOccured:)
-                                               name:AVAudioSessionInterruptionNotification
-                                             object:nil];
-#endif
+    self.fsAudio.configuration.cacheEnabled = YES;
+    self.fsAudio.configuration.cacheDirectory = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"AGAudioPlayer_cache"];
+    self.fsAudio.configuration.automaticAudioSessionHandlingEnabled = YES;
+    self.fsAudio.configuration.maxPrebufferedByteCount = 30 * 1024 * 1024; // 30 MB
+    self.fsAudio.configuration.seekingFromCacheEnabled = YES;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fsAudioStreamStateDidChange:)
+                                                 name:FSAudioStreamStateChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fsAudioStreamErrorOccurred:)
+                                                 name:FSAudioStreamErrorNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fsAudioStreamMetaDataAvailable:)
+                                                 name:FSAudioStreamMetaDataNotification
+                                               object:nil];
 }
 
-- (AVQueuePlayer *)player {
-    return self.hPlayer.audioPlayer;
-}
-
-- (void)teardownHysteria {
+- (void)teardownFreeStreamer {
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (NSString *)stringForState:(HysteriaPlayerStatus)status {
+- (NSString *)stringForState:(FSAudioStreamState)status {
     switch (status) {
-        case HysteriaPlayerStatusBuffering:
+        case kFsAudioStreamRetrievingURL:
+            return @"Retriving URL";
+            
+        case kFsAudioStreamStopped:
+            return @"Stopped";
+            
+        case kFsAudioStreamBuffering:
             return @"Buffering";
-        case HysteriaPlayerStatusPlaying:
+            
+        case kFsAudioStreamSeeking:
+            return @"Seeking";
+            
+        case kFsAudioStreamPlaying:
             return @"Playing";
-        case HysteriaPlayerStatusUnknown:
-            return @"Unknown";
-        case HysteriaPlayerStatusForcePause:
+            
+        case kFsAudioStreamFailed:
+            return @"Failed";
+            
+        case kFsAudioStreamPaused:
             return @"Paused";
+            
+        case kFSAudioStreamEndOfFile:
+            return @"End of File";
+            
+        case kFsAudioStreamRetryingStarted:
+            return @"Retrying Started";
+            
+        case kFsAudioStreamRetryingSucceeded:
+            return @"Retrying Succeeded";
+            
+        case kFsAudioStreamRetryingFailed:
+            return @"Retrying Failed";
+            
+        case kFsAudioStreamPlaybackCompleted:
+            return @"Playback Completed";
+            
+        case kFsAudioStreamUnknownState:
+            return @"FSUnknown";
+            
         default:
-            return @"Unknown!?";
+            return [NSString stringWithFormat:@"Unknown state: %ld", status];
     }
 }
 
-- (NSString *)stringForErrorCode:(HysteriaPlayerFailed)status {
-    switch (status) {
-        case HysteriaPlayerFailedPlayer:
-            return @"Error: Player";
-        case HysteriaPlayerFailedCurrentItem:
-            return @"Error: Current item";
+- (NSString *)stringForErrorCode:(FSAudioStreamError)errorCode {
+    switch (errorCode) {
+        case kFsAudioStreamErrorOpen:
+            return @"Cannot open the audio stream";
+        case kFsAudioStreamErrorStreamParse:
+            return @"Cannot read the audio stream";
+        case kFsAudioStreamErrorNetwork:
+            return @"Network failed: cannot play the audio stream";
+        case kFsAudioStreamErrorUnsupportedFormat:
+            return @"Unsupported format";
+        case kFsAudioStreamErrorStreamBouncing:
+            return @"Network failed: cannot get enough data to play";
         default:
-            return @"Error: unknown";
+            return @"Unknown error occurred";
     }
 }
 
@@ -359,12 +388,154 @@
     va_end(args);
 }
 
+- (void)fsAudioStreamStateDidChange:(NSNotification *)notification {
+    if (!(notification.object == self.fsAudio.activeStream)) {
+        return;
+    }
+    
+    NSDictionary *dict = [notification userInfo];
+    FSAudioStreamState state = [[dict valueForKey:FSAudioStreamNotificationKey_State] intValue];
+    
+    [self debug:@"[FreeStreamer] %@", [self stringForState:state]];
+    
+    [self debug:@"_currentIndex = %ld", _currentIndex];
+    _currentIndex = [self.queue indexOfURL:self.fsAudio.currentPlaylistItem.url];
+    [self debug:@"_currentIndex = %ld", _currentIndex];
+    
+    _isBuffering = NO;
+    _state = state;
+    
+    switch (state) {
+        case kFsAudioStreamRetrievingURL:
+            _isBuffering = YES;
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamStopped:
+            [self stopPlaybackUpdates];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamBuffering:
+            _isBuffering = YES;
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamSeeking:
+            _isBuffering = YES;
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
+
+            break;
+            
+        case kFsAudioStreamPlaying:
+            [self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamFailed:
+            [self stopPlaybackUpdates];
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackStopped
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamPaused:
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
+                             extraInfo:nil];
+
+            break;
+            
+        case kFsAudioStreamRetryingStarted:
+            _isBuffering = YES;
+            
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackBuffering
+                             extraInfo:nil];
+            
+            break;
+            
+        case kFsAudioStreamPlaybackCompleted:
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerTrackChanged
+                             extraInfo:nil];
+            
+            break;
+
+        case kFSAudioStreamEndOfFile:
+        case kFsAudioStreamRetryingSucceeded:
+        case kFsAudioStreamRetryingFailed:
+        case kFsAudioStreamUnknownState:
+            
+            break;
+    }
+}
+
+- (void)fsAudioStreamErrorOccurred:(NSNotification *)notification {
+    if (!(notification.object == self.fsAudio.activeStream)) {
+        return;
+    }
+    
+    NSDictionary *dict = [notification userInfo];
+    FSAudioStreamError errorCode = [[dict valueForKey:FSAudioStreamNotificationKey_Error] intValue];
+    
+    [self debug:@"[FreeStreamer] Error: %@", [self stringForErrorCode:errorCode]];
+    
+    [self.delegate audioPlayer:self
+        uiNeedsRedrawForReason:AGAudioPlayerError
+                     extraInfo:@{@"reason": [self stringForErrorCode:errorCode],
+                                 @"code": @(errorCode)}];
+}
+
+- (void)fsAudioStreamMetaDataAvailable:(NSNotification *)notification {
+
+}
+
+- (FSPlaylistItem *)playlistItemForAudioItem:(id<AGAudioItem>)item {
+    FSPlaylistItem *i = FSPlaylistItem.new;
+    i.url = item.playbackURL;
+    i.title = item.title;
+    
+    return i;
+}
+
+- (NSArray<FSPlaylistItem *>*)fsPlaylist {
+    NSMutableArray *arr = NSMutableArray.array;
+    
+    for (NSUInteger i = 0; i < self.queue.count; i++) {
+        id<AGAudioItem> item = [self.queue properQueueForShuffleEnabled:self.shuffle][i];
+        
+        [arr addObject:[self playlistItemForAudioItem:item]];
+    }
+    
+    return arr;
+}
+
 #pragma mark - Hysteria Datasource
 
 - (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue {
     _currentIndex = -1;
-    
-    [self.hPlayer removeAllItems];
     
     [self stop];
 }
@@ -372,17 +543,30 @@
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
           addedItem:(id<AGAudioItem>)item
             atIndex:(NSInteger)idx {
-    [self.hPlayer removeQueuesAtPlayer];
+    if(idx <= self.currentIndex) {
+        _currentIndex++;
+
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
+                         extraInfo:nil];
+    }
+    
+    [self.fsAudio insertItem:[self playlistItemForAudioItem:item]
+                     atIndex:idx];
 }
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
         removedItem:(id<AGAudioItem>)item
           fromIndex:(NSInteger)idx {
     if(idx == self.currentIndex) {
-        [self playItemAtIndex:idx];
+        // FreeStreamer doesn't allow remove the current item
+        // so build a new playlist and start at the same index which
+        // is now the next track
+        [self.fsAudio playFromPlaylist:[self fsPlaylist]
+                             itemIndex:idx];
     }
     else {
-        [self.hPlayer removeQueuesAtPlayer];
+        [self.fsAudio removeItemAtIndex:idx];
     }
 }
 
@@ -394,115 +578,22 @@
     
     if(oldIndex == self.currentIndex) {
         _currentIndex = newIndex;
-
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-                         extraInfo:nil];
     }
     else if(oldIndex < self.currentIndex && newIndex > self.currentIndex) {
         _currentIndex--;
-        
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-                         extraInfo:nil];
     }
     else if(oldIndex > self.currentIndex && newIndex <= self.currentIndex) {
         _currentIndex++;
-        
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-                         extraInfo:nil];
     }
-    
-    
-    [self.hPlayer moveItemFromIndex:oldIndex
-                            toIndex:newIndex];
+
+    [self.fsAudio moveItemAtIndex:oldIndex
+                          toIndex:newIndex];
 
     [self debug:@"new currentIndex: %d", self.currentIndex];
-}
 
-- (NSInteger)hysteriaPlayerNumberOfItems {
-    return self.queue.count;
-}
-
-- (NSURL *)hysteriaPlayerURLForItemAtIndex:(NSInteger)index
-                                 preBuffer:(BOOL)preBuffer {
-    id<AGAudioItem> item = self.queue[index];
-    [self debug:@"[AGAudioPlayer] requested URL for: %02d: %@", index, item.title ];
-    return item.playbackURL;
-}
-
-#pragma mark - Hysteria Delegate
-
-- (void)hysteriaPlayerDidFailed:(HysteriaPlayerFailed)identifier
-                          error:(NSError *)error {
-    [self debug:@"Hysteria: error: %@", error];
-    
     [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
+        uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
                      extraInfo:nil];
-}
-
-- (void)hysteriaPlayerWillChangedAtIndex:(NSInteger)index {
-	[self debug:@"Hysteria: Player will changed at index: %d", index];
-    
-    _currentIndex = index;
-
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-					 extraInfo:nil];
-}
-
-- (void)hysteriaPlayerCurrentItemChanged:(AVPlayerItem *)item {
-    [self debug:@"Hysteria: Current item changed: %@", item];
-    
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-                     extraInfo:nil];
-}
-
-- (void)hysteriaPlayerRateChanged:(BOOL)isPlaying {
-    [self debug:@"Hysteria: playing: %d", isPlaying];
-    
-    if(isPlaying) {
-        [self startPlaybackUpdatesWithInterval:self.playbackUpdateTimeInterval];
-    }
-    else {
-        [self stopPlaybackUpdates];
-    }
-    
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:isPlaying ? AGAudioPlayerTrackPlaying : AGAudioPlayerTrackPaused
-                     extraInfo:nil];
-}
-
-- (void)hysteriaPlayerDidReachEnd {
-    [self debug:@"Hysteria: did reach end"];
-	
-	[self.delegate audioPlayer:self
-		uiNeedsRedrawForReason:AGAudioPlayerTrackProgressUpdated
-					 extraInfo:nil];
-}
-
-- (void)hysteriaPlayerCurrentItemPreloaded:(CMTime)time {
-    [self debug:@"Hysteria: current item preloaded to: %f", CMTimeGetSeconds(time)];
-}
-
-- (void)hysteriaPlayerReadyToPlay:(HysteriaPlayerReadyToPlay)identifier {
-    [self debug:@"Hysteria: ready to play: %d", identifier];
-    
-    if(identifier == HysteriaPlayerReadyToPlayPlayer) {
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackPaused
-                         extraInfo:nil];
-    }
-    else {
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerTrackPlaying
-                         extraInfo:nil];
-    }
-    
-    [self resume];
 }
 
 #pragma mark - Interruption Handling
