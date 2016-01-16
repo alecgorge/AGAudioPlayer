@@ -120,6 +120,14 @@
 - (void)insertItem:(FSPlaylistItem *)item atIndex:(NSInteger)index;
 
 /**
+ * Moves an item already in the playlist to a different position in the playlist
+ *
+ * @param from The original index of the track to move
+ * @Param to The destination of the the track at the index specified in `from`
+ */
+- (void)moveItemAtIndex:(NSUInteger)from toIndex:(NSUInteger)to;
+
+/**
  * Replaces a playlist item.
  *
  * @param index The index of the playlist item to be replaced.

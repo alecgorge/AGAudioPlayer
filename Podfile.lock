@@ -12,7 +12,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   FreeStreamer:
-    :commit: e1d3b7a8354fe42d2d37bf8c3491d2c588867338
+    :commit: 047f7baae14d14e3916eaff4f4c5ea97521e41cd
     :git: https://github.com/alecgorge/FreeStreamer.git
 
 SPEC CHECKSUMS:
