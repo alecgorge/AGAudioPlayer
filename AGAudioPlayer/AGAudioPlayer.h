@@ -69,7 +69,6 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 @property (nonatomic) NSTimeInterval playbackUpdateTimeInterval;
 
 @property (nonatomic) AGAudioPlayerUpNextQueue *queue;
-@property (nonatomic, readonly) AVQueuePlayer *player;
 
 @property (nonatomic) NSInteger currentIndex;
 @property (nonatomic, readonly) id<AGAudioItem> currentItem;
@@ -118,5 +117,7 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 @property (nonatomic, readonly) NSTimeInterval duration;
 @property (nonatomic, readonly) NSTimeInterval elapsed;
 @property (nonatomic, readonly) CGFloat percentElapsed;
+
+@property (nonatomic) CGFloat volume;
 
 @end

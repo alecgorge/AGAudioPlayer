@@ -532,7 +532,15 @@
     return arr;
 }
 
-#pragma mark - Hysteria Datasource
+- (CGFloat)volume {
+    return self.fsAudio.volume;
+}
+
+- (void)setVolume:(CGFloat)volume {
+    self.fsAudio.volume = volume;
+}
+
+#pragma mark - Queue delegate
 
 - (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue {
     _currentIndex = -1;
