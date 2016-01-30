@@ -111,6 +111,12 @@
 - (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx {
     [self.items insertObject:item atIndex:idx];
     [self.shuffledItems insertObject:item atIndex:arc4random_uniform((u_int32_t)self.items.count)];
+
+    if([self.delegate respondsToSelector:@selector(upNextQueue:addedItem:atIndex:)]) {
+        [self.delegate upNextQueue:self
+                         addedItem:item
+                           atIndex:idx];
+    }
 }
 
 - (void)moveItem:(id<AGAudioItem>)item

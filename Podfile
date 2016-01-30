@@ -5,13 +5,13 @@ inhibit_all_warnings!
 target "AGAudioPlayer" do
     platform :ios, '8.0'
 
-    pod 'FreeStreamer', :git => "https://github.com/alecgorge/FreeStreamer.git"
+    pod 'FreeStreamer'
     # pod 'HysteriaPlayer', :head
 end
 
 target "AGAudioPlayerOSX" do
     platform :osx, '10.10'
     
-    pod 'FreeStreamer', :git => "https://github.com/alecgorge/FreeStreamer.git"
+    pod 'FreeStreamer'
     # pod 'HysteriaPlayer', :head
 end

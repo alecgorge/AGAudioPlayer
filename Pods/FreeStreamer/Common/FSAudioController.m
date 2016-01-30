@@ -563,15 +563,19 @@
         return;
     }
     
+    if (index > self.playlistItems.count) {
+        return;
+    }
+    
+    if(self.playlistItems.count == 0 && index == 0) {
+        [self addItem:item];
+    }
+    
     [self.playlistItems insertObject:item
                              atIndex:index];
     
     FSAudioStreamProxy *proxy = [[FSAudioStreamProxy alloc] initWithAudioController:self];
     proxy.url = item.url;
-    
-    if (self.enableDebugOutput) {
-        NSLog(@"[FSAudioController.m:%i] insertItem:atIndex. Adding stream proxy for %@ at %ld", __LINE__, proxy.url, index);
-    }
     
     [_streams insertObject:proxy
                    atIndex:index];

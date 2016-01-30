@@ -310,6 +310,7 @@
                                              selector:@selector(fsAudioStreamMetaDataAvailable:)
                                                  name:FSAudioStreamMetaDataNotification
                                                object:nil];
+    [self registerAudioSession];
 }
 
 - (void)teardownFreeStreamer {
@@ -635,7 +636,9 @@
     NSNumber *reason = notification.userInfo[AVAudioSessionRouteChangeReasonKey];
     
     if(reason.integerValue == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
-        [self pause];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self pause];
+        });
     }
 #endif
 }
@@ -655,7 +658,9 @@
                 [self.delegate audioPlayerBeginInterruption:self];
             }
             else {
-                [self pause];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self pause];
+                });
             }
         }
             
@@ -673,7 +678,9 @@
             }
             else {
                 if(resume) {
-                    [self resume];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self resume];
+                    });
                 }
             }
         }

@@ -1,24 +1,15 @@
 PODS:
-  - FreeStreamer (3.2.1):
+  - FreeStreamer (3.3.0):
     - Reachability (~> 3.0)
   - Reachability (3.2)
 
 DEPENDENCIES:
-  - FreeStreamer (from `https://github.com/alecgorge/FreeStreamer.git`)
-
-EXTERNAL SOURCES:
-  FreeStreamer:
-    :git: https://github.com/alecgorge/FreeStreamer.git
-
-CHECKOUT OPTIONS:
-  FreeStreamer:
-    :commit: 047f7baae14d14e3916eaff4f4c5ea97521e41cd
-    :git: https://github.com/alecgorge/FreeStreamer.git
+  - FreeStreamer
 
 SPEC CHECKSUMS:
-  FreeStreamer: 196f535d0fc365b9705bf79bfce70f1ab0f7828a
+  FreeStreamer: d0870b7cca7db2d457feb03a33fa220694bdbb32
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
-PODFILE CHECKSUM: f9b93ea433cca4c1b0b53193cdf47137fa53ef2c
+PODFILE CHECKSUM: 1dd03acab15fde56247dcbfc0a7bf3168fd2d297
 
 COCOAPODS: 1.0.0.beta.2
