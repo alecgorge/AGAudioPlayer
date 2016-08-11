@@ -191,21 +191,21 @@
         return;
     }
     
-    if (!self.preloadNextPlaylistItemAutomatically) {
-        // No preloading wanted, skip
-        if (self.enableDebugOutput) {
-            NSLog(@"[FSAudioController.m:%i] Preloading disabled, return.", __LINE__);
-        }
-        
-        return;
-    }
-    
     NSDictionary *dict = [notification userInfo];
     int state = [[dict valueForKey:FSAudioStreamNotificationKey_State] intValue];
     
     if (state == kFSAudioStreamEndOfFile) {
         if (self.enableDebugOutput) {
             NSLog(@"[FSAudioController.m:%i] EOF reached for %@", __LINE__, self.audioStream.url);
+        }
+        
+        if (!self.preloadNextPlaylistItemAutomatically) {
+            // No preloading wanted, skip
+            if (self.enableDebugOutput) {
+                NSLog(@"[FSAudioController.m:%i] Preloading disabled, return.", __LINE__);
+            }
+            
+            return;
         }
         
         // Reached EOF for this stream, do we have another item waiting in the playlist?
@@ -258,9 +258,11 @@
         
         self.songSwitchInProgress = NO;
         
+        if (self.configuration.automaticAudioSessionHandlingEnabled) {
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000)
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 #endif
+        }
         [self setAudioSessionActive:YES];
     }
 }
@@ -283,13 +285,15 @@
 
 - (void)setAudioSessionActive:(BOOL)active
 {
+    if (self.configuration.automaticAudioSessionHandlingEnabled) {
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000)
-    [[AVAudioSession sharedInstance] setActive:active withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+        [[AVAudioSession sharedInstance] setActive:active withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 #else
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 40000)
-    [[AVAudioSession sharedInstance] setActive:active error:nil];
+        [[AVAudioSession sharedInstance] setActive:active error:nil];
 #endif
 #endif
+    }
 }
 
 /*
@@ -569,6 +573,7 @@
     
     if(self.playlistItems.count == 0 && index == 0) {
         [self addItem:item];
+        return;
     }
     
     [self.playlistItems insertObject:item
@@ -652,7 +657,7 @@
         return;
     }
     
-    if (self.currentPlaylistItemIndex == index) {
+    if (self.currentPlaylistItemIndex == index && self.isPlaying) {
         // If the item is currently playing, do not allow the removal
         return;
     }
@@ -723,9 +728,9 @@
         }
         [self.audioStream stop];
         
-        self.currentPlaylistItemIndex = self.currentPlaylistItemIndex + 1;
-        
         [self deactivateInactivateStreams:self.currentPlaylistItemIndex];
+        
+        self.currentPlaylistItemIndex = self.currentPlaylistItemIndex + 1;
         
         [self play];
     }
@@ -739,9 +744,9 @@
         }
         [self.audioStream stop];
         
-        self.currentPlaylistItemIndex = self.currentPlaylistItemIndex - 1;
-        
         [self deactivateInactivateStreams:self.currentPlaylistItemIndex];
+        
+        self.currentPlaylistItemIndex = self.currentPlaylistItemIndex - 1;
         
         [self play];
     }

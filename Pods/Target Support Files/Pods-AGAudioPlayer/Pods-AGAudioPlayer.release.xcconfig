@@ -1,5 +1,8 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(SDKROOT)/usr/include/libxml2 $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/FreeStreamer" "${PODS_ROOT}/Headers/Public/Reachability"
+LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/FreeStreamer-iOS" "$PODS_CONFIGURATION_BUILD_DIR/Reachability-iOS"
 OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/FreeStreamer" -isystem "${PODS_ROOT}/Headers/Public/Reachability"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"Pods-AGAudioPlayer-FreeStreamer" -l"Pods-AGAudioPlayer-Reachability" -l"stdc++" -l"xml2" -framework "AVFoundation" -framework "AudioToolbox" -framework "CFNetwork" -framework "MediaPlayer" -framework "SystemConfiguration"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"FreeStreamer-iOS" -l"Reachability-iOS" -l"stdc++" -l"xml2" -framework "AVFoundation" -framework "AudioToolbox" -framework "CFNetwork" -framework "MediaPlayer" -framework "SystemConfiguration"
+PODS_BUILD_DIR = $BUILD_DIR
+PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}/Pods

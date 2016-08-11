@@ -1,1 +1,1 @@
-../../../FreeStreamer/Common/FSAudioController.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/FSAudioController.h

@@ -98,6 +98,7 @@ static NSInteger sortCacheObjects(id co1, id co2, void *keyForSorting)
         self.seekingFromCacheEnabled = YES;
         self.automaticAudioSessionHandlingEnabled = YES;
         self.enableTimeAndPitchConversion = NO;
+        self.requireStrictContentTypeChecking = YES;
         self.maxDiskCacheSize = 256000000; // 256 MB
         self.usePrebufferSizeCalculationInSeconds = YES;
         self.usePrebufferSizeCalculationInPackets = NO;
@@ -197,7 +198,7 @@ public:
     void audioStreamErrorOccurred(int errorCode, CFStringRef errorDescription);
     void audioStreamStateChanged(astreamer::Audio_Stream::State state);
     void audioStreamMetaDataAvailable(std::map<CFStringRef,CFStringRef> metaData);
-    void samplesAvailable(AudioBufferList samples, AudioStreamPacketDescription description);
+    void samplesAvailable(AudioBufferList *samples, UInt32 frames, AudioStreamPacketDescription description);
     void bitrateAvailable();
 };
 
@@ -250,6 +251,8 @@ public:
 @property (nonatomic,unsafe_unretained) FSAudioStream *stream;
 
 - (AudioStreamStateObserver *)streamStateObserver;
+
+- (void)endBackgroundTask;
 
 - (void)reachabilityChanged:(NSNotification *)note;
 - (void)interruptionOccurred:(NSNotification *)notification;
@@ -316,6 +319,8 @@ public:
                                                    object:nil];
 
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 40000)
+        _backgroundTask = UIBackgroundTaskInvalid;
+        
         @synchronized (self) {
             if (!fsAudioStreamPrivateActiveSessions) {
                 fsAudioStreamPrivateActiveSessions = [[NSMutableDictionary alloc] init];
@@ -414,6 +419,16 @@ public:
 #endif
             }
         }
+    }
+#endif
+}
+
+- (void)endBackgroundTask
+{
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 40000)
+    if (_backgroundTask != UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:_backgroundTask];
+        _backgroundTask = UIBackgroundTaskInvalid;
     }
 #endif
 }
@@ -654,6 +669,7 @@ public:
     config.seekingFromCacheEnabled  = c->seekingFromCacheEnabled;
     config.automaticAudioSessionHandlingEnabled = c->automaticAudioSessionHandlingEnabled;
     config.enableTimeAndPitchConversion = c->enableTimeAndPitchConversion;
+    config.requireStrictContentTypeChecking = c->requireStrictContentTypeChecking;
     config.maxDiskCacheSize         = c->maxDiskCacheSize;
     
     if (c->userAgent) {
@@ -911,6 +927,13 @@ public:
 
 - (void)attemptRestart
 {
+    if (_audioStream->isPreloading()) {
+#if defined(DEBUG) || (TARGET_IPHONE_SIMULATOR)
+        NSLog(@"FSAudioStream: Stream is preloading. Not attempting a restart");
+#endif
+        return;
+    }
+    
     if (_wasPaused) {
 #if defined(DEBUG) || (TARGET_IPHONE_SIMULATOR)
         NSLog(@"FSAudioStream: Stream was paused. Not attempting a restart");
@@ -981,6 +1004,14 @@ public:
         return;
     }
     
+#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 40000)
+    [self endBackgroundTask];
+    
+    _backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundTask];
+    }];
+#endif
+    
     _audioStream->open();
 
     if (!_reachability) {
@@ -994,12 +1025,7 @@ public:
 {
     _audioStream->close(true);
     
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 40000)
-    if (_backgroundTask != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:_backgroundTask];
-        _backgroundTask = UIBackgroundTaskInvalid;
-    }
-#endif
+    [self endBackgroundTask];
     
     [_reachability stopNotifier], _reachability = nil;
 }
@@ -1032,9 +1058,13 @@ public:
     
     _audioStream->rewind(seconds);
     
+    __weak FSAudioStreamPrivate *weakSelf = self;
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        FSAudioStreamPrivate *strongSelf = weakSelf;
+        
         // Return the original volume back
-        _audioStream->setVolume(originalVolume);
+        strongSelf->_audioStream->setVolume(originalVolume);
     });
 }
 
@@ -1127,7 +1157,7 @@ public:
 
 -(NSString *)description
 {
-    return [NSString stringWithFormat:@"[FreeStreamer %@] URL: %@\nbufferCount: %i\nbufferSize: %i\nmaxPacketDescs: %i\nhttpConnectionBufferSize: %i\noutputSampleRate: %f\noutputNumChannels: %ld\nbounceInterval: %i\nmaxBounceCount: %i\nstartupWatchdogPeriod: %i\nmaxPrebufferedByteCount: %i\nformat: %@\nbit rate: %f\nuserAgent: %@\ncacheDirectory: %@\npredefinedHttpHeaderValues: %@\ncacheEnabled: %@\nseekingFromCacheEnabled: %@\nautomaticAudioSessionHandlingEnabled: %@\nenableTimeAndPitchConversion: %@\nmaxDiskCacheSize: %i\nusePrebufferSizeCalculationInSeconds: %@\nusePrebufferSizeCalculationInPackets: %@\nrequiredPrebufferSizeInSeconds: %f\nrequiredInitialPrebufferedByteCountForContinuousStream: %i\nrequiredInitialPrebufferedByteCountForNonContinuousStream: %i\nrequiredInitialPrebufferedPacketCount: %i",
+    return [NSString stringWithFormat:@"[FreeStreamer %@] URL: %@\nbufferCount: %i\nbufferSize: %i\nmaxPacketDescs: %i\nhttpConnectionBufferSize: %i\noutputSampleRate: %f\noutputNumChannels: %ld\nbounceInterval: %i\nmaxBounceCount: %i\nstartupWatchdogPeriod: %i\nmaxPrebufferedByteCount: %i\nformat: %@\nbit rate: %f\nuserAgent: %@\ncacheDirectory: %@\npredefinedHttpHeaderValues: %@\ncacheEnabled: %@\nseekingFromCacheEnabled: %@\nautomaticAudioSessionHandlingEnabled: %@\nenableTimeAndPitchConversion: %@\nrequireStrictContentTypeChecking: %@\nmaxDiskCacheSize: %i\nusePrebufferSizeCalculationInSeconds: %@\nusePrebufferSizeCalculationInPackets: %@\nrequiredPrebufferSizeInSeconds: %f\nrequiredInitialPrebufferedByteCountForContinuousStream: %i\nrequiredInitialPrebufferedByteCountForNonContinuousStream: %i\nrequiredInitialPrebufferedPacketCount: %i",
             freeStreamerReleaseVersion(),
             self.url,
             self.configuration.bufferCount,
@@ -1149,6 +1179,7 @@ public:
             (self.configuration.seekingFromCacheEnabled ? @"YES" : @"NO"),
             (self.configuration.automaticAudioSessionHandlingEnabled ? @"YES" : @"NO"),
             (self.configuration.enableTimeAndPitchConversion ? @"YES" : @"NO"),
+            (self.configuration.requireStrictContentTypeChecking ? @"YES" : @"NO"),
             self.configuration.maxDiskCacheSize,
             (self.configuration.usePrebufferSizeCalculationInSeconds ? @"YES" : @"NO"),
             (self.configuration.usePrebufferSizeCalculationInPackets ? @"YES" : @"NO"),
@@ -1213,6 +1244,7 @@ public:
         c->seekingFromCacheEnabled  = configuration.seekingFromCacheEnabled;
         c->automaticAudioSessionHandlingEnabled = configuration.automaticAudioSessionHandlingEnabled;
         c->enableTimeAndPitchConversion = configuration.enableTimeAndPitchConversion;
+        c->requireStrictContentTypeChecking = configuration.requireStrictContentTypeChecking;
         c->maxDiskCacheSize         = configuration.maxDiskCacheSize;
         c->requiredInitialPrebufferedByteCountForContinuousStream = configuration.requiredInitialPrebufferedByteCountForContinuousStream;
         c->requiredInitialPrebufferedByteCountForNonContinuousStream = configuration.requiredInitialPrebufferedByteCountForNonContinuousStream;
@@ -1649,6 +1681,20 @@ public:
     return [_private description];
 }
 
+-(NSUInteger)maxRetryCount
+{
+    NSAssert([NSThread isMainThread], @"FSAudioStream.maxRetryCount needs to be called in the main thread");
+    
+    return [_private maxRetryCount];
+}
+
+-(void)setMaxRetryCount:(NSUInteger)maxRetryCount
+{
+    NSAssert([NSThread isMainThread], @"FSAudioStream.setMaxRetryCount needs to be called in the main thread");
+    
+    [_private setMaxRetryCount:maxRetryCount];
+}
+
 @end
 
 /*
@@ -1737,7 +1783,10 @@ void AudioStreamStateObserver::audioStreamErrorOccurred(int errorCode, CFStringR
         error == kFsAudioStreamErrorUnsupportedFormat ||
         error == kFsAudioStreamErrorOpen ||
         error == kFsAudioStreamErrorTerminated) {
-        [priv attemptRestart];
+        
+        if (!source->isPreloading()) {
+            [priv attemptRestart];
+        }
     }
 }
     
@@ -1753,6 +1802,8 @@ void AudioStreamStateObserver::audioStreamStateChanged(astreamer::Audio_Stream::
             notificationHandler = @selector(notifyPlaybackBuffering);
             break;
         case astreamer::Audio_Stream::PLAYING:
+            [priv endBackgroundTask];
+            
             notificationHandler = @selector(notifyPlaybackPlaying);
             break;
         case astreamer::Audio_Stream::PAUSED:
@@ -1765,6 +1816,8 @@ void AudioStreamStateObserver::audioStreamStateChanged(astreamer::Audio_Stream::
             notificationHandler = @selector(notifyPlaybackEndOfFile);
             break;
         case astreamer::Audio_Stream::FAILED:
+            [priv endBackgroundTask];
+            
             notificationHandler = @selector(notifyPlaybackFailed);
             break;
         case astreamer::Audio_Stream::PLAYBACK_COMPLETED:
@@ -1807,13 +1860,10 @@ void AudioStreamStateObserver::audioStreamMetaDataAvailable(std::map<CFStringRef
     [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
-void AudioStreamStateObserver::samplesAvailable(AudioBufferList samples, AudioStreamPacketDescription description)
+void AudioStreamStateObserver::samplesAvailable(AudioBufferList *samples, UInt32 frames, AudioStreamPacketDescription description)
 {
-    if ([priv.delegate respondsToSelector:@selector(audioStream:samplesAvailable:count:)]) {
-        int16_t *buffer = (int16_t *)samples.mBuffers[0].mData;
-        NSUInteger count = description.mDataByteSize / sizeof(int16_t);
-        
-        [priv.delegate audioStream:priv.stream samplesAvailable:buffer count:count];
+    if ([priv.delegate respondsToSelector:@selector(audioStream:samplesAvailable:frames:description:)]) {
+        [priv.delegate audioStream:priv.stream samplesAvailable:samples frames:frames description:description];
     }
 }
 

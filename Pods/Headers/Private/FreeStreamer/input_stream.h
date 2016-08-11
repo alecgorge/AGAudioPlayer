@@ -1,1 +1,1 @@
-../../../FreeStreamer/astreamer/input_stream.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/input_stream.h

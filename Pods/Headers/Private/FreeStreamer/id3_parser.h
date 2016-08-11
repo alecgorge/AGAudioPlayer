@@ -1,1 +1,1 @@
-../../../FreeStreamer/astreamer/id3_parser.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/id3_parser.h

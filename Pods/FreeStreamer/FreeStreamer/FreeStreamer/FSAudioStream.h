@@ -7,6 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <CoreAudio/CoreAudioTypes.h>
 
 /**
  * The major version of the current release.
@@ -16,7 +17,7 @@
 /**
  * The minor version of the current release.
  */
-#define FREESTREAMER_VERSION_MINOR          3
+#define FREESTREAMER_VERSION_MINOR          6
 
 /**
  * The reversion of the current release
@@ -279,6 +280,10 @@ typedef struct {
  */
 @property (nonatomic,assign) BOOL enableTimeAndPitchConversion;
 /**
+ * Requires the content type given by the server to match an audio content type.
+ */
+@property (nonatomic,assign) BOOL requireStrictContentTypeChecking;
+/**
  * The maximum size of the disk cache in bytes.
  */
 @property (nonatomic,assign) int maxDiskCacheSize;
@@ -524,6 +529,12 @@ NSString*             freeStreamerReleaseVersion();
  */
 @property (nonatomic,readonly) NSUInteger retryCount;
 /**
+ * Holds the maximum amount of playback retries that will be 
+ * performed before entering kFsAudioStreamRetryingFailed state.
+ * Default is 3.
+ */
+@property (nonatomic,assign) NSUInteger maxRetryCount;
+/**
  * The property determines the current audio levels.
  */
 @property (nonatomic,readonly) FSLevelMeterState levels;
@@ -574,8 +585,9 @@ NSString*             freeStreamerReleaseVersion();
  * sure your delegate code is thread safe.
  *
  * @param audioStream The audio stream the samples are from.
- * @param samples The PCM audio samples.
- * @param count The number of samples available.
+ * @param samples The samples as a buffer list.
+ * @param frames The number of frames.
+ * @param description Description of the data provided.
  */
-- (void)audioStream:(FSAudioStream *)audioStream samplesAvailable:(const int16_t *)samples count:(NSUInteger)count;
+- (void)audioStream:(FSAudioStream *)audioStream samplesAvailable:(AudioBufferList *)samples frames:(UInt32)frames description: (AudioStreamPacketDescription)description;
 @end

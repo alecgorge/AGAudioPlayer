@@ -1,1 +1,1 @@
-../../../FreeStreamer/astreamer/http_stream.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/http_stream.h

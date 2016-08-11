@@ -1,1 +1,1 @@
-../../../FreeStreamer/astreamer/stream_configuration.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/stream_configuration.h

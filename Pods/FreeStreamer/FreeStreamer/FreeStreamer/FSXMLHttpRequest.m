@@ -8,6 +8,7 @@
 
 #import "FSXMLHttpRequest.h"
 
+#import <libxml/parser.h>
 #import <libxml/xpath.h>
 
 #define DATE_COMPONENTS (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit)
@@ -45,61 +46,65 @@
                                          timeoutInterval:10.0];
     
     NSURLSession *session = [NSURLSession sharedSession];
+    
+    __weak FSXMLHttpRequest *weakSelf = self;
 
     @synchronized (self) {
         _task = [session dataTaskWithRequest:request
                            completionHandler:
                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                     FSXMLHttpRequest *strongSelf = weakSelf;
+                     
                      NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
                      if(error) {
-                         _lastError = FSXMLHttpRequestError_Connection_Failed;
+                         strongSelf->_lastError = FSXMLHttpRequestError_Connection_Failed;
                          
 #if defined(DEBUG) || (TARGET_IPHONE_SIMULATOR)
-                         NSLog(@"FSXMLHttpRequest: Request failed for URL: %@, error %@", _url, [error localizedDescription]);
+                         NSLog(@"FSXMLHttpRequest: Request failed for URL: %@, error %@", strongSelf.url, [error localizedDescription]);
 #endif
                          dispatch_async(dispatch_get_main_queue(), ^(){
-                             self.onFailure();
+                             strongSelf.onFailure();
                          });
                      } else {
                          if (httpResponse.statusCode != 200) {
-                             _lastError = FSXMLHttpRequestError_Invalid_Http_Status;
+                             strongSelf->_lastError = FSXMLHttpRequestError_Invalid_Http_Status;
                              
 #if defined(DEBUG) || (TARGET_IPHONE_SIMULATOR)
-                             NSLog(@"FSXMLHttpRequest: Unable to receive content for URL: %@", _url);
+                             NSLog(@"FSXMLHttpRequest: Unable to receive content for URL: %@", strongSelf.url);
 #endif
                              dispatch_async(dispatch_get_main_queue(), ^(){
-                                 self.onFailure();
+                                 strongSelf.onFailure();
                              });
                              return;
                          }
                          
                          const char *encoding = [self detectEncoding:data];
                          
-                         _xmlDocument = xmlReadMemory([data bytes],
+                         strongSelf->_xmlDocument = xmlReadMemory([data bytes],
                                                       (int)[data length],
                                                       "",
                                                       encoding,
                                                       0);
                          
-                         if (!_xmlDocument) {
-                             _lastError = FSXMLHttpRequestError_XML_Parser_Failed;
+                         if (!strongSelf->_xmlDocument) {
+                             strongSelf->_lastError = FSXMLHttpRequestError_XML_Parser_Failed;
                              
 #if defined(DEBUG) || (TARGET_IPHONE_SIMULATOR)
-                             NSLog(@"FSXMLHttpRequest: Unable to parse the content for URL: %@", _url);
+                             NSLog(@"FSXMLHttpRequest: Unable to parse the content for URL: %@", strongSelf.url);
 #endif
                              
                              dispatch_async(dispatch_get_main_queue(), ^(){
-                                 self.onFailure();
+                                 strongSelf.onFailure();
                              });
                              return;
                          }
                          
-                         [self parseResponseData];
+                         [strongSelf parseResponseData];
                          
-                         xmlFreeDoc(_xmlDocument), _xmlDocument = nil;
+                         xmlFreeDoc(strongSelf->_xmlDocument), strongSelf->_xmlDocument = nil;
                          
                          dispatch_async(dispatch_get_main_queue(), ^(){
-                             self.onCompletion();
+                             strongSelf.onCompletion();
                          });
                      }
                  }];

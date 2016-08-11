@@ -1,5 +1,5 @@
 PODS:
-  - FreeStreamer (3.3.0):
+  - FreeStreamer (3.6.0):
     - Reachability (~> 3.0)
   - Reachability (3.2)
 
@@ -7,9 +7,9 @@ DEPENDENCIES:
   - FreeStreamer
 
 SPEC CHECKSUMS:
-  FreeStreamer: d0870b7cca7db2d457feb03a33fa220694bdbb32
+  FreeStreamer: f4dc92b4a248aafc7e23a8cefc4c8bc237ca175c
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 PODFILE CHECKSUM: 1dd03acab15fde56247dcbfc0a7bf3168fd2d297
 
-COCOAPODS: 1.0.0.beta.2
+COCOAPODS: 1.1.0.beta.1

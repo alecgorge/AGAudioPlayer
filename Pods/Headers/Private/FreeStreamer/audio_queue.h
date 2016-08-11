@@ -1,1 +1,1 @@
-../../../FreeStreamer/astreamer/audio_queue.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/audio_queue.h

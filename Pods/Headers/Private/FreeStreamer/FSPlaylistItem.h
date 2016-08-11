@@ -1,1 +1,1 @@
-../../../FreeStreamer/Common/FSPlaylistItem.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/FSPlaylistItem.h

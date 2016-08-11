@@ -1,1 +1,1 @@
-../../../FreeStreamer/Common/FSParsePlaylistRequest.h
+../../../FreeStreamer/FreeStreamer/FreeStreamer/FSParsePlaylistRequest.h

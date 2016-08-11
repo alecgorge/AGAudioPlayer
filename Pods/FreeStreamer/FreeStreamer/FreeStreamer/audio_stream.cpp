@@ -96,11 +96,7 @@ Audio_Stream::Audio_Stream() :
     m_seekOffset(0),
     m_bounceCount(0),
     m_firstBufferingTime(0),
-#if defined (AS_RELAX_CONTENT_TYPE_CHECK)
-    m_strictContentTypeChecking(false),
-#else
-    m_strictContentTypeChecking(true),
-#endif
+    m_strictContentTypeChecking(Stream_Configuration::configuration()->requireStrictContentTypeChecking),
     m_defaultContentType(CFSTR("audio/mpeg")),
     m_contentType(NULL),
     
@@ -744,6 +740,7 @@ void Audio_Stream::audioQueueStateChanged(Audio_Queue::State state)
 {
     if (state == Audio_Queue::RUNNING) {
         invalidateWatchdogTimer();
+        setState(PLAYING);
         
         float currentVolume = m_audioQueue->volume();
         
@@ -1637,8 +1634,10 @@ void Audio_Stream::decodeSinglePacket(CFRunLoopTimerRef timer, void *info)
                                          outputBufferList.mBuffers[0].mData,
                                          &description);
         
+        const UInt32 nFrames = outputBufferList.mBuffers[0].mDataByteSize / THIS->m_dstFormat.mBytesPerFrame;
+        
         if (THIS->m_delegate) {
-            THIS->m_delegate->samplesAvailable(outputBufferList, description);
+            THIS->m_delegate->samplesAvailable(&outputBufferList, nFrames, description);
         }
         
         Stream_Configuration *config = Stream_Configuration::configuration();
