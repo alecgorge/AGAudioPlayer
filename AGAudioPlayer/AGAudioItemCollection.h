@@ -10,7 +10,7 @@
 
 #import "AGCachable.h"
 
-@protocol AGAudioItemCollection <AGCachable>
+@protocol AGAudioItemCollection <NSCoding>
 
 @property (nonatomic) NSString *displayText;
 @property (nonatomic) NSString *displaySubtext;

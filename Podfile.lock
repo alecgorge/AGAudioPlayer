@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "/Users/alecgorge/Documents/code/github/ios/BASS Audio Test"
 
 SPEC CHECKSUMS:
-  BASSGaplessAudioPlayer: 04a7c2d2d9c8fd77ddf9bd699e75439937095ae2
+  BASSGaplessAudioPlayer: bda2a7f84852cc0411e575450f13b6077f1055e6
 
 PODFILE CHECKSUM: 92d66d84a02c9f40a28851fc30fe5718cef62aa9
 

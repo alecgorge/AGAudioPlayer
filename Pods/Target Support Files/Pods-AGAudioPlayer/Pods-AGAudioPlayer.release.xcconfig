@@ -1,8 +1,8 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BASSGaplessAudioPlayer"
-LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BASSGaplessAudioPlayer"
+LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BASSGaplessAudioPlayer" $(inherited) "${PODS_ROOT}/../../../github/ios/BASS Audio Test/BASS Audio Test"
 OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/BASSGaplessAudioPlayer"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"BASS Audio Test/libbass" -l"BASS Audio Test/libbassmix" -l"BASSGaplessAudioPlayer"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"BASSGaplessAudioPlayer" -l"bass" -l"bassmix"
 PODS_BUILD_DIR = $BUILD_DIR
 PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}/Pods

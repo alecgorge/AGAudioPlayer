@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		017DDA7AB6B5E42AD570D17E66983E98 /* bassmix.h in Headers */ = {isa = PBXBuildFile; fileRef = D5E937E4AA6F0EDB25FAF95414DFAA1D /* bassmix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07DCD060B0A94947420A601C871B09E6 /* ObjectiveBASS.h in Headers */ = {isa = PBXBuildFile; fileRef = C7592726C243363FFAC982C0CB54DC48 /* ObjectiveBASS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1093CD926D369CE01A5A32DDA5AF638C /* Pods-AGAudioPlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A0F1F9B0EEA292C82E57EF37A6F42A34 /* Pods-AGAudioPlayer-dummy.m */; };
-		7C19D407E8EEC6898333B293AA319615 /* BASSGaplessAudioPlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFBBB6DF568CCCCD06994F940159803 /* BASSGaplessAudioPlayer-dummy.m */; };
 		7F33BAD193AFC2492BFB56FB1CDB5D95 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
-		7FCF987DEA94E2AFE03F96CCC1A14B6F /* ObjectiveBASS.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E1F913A007559B066DA9B8DF2C6E1 /* ObjectiveBASS.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		93256102490EDD806623E426E7E1544A /* ObjectiveBASS.h in Headers */ = {isa = PBXBuildFile; fileRef = A737479FDD4D1FF0096FCC6C43F60F15 /* ObjectiveBASS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9B76674682012ADD2713542185C97D54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
+		8FB43E4DC8AB540480DEB22BF436A986 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
+		A0E6354745992114945293D42655C5D4 /* bass.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC15A047CFCFDE3D85F59AA5A1F25DA /* bass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CC54C254D5DE4ED4A54CD0F0FA1EED08 /* BASSGaplessAudioPlayer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D230F6D460791C27A99D5614E8F17C /* BASSGaplessAudioPlayer-dummy.m */; };
+		D31511FEED8666995332E20136EE64FA /* ObjectiveBASS.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C855C2E2DE75B7BBF798E87A89794B /* ObjectiveBASS.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -20,36 +22,40 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 40EE7CD52ABC80A9807B599E0BC7E865;
+			remoteGlobalIDString = 83548EE7BFDA4B2CFC6D1FE8BEC0C747;
 			remoteInfo = BASSGaplessAudioPlayer;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05A485D4F984183F4CEF8B04800A0335 /* BASSGaplessAudioPlayer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BASSGaplessAudioPlayer.xcconfig; sourceTree = "<group>"; };
 		142588D2D8D1FE130F87BFD69AE890F8 /* Pods-AGAudioPlayer-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AGAudioPlayer-frameworks.sh"; sourceTree = "<group>"; };
-		38B6091A4635E7195EF006BE40C461E8 /* BASSGaplessAudioPlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BASSGaplessAudioPlayer-prefix.pch"; sourceTree = "<group>"; };
 		3A378F1E6976B7040283D9AA70593A38 /* Pods-AGAudioPlayer-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AGAudioPlayer-acknowledgements.plist"; sourceTree = "<group>"; };
 		7A5DC6CCFA84DDF9F862C67BF227C950 /* Pods-AGAudioPlayer-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AGAudioPlayer-resources.sh"; sourceTree = "<group>"; };
-		7E235B2D7AAE1A8FD9638AB87774DD66 /* BASSGaplessAudioPlayer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BASSGaplessAudioPlayer.xcconfig; sourceTree = "<group>"; };
-		932E1F913A007559B066DA9B8DF2C6E1 /* ObjectiveBASS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ObjectiveBASS.m; sourceTree = "<group>"; };
+		83C855C2E2DE75B7BBF798E87A89794B /* ObjectiveBASS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ObjectiveBASS.m; sourceTree = "<group>"; };
+		92312145F9CCDEA897C5B2545A153593 /* BASSGaplessAudioPlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BASSGaplessAudioPlayer-prefix.pch"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		965CCF2856C1E3D6EE4D25ABCCD3EBCA /* libbassmix.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libbassmix.a; path = "BASS Audio Test/libbassmix.a"; sourceTree = "<group>"; };
 		A0F1F9B0EEA292C82E57EF37A6F42A34 /* Pods-AGAudioPlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AGAudioPlayer-dummy.m"; sourceTree = "<group>"; };
-		A737479FDD4D1FF0096FCC6C43F60F15 /* ObjectiveBASS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ObjectiveBASS.h; sourceTree = "<group>"; };
+		A6D230F6D460791C27A99D5614E8F17C /* BASSGaplessAudioPlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BASSGaplessAudioPlayer-dummy.m"; sourceTree = "<group>"; };
 		AD79F6BA69611B5FBC62575ADD3D57FF /* Pods-AGAudioPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AGAudioPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		BBC3BBB495F56EBA217AA763DE2DFFF2 /* Pods-AGAudioPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AGAudioPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		BEC15A047CFCFDE3D85F59AA5A1F25DA /* bass.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
 		C45AFE3458C2CF974A3800DF15621D3C /* libPods-AGAudioPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-AGAudioPlayer.a"; path = "libPods-AGAudioPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7592726C243363FFAC982C0CB54DC48 /* ObjectiveBASS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ObjectiveBASS.h; sourceTree = "<group>"; };
 		CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		D5E937E4AA6F0EDB25FAF95414DFAA1D /* bassmix.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = bassmix.h; sourceTree = "<group>"; };
 		E11D8875D7EB7504A4E975417762F641 /* Pods-AGAudioPlayer-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AGAudioPlayer-acknowledgements.markdown"; sourceTree = "<group>"; };
 		E72F0A23347BB7B81EACA328E06BBDC1 /* libBASSGaplessAudioPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libBASSGaplessAudioPlayer.a; path = libBASSGaplessAudioPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCFBBB6DF568CCCCD06994F940159803 /* BASSGaplessAudioPlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BASSGaplessAudioPlayer-dummy.m"; sourceTree = "<group>"; };
+		F5FE18D100D4B98445D5F644A983DE7B /* libbass.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libbass.a; path = "BASS Audio Test/libbass.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DC29061C1FE0F89031BD1BD7DB49F5DF /* Frameworks */ = {
+		739EF6AA8460C9B5A48C6D04EA47E787 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B76674682012ADD2713542185C97D54 /* Foundation.framework in Frameworks */,
+				8FB43E4DC8AB540480DEB22BF436A986 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,13 +79,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		62011C3D2726872B7965F7D16BC21F42 /* Development Pods */ = {
+		4751663F106C1978C62AC5F934EB479F /* BASSGaplessAudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				D225649C72AAC7878D95FF6FF03E6E56 /* BASSGaplessAudioPlayer */,
+				C8779FEC7D5055327D53DCBE2AE4B42D /* BASS Audio Test */,
+				EBDCE3276010370E5DB61346EDEBCDD4 /* Frameworks */,
+				7E32A4E803085D187774C77BAE7A964F /* Support Files */,
 			);
-			name = "Development Pods";
-			sourceTree = "<group>";
+			name = BASSGaplessAudioPlayer;
+			path = "/Users/alecgorge/Documents/code/github/ios/BASS Audio Test";
+			sourceTree = "<absolute>";
 		};
 		7531C8F8DE19F1AA3C8A7AC97A91DC29 /* iOS */ = {
 			isa = PBXGroup;
@@ -101,22 +110,30 @@
 			isa = PBXGroup;
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
-				62011C3D2726872B7965F7D16BC21F42 /* Development Pods */,
+				89E945DAC678209A86923562921F2B75 /* Development Pods */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
 				361C994837E609B0AA19B8A2EDDB3870 /* Products */,
 				7C992F94BB9DB60A21E92F809409F26F /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		80D2D217D544E2F55A37E6436DD28FB2 /* Support Files */ = {
+		7E32A4E803085D187774C77BAE7A964F /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				7E235B2D7AAE1A8FD9638AB87774DD66 /* BASSGaplessAudioPlayer.xcconfig */,
-				FCFBBB6DF568CCCCD06994F940159803 /* BASSGaplessAudioPlayer-dummy.m */,
-				38B6091A4635E7195EF006BE40C461E8 /* BASSGaplessAudioPlayer-prefix.pch */,
+				05A485D4F984183F4CEF8B04800A0335 /* BASSGaplessAudioPlayer.xcconfig */,
+				A6D230F6D460791C27A99D5614E8F17C /* BASSGaplessAudioPlayer-dummy.m */,
+				92312145F9CCDEA897C5B2545A153593 /* BASSGaplessAudioPlayer-prefix.pch */,
 			);
 			name = "Support Files";
 			path = "../../../relisten/AGAudioPlayer/Pods/Target Support Files/BASSGaplessAudioPlayer";
+			sourceTree = "<group>";
+		};
+		89E945DAC678209A86923562921F2B75 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4751663F106C1978C62AC5F934EB479F /* BASSGaplessAudioPlayer */,
+			);
+			name = "Development Pods";
 			sourceTree = "<group>";
 		};
 		951652EC7A934A87F8C8377E5DC64A6C /* Pods-AGAudioPlayer */ = {
@@ -142,47 +159,50 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C3D864B9E2CA9D5170969FE46E43D4E2 /* BASS Audio Test */ = {
+		C8779FEC7D5055327D53DCBE2AE4B42D /* BASS Audio Test */ = {
 			isa = PBXGroup;
 			children = (
-				A737479FDD4D1FF0096FCC6C43F60F15 /* ObjectiveBASS.h */,
-				932E1F913A007559B066DA9B8DF2C6E1 /* ObjectiveBASS.m */,
+				BEC15A047CFCFDE3D85F59AA5A1F25DA /* bass.h */,
+				D5E937E4AA6F0EDB25FAF95414DFAA1D /* bassmix.h */,
+				C7592726C243363FFAC982C0CB54DC48 /* ObjectiveBASS.h */,
+				83C855C2E2DE75B7BBF798E87A89794B /* ObjectiveBASS.m */,
 			);
 			name = "BASS Audio Test";
 			path = "BASS Audio Test";
 			sourceTree = "<group>";
 		};
-		D225649C72AAC7878D95FF6FF03E6E56 /* BASSGaplessAudioPlayer */ = {
+		EBDCE3276010370E5DB61346EDEBCDD4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C3D864B9E2CA9D5170969FE46E43D4E2 /* BASS Audio Test */,
-				80D2D217D544E2F55A37E6436DD28FB2 /* Support Files */,
+				F5FE18D100D4B98445D5F644A983DE7B /* libbass.a */,
+				965CCF2856C1E3D6EE4D25ABCCD3EBCA /* libbassmix.a */,
 			);
-			name = BASSGaplessAudioPlayer;
-			path = "/Users/alecgorge/Documents/code/github/ios/BASS Audio Test";
-			sourceTree = "<absolute>";
+			name = Frameworks;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		F1BD34B660ACC21021307C08A2B2DC72 /* Headers */ = {
+		E1094EA8D0830DF6FB15C6878C2B310E /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93256102490EDD806623E426E7E1544A /* ObjectiveBASS.h in Headers */,
+				A0E6354745992114945293D42655C5D4 /* bass.h in Headers */,
+				017DDA7AB6B5E42AD570D17E66983E98 /* bassmix.h in Headers */,
+				07DCD060B0A94947420A601C871B09E6 /* ObjectiveBASS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		40EE7CD52ABC80A9807B599E0BC7E865 /* BASSGaplessAudioPlayer */ = {
+		83548EE7BFDA4B2CFC6D1FE8BEC0C747 /* BASSGaplessAudioPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6CD82A24DAA12232ADB96AC435704F04 /* Build configuration list for PBXNativeTarget "BASSGaplessAudioPlayer" */;
+			buildConfigurationList = 32D262F5691E5A73436DB8AFAC256EAC /* Build configuration list for PBXNativeTarget "BASSGaplessAudioPlayer" */;
 			buildPhases = (
-				508CD5AB6CAA252A7592F943A6CC693B /* Sources */,
-				DC29061C1FE0F89031BD1BD7DB49F5DF /* Frameworks */,
-				F1BD34B660ACC21021307C08A2B2DC72 /* Headers */,
+				3BE802E77A2E80697C3BECE1E4BE2636 /* Sources */,
+				739EF6AA8460C9B5A48C6D04EA47E787 /* Frameworks */,
+				E1094EA8D0830DF6FB15C6878C2B310E /* Headers */,
 			);
 			buildRules = (
 			);
@@ -231,27 +251,27 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				40EE7CD52ABC80A9807B599E0BC7E865 /* BASSGaplessAudioPlayer */,
+				83548EE7BFDA4B2CFC6D1FE8BEC0C747 /* BASSGaplessAudioPlayer */,
 				C3F0E610BE47F62A8F86362506DAB0E6 /* Pods-AGAudioPlayer */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3BE802E77A2E80697C3BECE1E4BE2636 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC54C254D5DE4ED4A54CD0F0FA1EED08 /* BASSGaplessAudioPlayer-dummy.m in Sources */,
+				D31511FEED8666995332E20136EE64FA /* ObjectiveBASS.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4A03EEECE3520115CE2BC768C3BE1DF2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				1093CD926D369CE01A5A32DDA5AF638C /* Pods-AGAudioPlayer-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508CD5AB6CAA252A7592F943A6CC693B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C19D407E8EEC6898333B293AA319615 /* BASSGaplessAudioPlayer-dummy.m in Sources */,
-				7FCF987DEA94E2AFE03F96CCC1A14B6F /* ObjectiveBASS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,15 +281,15 @@
 		143F60C81207C8E89FEC850A6BF81EF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = BASSGaplessAudioPlayer;
-			target = 40EE7CD52ABC80A9807B599E0BC7E865 /* BASSGaplessAudioPlayer */;
+			target = 83548EE7BFDA4B2CFC6D1FE8BEC0C747 /* BASSGaplessAudioPlayer */;
 			targetProxy = 3CA5A10C46A31BC3B4B98ACBD9FDA558 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1538BA9EE7B65DA55BB5521C0BD48BA3 /* Release */ = {
+		1CC16857ECDCC0436AF5B9BB5D66892E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E235B2D7AAE1A8FD9638AB87774DD66 /* BASSGaplessAudioPlayer.xcconfig */;
+			baseConfigurationReference = 05A485D4F984183F4CEF8B04800A0335 /* BASSGaplessAudioPlayer.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -289,6 +309,29 @@
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
+		};
+		2A1FE422467150DBE1F1B9AC8F8775EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05A485D4F984183F4CEF8B04800A0335 /* BASSGaplessAudioPlayer.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/BASSGaplessAudioPlayer/BASSGaplessAudioPlayer-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
 		};
 		420D0D2B0C3C16A4277E025164BE31E0 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -354,29 +397,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Debug;
-		};
-		66DB757C34FFA84066E4D77C69628BA8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E235B2D7AAE1A8FD9638AB87774DD66 /* BASSGaplessAudioPlayer.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/BASSGaplessAudioPlayer/BASSGaplessAudioPlayer-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -464,11 +484,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6CD82A24DAA12232ADB96AC435704F04 /* Build configuration list for PBXNativeTarget "BASSGaplessAudioPlayer" */ = {
+		32D262F5691E5A73436DB8AFAC256EAC /* Build configuration list for PBXNativeTarget "BASSGaplessAudioPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				66DB757C34FFA84066E4D77C69628BA8 /* Debug */,
-				1538BA9EE7B65DA55BB5521C0BD48BA3 /* Release */,
+				2A1FE422467150DBE1F1B9AC8F8775EF /* Debug */,
+				1CC16857ECDCC0436AF5B9BB5D66892E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

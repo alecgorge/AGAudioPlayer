@@ -30,43 +30,43 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (void)upNextQueueChanged:(AGAudioPlayerUpNextQueueChanged)changeType;
 
-- (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-          addedItem:(id<AGAudioItem>)item
+- (void)upNextQueue:(AGAudioPlayerUpNextQueue * _Nonnull)queue
+          addedItem:(AGAudioItem * _Nonnull)item
             atIndex:(NSInteger)idx;
 
-- (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-        removedItem:(id<AGAudioItem>)item
+- (void)upNextQueue:(AGAudioPlayerUpNextQueue * _Nonnull)queue
+        removedItem:(AGAudioItem * _Nonnull)item
           fromIndex:(NSInteger)idx;
 
-- (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
-          movedItem:(id<AGAudioItem>)item
+- (void)upNextQueue:(AGAudioPlayerUpNextQueue * _Nonnull)queue
+          movedItem:(AGAudioItem * _Nonnull)item
           fromIndex:(NSInteger)oldIndex
             toIndex:(NSInteger)newIndex;
 
-- (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue *)queue;
+- (void)upNextQueueRemovedAllItems:(AGAudioPlayerUpNextQueue * _Nonnull)queue;
 
 @end
 
 @interface AGAudioPlayerUpNextQueue : NSObject<NSCoding>
 
-- (instancetype)initWithItems:(NSArray *)items;
+- (_Nonnull instancetype)initWithItems:(NSArray<AGAudioItem *> * _Nonnull)items;
 
-@property (nonatomic, weak) id<AGAudioPlayerUpNextQueueDelegate> delegate;
+@property (nonatomic, weak) _Nullable id<AGAudioPlayerUpNextQueueDelegate> delegate;
 
 @property (nonatomic, readonly) NSInteger count;
 
-@property (nonatomic, readonly) NSArray *queue;
-@property (nonatomic, readonly) NSArray *shuffledQueue;
+@property (nonatomic, readonly)  NSArray<AGAudioItem *> * _Nonnull queue;
+@property (nonatomic, readonly)  NSArray<AGAudioItem *> * _Nonnull shuffledQueue;
 
-- (void)appendItem:(id<AGAudioItem>)item;
-- (void)appendItems:(NSArray<id<AGAudioItem>> *)items;
+- (void)appendItem:(AGAudioItem * _Nonnull)item;
+- (void)appendItems:(NSArray<AGAudioItem *> * _Nonnull)items;
 
-- (void)prependItem:(id<AGAudioItem>)item;
-- (void)prependItems:(NSArray<id<AGAudioItem>> *)items;
+- (void)prependItem:(AGAudioItem * _Nonnull)item;
+- (void)prependItems:(NSArray<AGAudioItem *> * _Nonnull)items;
 
-- (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx;
+- (void)insertItem:(AGAudioItem * _Nonnull)item atIndex: (NSUInteger)idx;
 
-- (void)moveItem:(id<AGAudioItem>)item
+- (void)moveItem:(AGAudioItem * _Nonnull)item
          toIndex:(NSInteger)to;
 
 - (void)moveItemAtIndex:(NSInteger)from
@@ -74,18 +74,23 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 
 - (void)clear;
 
-- (void)clearAndReplaceWithItems:(NSArray<id<AGAudioItem>> *)items;
+- (void)clearAndReplaceWithItems:(NSArray<AGAudioItem *> * _Nonnull)items;
 
-- (void)removeItem:(id<AGAudioItem>)item;
+- (void)removeItem:(AGAudioItem * _Nonnull)item;
 - (void)removeItemAtIndex:(NSInteger)indx;
 
-- (id)objectAtIndexedSubscript:(NSUInteger)idx;
+- (_Nonnull id)objectAtIndexedSubscript:(NSUInteger)idx;
 
-- (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx;
-- (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx;
+- (AGAudioItem * _Nonnull)shuffledItemAtIndex:(NSUInteger)idx;
+- (AGAudioItem * _Nonnull)unshuffledItemAtIndex:(NSUInteger)idx;
 
-- (NSArray<id<AGAudioItem>> *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
+- (NSArray<AGAudioItem *> * _Nonnull)properQueueForShuffleEnabled:(BOOL)shuffleEnabled;
 
-- (NSUInteger)indexOfURL:(NSURL *)url;
+- (NSUInteger)indexOfURL:(NSURL * _Nonnull)url;
+
+- (AGAudioItem * _Nonnull)itemForId:(nonnull NSUUID *)_id;
+
+- (NSInteger)properPositionForId:(nonnull NSUUID *)_id
+               forShuffleEnabled:(BOOL)shuffleEnabled;
 
 @end

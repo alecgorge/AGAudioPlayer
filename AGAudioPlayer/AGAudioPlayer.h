@@ -1,4 +1,4 @@
-//
+ //
 //  AGAudioPlayer.h
 //  AGAudioPlayer
 //
@@ -26,26 +26,37 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerBackwardStyle) {
 - (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
   numberOfUpcomingTracks:upcomingTracks;
 
-- (id<AGAudioItem>)audioPlayer:(AGAudioPlayer *)audioPlayer
+- (AGAudioItem *)audioPlayer:(AGAudioPlayer *)audioPlayer
 audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
 
 @end
 
 typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
-    AGAudioPlayerTrackProgressUpdated,
-    AGAudioPlayerTrackBuffering,
-    AGAudioPlayerTrackPlaying,
-    AGAudioPlayerTrackStopped,
-    AGAudioPlayerTrackPaused,
-    AGAudioPlayerError,
-    AGAudioPlayerTrackChanged,
+    AGAudioPlayerRedrawReasonBuffering,
+    AGAudioPlayerRedrawReasonPlaying,
+    AGAudioPlayerRedrawReasonStopped,
+    AGAudioPlayerRedrawReasonPaused,
+    AGAudioPlayerRedrawReasonError,
+    AGAudioPlayerRedrawReasonTrackChanged,
+    AGAudioPlayerRedrawReasonQueueChanged
 };
 
 @protocol AGAudioPlayerDelegate <NSObject>
 
 - (void)audioPlayer:(AGAudioPlayer *)audioPlayer
-uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
-          extraInfo:(NSDictionary *)dict;
+uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
+
+- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+        errorRaised:(NSError *)error
+             forURL:(NSURL *)url;
+
+- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
+         totalBytes:(uint64_t)totalBytes;
+
+- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+    progressChanged:(NSTimeInterval)elapsed
+  withTotalDuration:(NSTimeInterval)totalDuration;
 
 @optional
 
@@ -66,24 +77,22 @@ uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason
 
 @property (nonatomic, weak) id<AGAudioPlayerDelegate> delegate;
 
-@property (nonatomic) NSTimeInterval playbackUpdateTimeInterval;
-
 @property (nonatomic) AGAudioPlayerUpNextQueue *queue;
 
 @property (nonatomic) NSInteger currentIndex;
-@property (nonatomic, readonly) id<AGAudioItem> currentItem;
+@property (nonatomic, readonly) AGAudioItem * currentItem;
 
 // returns NSNotFound when last item is playing
 @property (nonatomic, readonly) NSInteger nextIndex;
 
 // returns nil when last item is playing
-@property (nonatomic, readonly) id<AGAudioItem> nextItem;
+@property (nonatomic, readonly) AGAudioItem * nextItem;
 
 // returns NSNotFound when the first item playing
 @property (nonatomic, readonly) NSInteger previousIndex;
 
 // returns nil when the first item is playing
-@property (nonatomic, readonly) id<AGAudioItem> previousItem;
+@property (nonatomic, readonly) AGAudioItem * previousItem;
 
 // playback control
 @property (nonatomic, readonly) BOOL isPlaying;

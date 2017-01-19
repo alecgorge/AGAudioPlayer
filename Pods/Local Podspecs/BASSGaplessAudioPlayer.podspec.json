@@ -15,9 +15,15 @@
     "git": "https://github.com/alecgorge/gapless-audio-bass-ios.git",
     "tag": "0.0.1"
   },
-  "source_files": "BASS Audio Test/ObjectiveBASS.{h,m}",
-  "libraries": [
-    "BASS Audio Test/libbass",
-    "BASS Audio Test/libbassmix"
-  ]
+  "source_files": [
+    "BASS Audio Test/ObjectiveBASS.{h,m}",
+    "BASS Audio Test/bass.h",
+    "BASS Audio Test/bassmix.h"
+  ],
+  "ios": {
+    "vendored_libraries": [
+      "BASS Audio Test/libbass.a",
+      "BASS Audio Test/libbassmix.a"
+    ]
+  }
 }

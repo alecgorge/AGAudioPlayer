@@ -12,7 +12,7 @@
 //#import "AGAudioPlayerViewController.h"
 #import "AGAudioPlayerUpNextQueue.h"
 
-@interface TestAudioItem : AGAudioItemBase
+@interface TestAudioItem : AGAudioItem
 
 - (instancetype)initWithTitle:(NSString *)str
                           url:(NSString *)url;
@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback {
+- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback {
     metadataCallback(self);
 }
 

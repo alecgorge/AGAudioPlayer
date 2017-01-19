@@ -10,8 +10,8 @@
 
 @interface AGAudioPlayerUpNextQueue ()
 
-@property (nonatomic) NSMutableArray<id<AGAudioItem>> *items;
-@property (nonatomic) NSMutableArray<id<AGAudioItem>> *shuffledItems;
+@property (nonatomic) NSMutableArray<AGAudioItem *> *items;
+@property (nonatomic) NSMutableArray<AGAudioItem *> *shuffledItems;
 
 @end
 
@@ -41,7 +41,7 @@
         
         [self appendItems:[aDecoder decodeObjectForKey:@"items"]];
         
-        for (id<AGAudioItem> item in self.items) {
+        for (AGAudioItem * item in self.items) {
             [self.shuffledItems insertObject:item
                                      atIndex:arc4random_uniform((u_int32_t)self.items.count)];
         }
@@ -57,7 +57,7 @@
     return self.items.count;
 }
 
-- (void)appendItem:(id<AGAudioItem>)item {
+- (void)appendItem:(AGAudioItem *)item {
     if(item == nil) return;
     
     [self.items addObject:item];
@@ -77,12 +77,12 @@
 }
 
 - (void)appendItems:(NSArray *)items {
-    for (id<AGAudioItem> i in items) {
+    for (AGAudioItem * i in items) {
         [self appendItem:i];
     }
 }
 
-- (void)prependItem:(id<AGAudioItem>)item {
+- (void)prependItem:(AGAudioItem *)item {
     if(item == nil) return;
     
     [self.items insertObject:item
@@ -103,12 +103,12 @@
 }
 
 - (void)prependItems:(NSArray *)items {
-    for (id<AGAudioItem> i in items) {
+    for (AGAudioItem * i in items) {
         [self prependItem:i];
     }
 }
 
-- (void)insertItem:(id<AGAudioItem>)item atIndex: (NSUInteger)idx {
+- (void)insertItem:(AGAudioItem *)item atIndex: (NSUInteger)idx {
     [self.items insertObject:item atIndex:idx];
     [self.shuffledItems insertObject:item atIndex:arc4random_uniform((u_int32_t)self.items.count)];
 
@@ -119,7 +119,7 @@
     }
 }
 
-- (void)moveItem:(id<AGAudioItem>)item
+- (void)moveItem:(AGAudioItem *)item
          toIndex:(NSInteger)to {
     NSInteger from = [self.items indexOfObjectIdenticalTo:item];
     [self moveItemAtIndex:from
@@ -174,7 +174,7 @@
     [self appendItems:items];
 }
 
-- (void)removeItem:(id<AGAudioItem>)item {
+- (void)removeItem:(AGAudioItem *)item {
     if(item == nil) return;
     
     NSInteger idx = [self.items indexOfObjectIdenticalTo:item];
@@ -185,7 +185,7 @@
 }
 
 - (void)removeItemAtIndex:(NSInteger)indx {
-    id<AGAudioItem> old_value = self.items[indx];
+    AGAudioItem * old_value = self.items[indx];
     [self.items removeObjectAtIndex:indx];
     
     // not by
@@ -206,11 +206,11 @@
     return self.items[idx];
 }
 
-- (id<AGAudioItem>)shuffledItemAtIndex:(NSUInteger)idx {
+- (AGAudioItem *)shuffledItemAtIndex:(NSUInteger)idx {
     return self.shuffledItems[idx];
 }
 
-- (id<AGAudioItem>)unshuffledItemAtIndex:(NSUInteger)idx {
+- (AGAudioItem *)unshuffledItemAtIndex:(NSUInteger)idx {
     return self.items[idx];
 }
 
@@ -222,7 +222,7 @@
     return self.shuffledItems;
 }
 
-- (NSArray<id<AGAudioItem>> *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
+- (NSArray<AGAudioItem *> *)properQueueForShuffleEnabled:(BOOL)shuffleEnabled {
     if (shuffleEnabled) {
         return self.shuffledItems;
     }
@@ -237,6 +237,28 @@
         }
     }
     return 0;
+}
+
+- (AGAudioItem *)itemForId:(nonnull NSUUID *)_id {
+    for (AGAudioItem * item in self.items) {
+        if([item.playbackGUID isEqual:_id]) {
+            return item;
+        }
+    }
+    
+    return nil;
+}
+
+- (NSInteger)properPositionForId:(nonnull NSUUID *)_id
+               forShuffleEnabled:(BOOL)shuffleEnabled {
+    NSArray<AGAudioItem *> *items = [self properQueueForShuffleEnabled:shuffleEnabled];
+    for(NSInteger i = 0; i < self.count; i++) {
+        if ([items[i].playbackGUID isEqual:_id]) {
+            return i;
+        }
+    }
+    
+    return NSNotFound;
 }
 
 @end

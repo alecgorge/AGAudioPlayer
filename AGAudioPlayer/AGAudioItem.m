@@ -8,13 +8,18 @@
 
 #import "AGAudioItem.h"
 
-@implementation AGAudioItemBase
+@implementation AGAudioItem
 
-@synthesize cacheKey, trackNumber, title, artist, album, metadataLoaded, collection,
-            duration, displayText, displaySubtext, albumArt, playbackURL, id, isCached;
+- (instancetype)init {
+    if (self = [super init]) {
+        _playbackGUID = NSUUID.UUID;
+    }
+    return self;
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
+        _playbackGUID       = [aDecoder decodeObjectForKey:@"guid"];
         self.id             = [aDecoder decodeIntegerForKey:@"id"];
         self.trackNumber	= [aDecoder decodeIntegerForKey:@"trackNumber"];
 		self.title			= [aDecoder decodeObjectForKey:@"title"];
@@ -60,13 +65,16 @@
     
     [aCoder encodeObject:self.playbackURL
                   forKey:@"playbackURL"];
+    
+    [aCoder encodeObject:self.playbackGUID
+                  forKey:@"guid"];
 }
 
 - (BOOL)metadataLoaded {
 	return YES;
 }
 
-- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback {
+- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback {
 	NSAssert(NO, @"This method must be overriden");
 }
 

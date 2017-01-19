@@ -9,13 +9,12 @@
 #import <Foundation/Foundation.h>
 
 #import "AGAudioItemCollection.h"
-#import "AGCachable.h"
 
 @class MPMediaItemArtwork;
 
-@protocol AGAudioItem <AGCachable>
+@interface AGAudioItem : NSObject
 
-@property (nonatomic, readonly) NSString *cacheKey;
+@property (nonatomic, readonly) NSUUID *playbackGUID;
 
 @property (nonatomic) id<AGAudioItemCollection> collection;
 
@@ -40,16 +39,12 @@
 @property (nonatomic) BOOL metadataLoaded;
 
 // this should only load new metadata if it isn't loaded yet or it needs to be updated
-- (void)loadMetadata:(void (^)(id<AGAudioItem>))metadataCallback;
+- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback;
 
 - (void)shareText:(void(^)(NSString *))stringBuilt;
 - (void)shareURL:(void(^)(NSURL *))urlFound;
 
 - (void)shareURLWithTime:(NSTimeInterval)shareTime
 				callback:(void(^)(NSURL *))urlFound;
-
-@end
-
-@interface AGAudioItemBase : NSObject <AGAudioItem>
 
 @end
