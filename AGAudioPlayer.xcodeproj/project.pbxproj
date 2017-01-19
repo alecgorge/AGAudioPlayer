@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		15173520C34F1B68CFE6FC8E /* libPods-AGAudioPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 262B306D986F6DF2B0FB3648 /* libPods-AGAudioPlayer.a */; };
 		7C0D7BC81A44B68600607581 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C0D7BC41A44B68600607581 /* LaunchScreen.xib */; };
-		7C12F76A1C493219006FA021 /* Pods-AGAudioPlayer.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C12F7681C493219006FA021 /* Pods-AGAudioPlayer.debug.xcconfig */; };
-		7C12F76B1C493219006FA021 /* Pods-AGAudioPlayer.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C12F7691C493219006FA021 /* Pods-AGAudioPlayer.release.xcconfig */; };
-		7C12F76D1C493226006FA021 /* Pods-AGAudioPlayerOSX.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C12F76C1C493226006FA021 /* Pods-AGAudioPlayerOSX.debug.xcconfig */; };
 		7C3FE4461AB3B69900A52266 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3FE4451AB3B69900A52266 /* MediaPlayer.framework */; };
 		7C3FF8361AB6723B003BAE01 /* AGAudioItemCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C3FF8351AB6723B003BAE01 /* AGAudioItemCollection.m */; };
 		7C4B52531AB38CBC00A57843 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C4B52521AB38CBC00A57843 /* Icons.xcassets */; };
@@ -22,10 +19,10 @@
 		7CC250C01A44792F009F91C8 /* AGAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC250BF1A44792F009F91C8 /* AGAudioPlayer.m */; };
 		7CC250CE1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC250CD1A447A98009F91C8 /* AGAudioPlayerUpNextQueue.m */; };
 		7CC250D11A447AB0009F91C8 /* AGAudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC250D01A447AB0009F91C8 /* AGAudioItem.m */; };
-		7CE24AAF1BDDD83800ABD545 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		7CE24AB01BDDD83800ABD545 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		7CE24AB31BDDD84B00ABD545 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
-		7CE24AB41BDDD84B00ABD545 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		7CE24AAF1BDDD83800ABD545 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		7CE24AB01BDDD83800ABD545 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		7CE24AB31BDDD84B00ABD545 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		7CE24AB41BDDD84B00ABD545 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		C122A1CB1C083B1800DE7E07 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122A1CA1C083B1800DE7E07 /* AVFoundation.framework */; };
 		C1511AB51BDD9F6E003B4E6C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1511AB41BDD9F6E003B4E6C /* AppDelegate.m */; };
 		C1511AB81BDD9F6E003B4E6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1511AB71BDD9F6E003B4E6C /* main.m */; };
@@ -289,7 +286,7 @@
 		7CC2508C1A447901009F91C8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Alec Gorge";
 				TargetAttributes = {
 					7CC250931A447901009F91C8 = {
@@ -325,15 +322,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CE24AB41BDDD84B00ABD545 /* BuildFile in Resources */,
-				7CE24AAF1BDDD83800ABD545 /* BuildFile in Resources */,
-				7C12F76D1C493226006FA021 /* Pods-AGAudioPlayerOSX.debug.xcconfig in Resources */,
-				7CE24AB31BDDD84B00ABD545 /* BuildFile in Resources */,
+				7CE24AB41BDDD84B00ABD545 /* (null) in Resources */,
+				7CE24AAF1BDDD83800ABD545 /* (null) in Resources */,
+				7CE24AB31BDDD84B00ABD545 /* (null) in Resources */,
 				7C0D7BC81A44B68600607581 /* LaunchScreen.xib in Resources */,
 				7CC250A51A447901009F91C8 /* Images.xcassets in Resources */,
-				7C12F76B1C493219006FA021 /* Pods-AGAudioPlayer.release.xcconfig in Resources */,
-				7C12F76A1C493219006FA021 /* Pods-AGAudioPlayer.debug.xcconfig in Resources */,
-				7CE24AB01BDDD83800ABD545 /* BuildFile in Resources */,
+				7CE24AB01BDDD83800ABD545 /* (null) in Resources */,
 				7C4B52531AB38CBC00A57843 /* Icons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,8 +457,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -473,6 +469,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -506,8 +503,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -515,6 +514,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -558,7 +558,7 @@
 		};
 		7CC250B91A447901009F91C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 547E88FB86F56E15B4477CC3 /* Pods-AGAudioPlayer.release.xcconfig */;
+			baseConfigurationReference = 7C12F76C1C493226006FA021 /* Pods-AGAudioPlayerOSX.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6F33NM6S7U;
