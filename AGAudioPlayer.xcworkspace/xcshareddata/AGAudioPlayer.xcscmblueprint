@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "256B465BA82CB900AC32B2F2BC3A5432B17C8342",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "256B465BA82CB900AC32B2F2BC3A5432B17C8342" : 9223372036854775807,
+    "2DF8D084974DD08475B4E12D10A71DC7D576F671" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "2CD25A6B-D0B9-4B88-A2F8-9A25C639A13C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "256B465BA82CB900AC32B2F2BC3A5432B17C8342" : "AGAudioPlayer\/",
+    "2DF8D084974DD08475B4E12D10A71DC7D576F671" : "..\/github\/ios\/BASS%20Audio%20Test"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AGAudioPlayer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AGAudioPlayer.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/alecgorge\/AGAudioPlayer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "256B465BA82CB900AC32B2F2BC3A5432B17C8342"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/alecgorge\/gapless-audio-bass-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2DF8D084974DD08475B4E12D10A71DC7D576F671"
+    }
+  ]
+}

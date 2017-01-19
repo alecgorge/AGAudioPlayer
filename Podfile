@@ -3,15 +3,18 @@ source 'https://github.com/CocoaPods/Specs.git'
 inhibit_all_warnings!
 
 target "AGAudioPlayer" do
-    platform :ios, '8.0'
+    platform :ios, '9.0'
 
-    pod 'FreeStreamer'
+    pod 'BASSGaplessAudioPlayer', :path => '/Users/alecgorge/Documents/code/github/ios/BASS Audio Test'
     # pod 'HysteriaPlayer', :head
 end
 
+=begin
 target "AGAudioPlayerOSX" do
     platform :osx, '10.10'
     
     pod 'FreeStreamer'
     # pod 'HysteriaPlayer', :head
 end
+=end
+

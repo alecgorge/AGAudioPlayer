@@ -1,15 +1,16 @@
 PODS:
-  - FreeStreamer (3.6.0):
-    - Reachability (~> 3.0)
-  - Reachability (3.2)
+  - BASSGaplessAudioPlayer (0.0.1)
 
 DEPENDENCIES:
-  - FreeStreamer
+  - BASSGaplessAudioPlayer (from `/Users/alecgorge/Documents/code/github/ios/BASS Audio Test`)
+
+EXTERNAL SOURCES:
+  BASSGaplessAudioPlayer:
+    :path: "/Users/alecgorge/Documents/code/github/ios/BASS Audio Test"
 
 SPEC CHECKSUMS:
-  FreeStreamer: f4dc92b4a248aafc7e23a8cefc4c8bc237ca175c
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  BASSGaplessAudioPlayer: 04a7c2d2d9c8fd77ddf9bd699e75439937095ae2
 
-PODFILE CHECKSUM: 1dd03acab15fde56247dcbfc0a7bf3168fd2d297
+PODFILE CHECKSUM: 92d66d84a02c9f40a28851fc30fe5718cef62aa9
 
-COCOAPODS: 1.1.0.beta.1
+COCOAPODS: 1.2.0.rc.1
