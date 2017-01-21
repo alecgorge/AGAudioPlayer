@@ -20,6 +20,13 @@
     "BASS Audio Test/bass.h",
     "BASS Audio Test/bassmix.h"
   ],
+  "frameworks": [
+    "AVFoundation",
+    "Accelerate",
+    "CFNetwork",
+    "SystemConfiguration",
+    "AudioToolbox"
+  ],
   "ios": {
     "vendored_libraries": [
       "BASS Audio Test/libbass.a",

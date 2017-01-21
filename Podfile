@@ -1,12 +1,23 @@
 # Uncomment this line to define a global platform for your project
 source 'https://github.com/CocoaPods/Specs.git'
 inhibit_all_warnings!
+use_frameworks!
 
 target "AGAudioPlayer" do
     platform :ios, '9.0'
 
-    pod 'BASSGaplessAudioPlayer', :path => '/Users/alecgorge/Documents/code/github/ios/BASS Audio Test'
+    pod 'Interpolate'
+    pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
+    pod 'MarqueeLabel', '~> 3.0.1'
     # pod 'HysteriaPlayer', :head
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+    end
+  end
 end
 
 =begin

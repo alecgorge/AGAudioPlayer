@@ -41,30 +41,31 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
     AGAudioPlayerRedrawReasonQueueChanged
 };
 
+/// all methods are always called on the main thread
 @protocol AGAudioPlayerDelegate <NSObject>
 
-- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
 uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
 
-- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
-        errorRaised:(NSError *)error
-             forURL:(NSURL *)url;
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
+        errorRaised:(NSError * _Nonnull)error
+             forURL:(NSURL * _Nonnull)url;
 
-- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
 downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
          totalBytes:(uint64_t)totalBytes;
 
-- (void)audioPlayer:(AGAudioPlayer *)audioPlayer
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
     progressChanged:(NSTimeInterval)elapsed
   withTotalDuration:(NSTimeInterval)totalDuration;
 
 @optional
 
 // OPTIONAL: if not implemented, will pause playback
-- (void)audioPlayerBeginInterruption:(AGAudioPlayer *)audioPlayer;
+- (void)audioPlayerBeginInterruption:(AGAudioPlayer * _Nonnull)audioPlayer;
 
 // OPTIONAL: if not implemented, will resume playback if resume == YES
-- (void)audioPlayerEndInterruption:(AGAudioPlayer *)audioPlayer
+- (void)audioPlayerEndInterruption:(AGAudioPlayer * _Nonnull)audioPlayer
                       shouldResume:(BOOL)resume;
 
 @end
@@ -73,26 +74,26 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
 
 @interface AGAudioPlayer : NSObject
 
-- (instancetype)initWithQueue:(AGAudioPlayerUpNextQueue *)queue;
+- (_Nonnull instancetype)initWithQueue:(AGAudioPlayerUpNextQueue * _Nonnull)queue;
 
-@property (nonatomic, weak) id<AGAudioPlayerDelegate> delegate;
+@property (nonatomic, weak) id<AGAudioPlayerDelegate> _Nullable delegate;
 
-@property (nonatomic) AGAudioPlayerUpNextQueue *queue;
+@property (nonatomic) AGAudioPlayerUpNextQueue * _Nonnull queue;
 
 @property (nonatomic) NSInteger currentIndex;
-@property (nonatomic, readonly) AGAudioItem * currentItem;
+@property (nonatomic, readonly) AGAudioItem * _Nullable currentItem;
 
 // returns NSNotFound when last item is playing
 @property (nonatomic, readonly) NSInteger nextIndex;
 
 // returns nil when last item is playing
-@property (nonatomic, readonly) AGAudioItem * nextItem;
+@property (nonatomic, readonly) AGAudioItem * _Nullable nextItem;
 
 // returns NSNotFound when the first item playing
 @property (nonatomic, readonly) NSInteger previousIndex;
 
 // returns nil when the first item is playing
-@property (nonatomic, readonly) AGAudioItem * previousItem;
+@property (nonatomic, readonly) AGAudioItem * _Nullable previousItem;
 
 // playback control
 @property (nonatomic, readonly) BOOL isPlaying;

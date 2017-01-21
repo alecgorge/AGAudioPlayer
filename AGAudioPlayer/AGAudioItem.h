@@ -14,37 +14,37 @@
 
 @interface AGAudioItem : NSObject
 
-@property (nonatomic, readonly) NSUUID *playbackGUID;
+@property (nonatomic, readonly) NSUUID * _Nonnull playbackGUID;
 
-@property (nonatomic) id<AGAudioItemCollection> collection;
+@property (nonatomic) AGAudioItemCollection * _Nullable collection;
 
 @property (nonatomic) NSInteger id;
 
 @property (nonatomic) NSInteger trackNumber;
-@property (nonatomic) NSString *title;
-@property (nonatomic) NSString *artist;
-@property (nonatomic) NSString *album;
+@property (nonatomic) NSString * _Nonnull title;
+@property (nonatomic) NSString * _Nonnull artist;
+@property (nonatomic) NSString * _Nonnull album;
 
 @property (nonatomic) NSTimeInterval duration;
 
-@property (nonatomic) NSString *displayText;
-@property (nonatomic) NSString *displaySubtext;
+@property (nonatomic) NSString * _Nonnull displayText;
+@property (nonatomic) NSString * _Nonnull displaySubtext;
 
-@property (nonatomic) NSURL *albumArt;
-@property (nonatomic) NSURL *playbackURL;
+@property (nonatomic) NSURL * _Nullable albumArt;
+@property (nonatomic) NSURL * _Nonnull playbackURL;
 // @property (nonatomic) NSDictionary *playbackRequestHTTPHeaders;
 
-@property (nonatomic, readonly) MPMediaItemArtwork *artwork;
+@property (nonatomic, readonly) MPMediaItemArtwork * _Nullable artwork;
 
 @property (nonatomic) BOOL metadataLoaded;
 
 // this should only load new metadata if it isn't loaded yet or it needs to be updated
-- (void)loadMetadata:(void (^)(AGAudioItem *))metadataCallback;
+- (void)loadMetadata:(nonnull void (^)(AGAudioItem * _Nonnull))metadataCallback;
 
-- (void)shareText:(void(^)(NSString *))stringBuilt;
-- (void)shareURL:(void(^)(NSURL *))urlFound;
+- (void)shareText:(nonnull void(^)(NSString * _Nonnull))stringBuilt;
+- (void)shareURL:(nonnull void(^)(NSURL * _Nonnull))urlFound;
 
 - (void)shareURLWithTime:(NSTimeInterval)shareTime
-				callback:(void(^)(NSURL *))urlFound;
+				callback:(nonnull void(^)(NSURL * _Nonnull))urlFound;
 
 @end

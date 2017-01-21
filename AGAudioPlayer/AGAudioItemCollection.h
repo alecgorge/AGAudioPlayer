@@ -8,21 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AGCachable.h"
+@class AGAudioItem;
 
-@protocol AGAudioItemCollection <NSCoding>
+@interface AGAudioItemCollection : NSObject<NSCoding>
 
-@property (nonatomic) NSString *displayText;
-@property (nonatomic) NSString *displaySubtext;
-@property (nonatomic) NSURL *albumArt;
+@property (nonatomic) NSString * _Nonnull displayText;
+@property (nonatomic) NSString * _Nonnull displaySubtext;
+@property (nonatomic) NSURL * _Nullable albumArt;
 
-@property (nonatomic) NSArray *items;
+@property (nonatomic) NSArray * _Nonnull items;
 
-@end
-
-@interface AGAudioItemCollectionBase : NSObject<AGAudioItemCollection>
-
-// an array of id<AGAudioObjects>
-- (instancetype)initWithItems:(NSArray *)items;
+- (_Nonnull instancetype)initWithItems:(NSArray<AGAudioItem *> * _Nonnull) items;
 
 @end

@@ -12,6 +12,12 @@
 //#import "AGAudioPlayerViewController.h"
 #import "AGAudioPlayerUpNextQueue.h"
 
+//@import AGAudioPlayer;
+
+#import "AGAudioPlayer-Swift.h"
+
+//#import "AGAUdio"
+
 @interface TestAudioItem : AGAudioItem
 
 - (instancetype)initWithTitle:(NSString *)str
@@ -24,6 +30,7 @@
 - (instancetype)initWithTitle:(NSString *)str url:(NSString *)url {
     if (self = [super init]) {
         self.displayText = self.title = str;
+        self.displaySubtext = @"Phish — 1993/05/07 — The Great Went, Fargo, ND";
         self.playbackURL = [NSURL URLWithString:url];
         self.metadataLoaded = YES;
     }
@@ -50,12 +57,13 @@
 	UISlider.appearance.tintColor = UIColor.greenColor;
 	
 	self.window = [UIWindow.alloc initWithFrame:UIScreen.mainScreen.bounds];
-	
+    self.window.rootViewController = UIViewController.new;
+    
     NSArray *pl = @[
-                    [TestAudioItem.alloc initWithTitle:@"Run Like an Antelope"
-                                                   url:@"http://phish.in/audio/000/013/626/13626.mp3"],
-                    [TestAudioItem.alloc initWithTitle:@"Tela"
-                                                   url:@"http://phish.in/audio/000/013/627/13627.mp3"]
+                    [TestAudioItem.alloc initWithTitle:@"1" url:@"http://phish.in/audio/000/025/507/25507.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"2" url:@"http://phish.in/audio/000/025/508/25508.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"3" url:@"http://phish.in/audio/000/025/509/25509.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"4" url:@"http://phish.in/audio/000/025/510/25510.mp3"]
                     ];
     
 	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:pl];
@@ -74,7 +82,8 @@
 	
 	self.window.rootViewController = nav;
      */
-    
+
+    /*
     self.player.currentIndex = 0;
     
     [NSTimer scheduledTimerWithTimeInterval:5.0
@@ -88,9 +97,18 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.player seekToPercent:0.8];
     });
+     */
 	
 	[self.window makeKeyAndVisible];
 	
+    [self.window.rootViewController presentViewController:[AGAudioPlayerViewController.alloc initWithPlayer:self.player]
+                                                 animated:YES
+                                               completion:^{
+                                                   self.player.currentIndex = 0;
+                                               }];
+    
+//    [AGAudioPlayerViewController presentAnimatedFrom:self.window.rootViewController];
+    
     return YES;
 }
 

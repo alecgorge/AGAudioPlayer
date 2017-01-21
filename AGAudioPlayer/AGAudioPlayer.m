@@ -94,14 +94,20 @@
 
 - (void)setShuffle:(BOOL)shuffle {
     _shuffle = shuffle;
+    
+    [self.bass nextTrackMayHaveChanged];
 }
 
 - (void)setLoopItem:(BOOL)loopItem {
     _loopItem = loopItem;
+    
+    [self.bass nextTrackMayHaveChanged];
 }
 
 - (void)setLoopQueue:(BOOL)loopQueue {
     _loopQueue = loopQueue;
+    
+    [self.bass nextTrackMayHaveChanged];
 }
 
 - (void)resume {
@@ -153,6 +159,15 @@
     return self.elapsed / self.duration;
 }
 
+- (void)addHistoryEntryWithIndex:(NSInteger)index {
+    [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
+                                                                         andIndex:self.currentIndex]];
+    
+    for (AGAudioPlayerHistoryItem *hi in self.playbackHistory) {
+        [self debug:"\t%@", self.queue]
+    }
+}
+
 #pragma mark - Playback Order
 
 - (void)setIndex:(NSInteger)index {
@@ -167,8 +182,7 @@
 - (void)setCurrentIndex:(NSInteger)currentIndex
          loggingHistory:(BOOL)history {
     if(history) {
-        [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
-                                                                             andIndex:self.currentIndex]];
+        [self addHistoryEntryWithIndex:self.currentIndex];
     }
     
     _currentIndex = currentIndex;
@@ -249,7 +263,18 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@<%p>:\n    state: %@\n    shuffle: %d, loop: %d\n    currentItem (index: %ld): %@\n    playback: %.2f/%.2f (%.2f%%)", NSStringFromClass(self.class), self, [self stringForState:self.bass.currentState], self.shuffle, self.loopItem || self.loopQueue, (long)self.currentIndex, self.currentItem, self.elapsed, self.duration, self.percentElapsed * 100.0f];
+    return [NSString stringWithFormat:@"%@<%p>:\n    state: %@\n    shuffle: %d, loop: %d\n    currentItem (index: %ld): %@\n    playback: %.2f/%.2f (%.2f%%)",
+            NSStringFromClass(self.class),
+            self,
+            [self stringForState:self.bass.currentState],
+            self.shuffle,
+            self.loopItem || self.loopQueue,
+            (long)self.currentIndex,
+            self.currentItem,
+            self.elapsed,
+            self.duration,
+            self.percentElapsed * 100.0f
+            ];
 }
 
 #pragma mark - History management
@@ -266,6 +291,9 @@
 
 - (void)setupBASS {
     self.bass = ObjectiveBASS.new;
+    
+    self.bass.delegate = self;
+    self.bass.dataSource = self;
 }
 
 - (void)teardownBASS {
@@ -277,16 +305,16 @@
 - (NSString *)stringForState:(BassPlaybackState)status {
     switch (status) {
         case BassPlaybackStateStopped:
-            return @"Retriving URL";
-            
-        case BassPlaybackStateStalled:
             return @"Stopped";
             
-        case BassPlaybackStatePlaying:
+        case BassPlaybackStateStalled:
             return @"Buffering";
             
+        case BassPlaybackStatePlaying:
+            return @"Playing";
+            
         case BassPlaybackStatePaused:
-            return @"Seeking";
+            return @"Paused";
 
         default:
             return [NSString stringWithFormat:@"Unknown state: %ld", status];
@@ -362,6 +390,19 @@
              withTotalDuration:totalDuration];
 }
 
+- (void)BASSFinishedPlayingGUID:(nonnull NSUUID *)identifier
+                         forURL:(nonnull NSURL *)url {
+    if([self.currentItem.playbackGUID isEqual:identifier]) {
+        _currentIndex = self.nextIndex;
+        
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
+    }
+    else {
+        [self debug:@"Finished playing something that wasn't the active track!? %@ %@", identifier, url];
+    }
+}
+
 - (CGFloat)volume {
     return self.bass.volume;
 }
@@ -415,8 +456,7 @@
         removedItem:(AGAudioItem *)item
           fromIndex:(NSInteger)idx {
     if(idx == self.currentIndex) {
-        [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:queue
-                                                                             andIndex:idx]];
+        [self addHistoryEntryWithIndex:idx];
         
         [self setCurrentIndex:idx
                loggingHistory:NO];

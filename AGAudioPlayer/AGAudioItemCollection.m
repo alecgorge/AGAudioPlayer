@@ -8,13 +8,11 @@
 
 #import "AGAudioItemCollection.h"
 
-@implementation AGAudioItemCollectionBase
+@implementation AGAudioItemCollection
 
-@synthesize displayText, displaySubtext, albumArt, items;
-
-- (instancetype)initWithItems:(NSArray *)_items {
+- (instancetype)initWithItems:(NSArray *)items {
 	if (self = [super init]) {
-		self.items = _items;
+		self.items = items;
 	}
 	return self;
 }

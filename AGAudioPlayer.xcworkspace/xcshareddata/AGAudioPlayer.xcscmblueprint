@@ -10,7 +10,7 @@
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6805BA51-6289-4A51-BE66-D1A83D9B4005",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "256B465BA82CB900AC32B2F2BC3A5432B17C8342" : "AGAudioPlayer\/",
-    "2DF8D084974DD08475B4E12D10A71DC7D576F671" : "..\/github\/ios\/BASS%20Audio%20Test"
+    "2DF8D084974DD08475B4E12D10A71DC7D576F671" : "gapless-audio-bass-ios\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AGAudioPlayer",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,

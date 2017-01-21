@@ -1,16 +1,24 @@
 PODS:
   - BASSGaplessAudioPlayer (0.0.1)
+  - Interpolate (0.4.0)
+  - MarqueeLabel (3.0.1):
+    - MarqueeLabel/ObjC (= 3.0.1)
+  - MarqueeLabel/ObjC (3.0.1)
 
 DEPENDENCIES:
-  - BASSGaplessAudioPlayer (from `/Users/alecgorge/Documents/code/github/ios/BASS Audio Test`)
+  - BASSGaplessAudioPlayer (from `../gapless-audio-bass-ios`)
+  - Interpolate
+  - MarqueeLabel (~> 3.0.1)
 
 EXTERNAL SOURCES:
   BASSGaplessAudioPlayer:
-    :path: "/Users/alecgorge/Documents/code/github/ios/BASS Audio Test"
+    :path: "../gapless-audio-bass-ios"
 
 SPEC CHECKSUMS:
-  BASSGaplessAudioPlayer: bda2a7f84852cc0411e575450f13b6077f1055e6
+  BASSGaplessAudioPlayer: 4b3554f390ac110d0d3acf69c3c54b1b592cd908
+  Interpolate: 682895f1a2fc091da0ba53ccb018520daf51f8fd
+  MarqueeLabel: 80ba85d2b76a9f5fa6c13de337db80bcd94feb1d
 
-PODFILE CHECKSUM: 92d66d84a02c9f40a28851fc30fe5718cef62aa9
+PODFILE CHECKSUM: 96a89ea43df3c4558be0bdcf8962d8c72e14dc9f
 
-COCOAPODS: 1.2.0.rc.1
+COCOAPODS: 1.1.1
