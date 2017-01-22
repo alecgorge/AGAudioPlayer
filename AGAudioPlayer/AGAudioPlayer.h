@@ -21,16 +21,6 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerBackwardStyle) {
 
 @class AGAudioPlayer;
 
-@protocol AGAudioPlayerUpcomingQueueDelegate <NSObject>
-
-- (NSInteger)audioPlayer:(AGAudioPlayer *)audioPlayer
-  numberOfUpcomingTracks:upcomingTracks;
-
-- (AGAudioItem *)audioPlayer:(AGAudioPlayer *)audioPlayer
-audioItemForUpcomingTrackIndex:(NSInteger)upcomingTrackIndex;
-
-@end
-
 typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
     AGAudioPlayerRedrawReasonBuffering,
     AGAudioPlayerRedrawReasonPlaying,

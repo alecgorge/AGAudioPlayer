@@ -25,6 +25,7 @@
                 <outlet property="uiLabelElapsed" destination="O1k-1t-mAU" id="Ofp-Wk-Qt8"/>
                 <outlet property="uiLabelSubtitle" destination="7up-hA-coa" id="54Y-MV-ifP"/>
                 <outlet property="uiLabelTitle" destination="7hF-uW-Yvs" id="YIv-Ig-Z8b"/>
+                <outlet property="uiPanGestureClose" destination="wNe-aW-vHn" id="yPj-Ah-SSA"/>
                 <outlet property="uiProgressDownload" destination="QYP-TA-5ZA" id="5jM-w8-DwK"/>
                 <outlet property="uiProgressDownloadCompleted" destination="N1S-bw-vqv" id="abL-ka-V1v"/>
                 <outlet property="uiProgressDownloadCompletedContraint" destination="u01-gK-E3N" id="6VB-cX-6fL"/>
@@ -70,7 +71,7 @@
                             <rect key="frame" x="16" y="116" width="343" height="6"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N1S-bw-vqv">
-                                    <rect key="frame" x="0.0" y="0.0" width="172" height="6"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="6"/>
                                     <color key="backgroundColor" red="1" green="0.0099468241871529806" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </view>
                             </subviews>
@@ -79,7 +80,7 @@
                                 <constraint firstAttribute="bottom" secondItem="N1S-bw-vqv" secondAttribute="bottom" id="TDs-kV-rcV"/>
                                 <constraint firstItem="N1S-bw-vqv" firstAttribute="top" secondItem="QYP-TA-5ZA" secondAttribute="top" id="Vxl-iS-VrI"/>
                                 <constraint firstItem="N1S-bw-vqv" firstAttribute="leading" secondItem="QYP-TA-5ZA" secondAttribute="leading" id="gTW-SH-twC"/>
-                                <constraint firstItem="N1S-bw-vqv" firstAttribute="width" secondItem="QYP-TA-5ZA" secondAttribute="width" multiplier="0.5" id="u01-gK-E3N"/>
+                                <constraint firstItem="N1S-bw-vqv" firstAttribute="width" secondItem="QYP-TA-5ZA" secondAttribute="width" multiplier="1e-07" id="u01-gK-E3N"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vW0-b0-dwJ" userLabel="Playback Progress" customClass="ScrubberBar" customModule="AGAudioPlayer" customModuleProvider="target">
@@ -262,6 +263,7 @@
         <panGestureRecognizer delaysTouchesBegan="YES" minimumNumberOfTouches="1" id="wNe-aW-vHn" customClass="VerticalPanDirectionGestureRecognizer" customModule="AGAudioPlayer">
             <connections>
                 <action selector="handlePanToClose:" destination="-1" id="dbc-GX-cic"/>
+                <outlet property="delegate" destination="-1" id="4wy-kh-lxG"/>
             </connections>
         </panGestureRecognizer>
     </objects>

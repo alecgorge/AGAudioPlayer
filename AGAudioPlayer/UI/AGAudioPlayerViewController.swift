@@ -14,6 +14,8 @@ import MarqueeLabel
 
 @objc class AGAudioPlayerViewController: UIViewController {
 
+    @IBOutlet var uiPanGestureClose: VerticalPanDirectionGestureRecognizer!
+    
     @IBOutlet weak var uiTable: UITableView!
     @IBOutlet weak var uiHeaderView: UIView!
     @IBOutlet weak var uiFooterView: UIView!
@@ -48,8 +50,7 @@ import MarqueeLabel
     let ColorScrubberHandle = UIColor.white
     
     // constants
-    let SectionHistory = 0
-    let SectionQueue = 1
+    let SectionQueue = 0
     
     // bouncy header
     var headerInterpolate: Interpolate?
@@ -92,6 +93,14 @@ import MarqueeLabel
         viewWillAppear_StretchyHeader()
         viewWillAppear_Table()
         updateUI()
+    }
+}
+
+extension AGAudioPlayerViewController : UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let pt = touch.location(in: uiHeaderView)
+        
+        return !uiHeaderView.frame.contains(pt);
     }
 }
 
@@ -190,6 +199,7 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             print("track changed")
             updatePreviousNextButtons()
             updateNonTimeLabels()
+            uiTable.reloadData()
             
         default:
             break
@@ -227,7 +237,10 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         uiLabelSubtitle.trailingBuffer = 24
         
         uiLabelTitle.animationDelay = 5
+        uiLabelTitle.rate = 25
+        
         uiLabelSubtitle.animationDelay = 5
+        uiLabelSubtitle.rate = 25
     }
     
     func scrubberBar(bar: ScrubberBar, didScrubToProgress: Float, finished: Bool) {
@@ -297,7 +310,6 @@ extension AGAudioPlayerViewController {
     func setupStretchyHeader() {
         let blk = { [weak self] (fontScale: Double) in
             if let s = self {
-                print("called")
                 s.uiHeaderView.transform = CGAffineTransform(scaleX: CGFloat(fontScale), y: CGFloat(fontScale))
                 
                 let h = s.uiHeaderView.bounds.height * CGFloat(fontScale)
@@ -357,19 +369,18 @@ extension AGAudioPlayerViewController {
     func setupTable() {
         uiTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        uiTable.backgroundView = UIView(frame: UIScreen.main.bounds)
-        uiTable.backgroundView?.backgroundColor = ColorMain
+//        uiTable.backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: uiHeaderView.bounds.size.height + 44 * 2))
+//        uiTable.backgroundView?.backgroundColor = ColorMain
         
         uiTable.allowsSelection = true
         uiTable.allowsSelectionDuringEditing = false
         uiTable.allowsMultipleSelectionDuringEditing = true
         
-        uiTable.setEditing(true, animated: false)
+        uiTable.setEditing(false, animated: false)
         uiTable.reloadData()
     }
     
     func viewWillAppear_Table() {
-        uiTable.scrollToRow(at: IndexPath(row: 0, section: SectionQueue), at: .top, animated: false)
     }
 }
 
@@ -379,7 +390,12 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("\(indexPath) selected")
+        if tableView.isEditing {
+            
+        }
+        else {
+            player.currentIndex = indexPath.row
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -401,26 +417,28 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
 
 extension AGAudioPlayerViewController : UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == SectionHistory ? 10 : 25
+        return player.queue.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == SectionHistory {
-            return "History"
-        }
-        else {
-            return "Queue"
-        }
+        return "Queue"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        cell.textLabel?.text = "\(indexPath.row)"
+        guard indexPath.row < player.queue.count else {
+            cell.textLabel?.text = "Error"
+            return cell
+        }
+        
+        let item = player.queue[UInt(indexPath.row)]
+        
+        cell.textLabel?.text = (item.playbackGUID == player.currentItem?.playbackGUID ? "* " : "") + item.title
         
         return cell
     }

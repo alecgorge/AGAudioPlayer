@@ -47,7 +47,7 @@
 
 @property (nonatomic) ObjectiveBASS *bass;
 
-@property (nonatomic) NSMutableArray<AGAudioPlayerHistoryItem *> *playbackHistory;
+@property (nonatomic) NSMutableArray<AGAudioItem *> *playbackHistory;
 
 @property (nonatomic) NSTimer *playbackUpdateTimer;
 
@@ -159,13 +159,8 @@
     return self.elapsed / self.duration;
 }
 
-- (void)addHistoryEntryWithIndex:(NSInteger)index {
-    [self.playbackHistory addObject:[AGAudioPlayerHistoryItem.alloc initWithQueue:self.queue
-                                                                         andIndex:self.currentIndex]];
-    
-    for (AGAudioPlayerHistoryItem *hi in self.playbackHistory) {
-        [self debug:"\t%@", self.queue]
-    }
+- (void)addHistoryEntry:(AGAudioItem *)item {
+    [self.playbackHistory addObject:item];
 }
 
 #pragma mark - Playback Order
@@ -182,7 +177,7 @@
 - (void)setCurrentIndex:(NSInteger)currentIndex
          loggingHistory:(BOOL)history {
     if(history) {
-        [self addHistoryEntryWithIndex:self.currentIndex];
+        [self addHistoryEntry:self.currentItem];
     }
     
     _currentIndex = currentIndex;
@@ -241,21 +236,35 @@
     return [self.queue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
 }
 
-- (AGAudioPlayerHistoryItem *)lastHistoryEntry {
+- (AGAudioItem *)lastHistoryEntry {
     return self.playbackHistory.lastObject;
 }
 
 - (NSInteger)previousIndex {
-    AGAudioPlayerHistoryItem *l = self.lastHistoryEntry;
-    if (l == nil) {
-        return NSNotFound;
+    // looping a single track
+    if (self.loopItem) {
+        return self.currentIndex;
     }
     
-    return l.index;
+    // last song in the current queue
+    if (self.currentIndex == 0) {
+        // start the current queue from the end
+        if(self.loopQueue) {
+            return self.queue.count - 1;
+        }
+        // reached the beginning of all tracks, accross both queues
+        else {
+            return NSNotFound;
+        }
+    }
+    // there are still songs in the current queue
+    else {
+        return self.currentIndex - 1;
+    }
 }
 
 - (AGAudioItem *)previousItem {
-    return self.lastHistoryEntry.queue[self.lastHistoryEntry.index];
+    return self.queue[self.previousIndex];
 }
 
 - (void)incrementIndex {
@@ -317,7 +326,7 @@
             return @"Paused";
 
         default:
-            return [NSString stringWithFormat:@"Unknown state: %ld", status];
+            return [NSString stringWithFormat:@"Unknown state: %ld", (long)status];
     }
 }
 
@@ -393,6 +402,8 @@
 - (void)BASSFinishedPlayingGUID:(nonnull NSUUID *)identifier
                          forURL:(nonnull NSURL *)url {
     if([self.currentItem.playbackGUID isEqual:identifier]) {
+        [self addHistoryEntry:self.currentItem];
+        
         _currentIndex = self.nextIndex;
         
         [self.delegate audioPlayer:self
@@ -456,7 +467,7 @@
         removedItem:(AGAudioItem *)item
           fromIndex:(NSInteger)idx {
     if(idx == self.currentIndex) {
-        [self addHistoryEntryWithIndex:idx];
+        [self addHistoryEntry:self.currentItem];
         
         [self setCurrentIndex:idx
                loggingHistory:NO];

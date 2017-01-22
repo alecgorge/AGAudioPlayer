@@ -60,10 +60,10 @@
     self.window.rootViewController = UIViewController.new;
     
     NSArray *pl = @[
-                    [TestAudioItem.alloc initWithTitle:@"1" url:@"http://phish.in/audio/000/025/507/25507.mp3"],
-                    [TestAudioItem.alloc initWithTitle:@"2" url:@"http://phish.in/audio/000/025/508/25508.mp3"],
-                    [TestAudioItem.alloc initWithTitle:@"3" url:@"http://phish.in/audio/000/025/509/25509.mp3"],
-                    [TestAudioItem.alloc initWithTitle:@"4" url:@"http://phish.in/audio/000/025/510/25510.mp3"]
+                    [TestAudioItem.alloc initWithTitle:@"Light >" url:@"http://phish.in/audio/000/025/507/25507.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"Sneaking Sally Through The Alley >" url:@"http://phish.in/audio/000/025/508/25508.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"Crosseyed and Painless >" url:@"http://phish.in/audio/000/025/509/25509.mp3"],
+                    [TestAudioItem.alloc initWithTitle:@"Theme From The Bottom" url:@"http://phish.in/audio/000/025/510/25510.mp3"]
                     ];
     
 	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:pl];

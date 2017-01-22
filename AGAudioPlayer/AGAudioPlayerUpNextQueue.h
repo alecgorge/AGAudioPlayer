@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (void)removeItem:(AGAudioItem * _Nonnull)item;
 - (void)removeItemAtIndex:(NSInteger)indx;
 
-- (_Nonnull id)objectAtIndexedSubscript:(NSUInteger)idx;
+- (AGAudioItem * _Nonnull)objectAtIndexedSubscript:(NSUInteger)idx;
 
 - (AGAudioItem * _Nonnull)shuffledItemAtIndex:(NSUInteger)idx;
 - (AGAudioItem * _Nonnull)unshuffledItemAtIndex:(NSUInteger)idx;
