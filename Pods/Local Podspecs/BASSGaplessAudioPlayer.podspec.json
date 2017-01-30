@@ -18,7 +18,8 @@
   "source_files": [
     "BASS Audio Test/ObjectiveBASS.{h,m}",
     "BASS Audio Test/bass.h",
-    "BASS Audio Test/bassmix.h"
+    "BASS Audio Test/bassmix.h",
+    "BASS Audio Test/bass_fx.h"
   ],
   "frameworks": [
     "AVFoundation",
@@ -30,7 +31,11 @@
   "ios": {
     "vendored_libraries": [
       "BASS Audio Test/libbass.a",
-      "BASS Audio Test/libbassmix.a"
+      "BASS Audio Test/libbassmix.a",
+      "BASS Audio Test/libbass_fx.a"
     ]
+  },
+  "xcconfig": {
+    "OTHER_LDFLAGS": "$(inherited) -lstdc++"
   }
 }
