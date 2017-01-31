@@ -85,12 +85,14 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/BASSGaplessAudioPlayer/BASSGaplessAudioPlayer.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/BCColor/BCColor.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Interpolate/Interpolate.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MarqueeLabel/MarqueeLabel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/NapySlider/NapySlider.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/BASSGaplessAudioPlayer/BASSGaplessAudioPlayer.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/BCColor/BCColor.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Interpolate/Interpolate.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MarqueeLabel/MarqueeLabel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/NapySlider/NapySlider.framework"

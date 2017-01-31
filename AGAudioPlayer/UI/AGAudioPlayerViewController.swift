@@ -11,6 +11,8 @@ import QuartzCore
 
 import Interpolate
 import MarqueeLabel
+import BCColor
+import NapySlider
 
 @objc class AGAudioPlayerViewController: UIViewController {
 
@@ -38,6 +40,9 @@ import MarqueeLabel
     @IBOutlet weak var uiButtonLoop: UIButton!
     @IBOutlet weak var uiButtonDots: UIButton!
     @IBOutlet weak var uiButtonPlus: UIButton!
+    
+    @IBOutlet weak var uiWrapperEq: UIView!
+    @IBOutlet weak var uiSliderEqBass: NapySlider!
     
     // colors
     let ColorMain = UIColor(red:0.149, green:0.608, blue:0.737, alpha:1)
@@ -355,9 +360,15 @@ extension AGAudioPlayerViewController {
         uiProgressDownloadCompleted.backgroundColor = ColorBarDownloads
         uiScrubber.elapsedColor = ColorBarPlaybackElapsed
         uiScrubber.dragIndicatorColor = ColorScrubberHandle
+        
+        uiWrapperEq.backgroundColor = ColorMain.darkenByPercentage(0.05)
     
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 4
+        
+        uiSliderEqBass.tintColor = ColorBarPlaybackElapsed
+        uiSliderEqBass.sliderUnselectedColor = ColorBarDownloads
+        uiSliderEqBass.
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
