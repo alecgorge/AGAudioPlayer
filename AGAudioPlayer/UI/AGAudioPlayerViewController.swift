@@ -8,6 +8,7 @@
 
 import UIKit
 import QuartzCore
+import MediaPlayer
 
 import Interpolate
 import MarqueeLabel
@@ -40,6 +41,7 @@ import NapySlider
     @IBOutlet weak var uiButtonLoop: UIButton!
     @IBOutlet weak var uiButtonDots: UIButton!
     @IBOutlet weak var uiButtonPlus: UIButton!
+    @IBOutlet weak var uiSliderVolume: MPVolumeView!
     
     @IBOutlet weak var uiWrapperEq: UIView!
     @IBOutlet weak var uiSliderEqBass: NapySlider!
@@ -241,11 +243,15 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         uiLabelTitle.trailingBuffer = 32
         uiLabelSubtitle.trailingBuffer = 24
         
+        // uiLabelTitle.animationDuration = 2
         uiLabelTitle.animationDelay = 5
         uiLabelTitle.rate = 25
         
         uiLabelSubtitle.animationDelay = 5
         uiLabelSubtitle.rate = 25
+        
+        uiLabelTitle.isUserInteractionEnabled = true
+        uiLabelSubtitle.isUserInteractionEnabled = true
     }
     
     func scrubberBar(bar: ScrubberBar, didScrubToProgress: Float, finished: Bool) {
@@ -264,6 +270,8 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         player.shuffle = !player.shuffle
         
         updateShuffleLoopButtons()
+        uiTable.reloadData()
+        updatePreviousNextButtons()
     }
     
     @IBAction func uiActionToggleLoop(_ sender: UIButton) {
@@ -308,6 +316,10 @@ extension AGAudioPlayerViewController {
             
             del.handleGesture(self, inView: uiHeaderView, sender: sender);
         }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
+        return !isCurrentlyScrubbing
     }
 }
 
@@ -361,14 +373,17 @@ extension AGAudioPlayerViewController {
         uiScrubber.elapsedColor = ColorBarPlaybackElapsed
         uiScrubber.dragIndicatorColor = ColorScrubberHandle
         
+        uiWrapperEq.isHidden = true
         uiWrapperEq.backgroundColor = ColorMain.darkenByPercentage(0.05)
     
+        uiSliderVolume.tintColor = ColorAccent
+        
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 4
         
         uiSliderEqBass.tintColor = ColorBarPlaybackElapsed
         uiSliderEqBass.sliderUnselectedColor = ColorBarDownloads
-        uiSliderEqBass.
+        // uiSliderEqBass.
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -447,7 +462,8 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
             return cell
         }
         
-        let item = player.queue[UInt(indexPath.row)]
+        let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
+        let item = q[indexPath.row]
         
         cell.textLabel?.text = (item.playbackGUID == player.currentItem?.playbackGUID ? "* " : "") + item.title
         

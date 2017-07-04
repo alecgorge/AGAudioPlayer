@@ -93,4 +93,6 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerUpNextQueueChanged) {
 - (NSInteger)properPositionForId:(nonnull NSUUID *)_id
                forShuffleEnabled:(BOOL)shuffleEnabled;
 
+- (void)shuffleStartingAtIndex:(NSUInteger)idx;
+
 @end

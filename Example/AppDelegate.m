@@ -66,6 +66,8 @@
                     [TestAudioItem.alloc initWithTitle:@"Theme From The Bottom" url:@"http://phish.in/audio/000/025/510/25510.mp3"]
                     ];
     
+    NSLog(@"queue: %@", pl);
+    
 	AGAudioPlayerUpNextQueue *queue = [AGAudioPlayerUpNextQueue.alloc initWithItems:pl];
 	self.player = [AGAudioPlayer.alloc initWithQueue:queue];
 

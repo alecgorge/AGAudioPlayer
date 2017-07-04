@@ -261,4 +261,26 @@
     return NSNotFound;
 }
 
+- (void)shuffleStartingAtIndex:(NSUInteger)idx {
+    AGAudioItem *starter = self.items[idx];
+    self.shuffledItems = NSMutableArray.array;
+    
+    for (AGAudioItem *item in self.items) {
+        if(starter == item) {
+            continue;
+        }
+        
+        if(self.shuffledItems.count == 0) {
+            [self.shuffledItems addObject:item];
+            continue;
+        }
+        
+        [self.shuffledItems insertObject:item
+                                 atIndex:arc4random_uniform((u_int32_t)self.shuffledItems.count)];
+    }
+    
+    [self.shuffledItems insertObject:starter
+                             atIndex:0];
+}
+
 @end

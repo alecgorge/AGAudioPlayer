@@ -85,16 +85,36 @@
 }
 
 - (BOOL)isPlayingFirstItem {
-    return self.currentIndex == 0;
+    if(self.loopItem) {
+        return NO;
+    }
+    
+    return [self.queue properPositionForId:self.currentItem.playbackGUID
+                                           forShuffleEnabled:self.shuffle] == 0;
 }
 
 - (BOOL)isPlayingLastItem {
-    return self.currentIndex == self.queue.count - 1;
+    if(self.loopItem) {
+        return NO;
+    }
+    
+    return [self.queue properPositionForId:self.currentItem.playbackGUID
+                         forShuffleEnabled:self.shuffle] == self.queue.count - 1;
 }
 
 - (void)setShuffle:(BOOL)shuffle {
+    NSUUID *currentlyPlayingGUID = self.currentItem.playbackGUID;
+    
     _shuffle = shuffle;
     
+    if(shuffle) {
+        [self.queue shuffleStartingAtIndex: self.currentIndex];
+    }
+
+    // restore the current index to point to the right track for visual purposes
+    _currentIndex = [self.queue properPositionForId:currentlyPlayingGUID
+                                  forShuffleEnabled:shuffle];
+
     [self.bass nextTrackMayHaveChanged];
 }
 
@@ -128,11 +148,15 @@
 
 - (void)forward {
     self.currentIndex = self.nextIndex;
+    
+    [self.bass nextTrackMayHaveChanged];
 }
 
 - (void)backward {
     if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
         self.currentIndex = self.previousIndex;
+        
+        [self.bass nextTrackMayHaveChanged];
     }
     else {
         [self seekTo:0];
@@ -180,13 +204,13 @@
         [self addHistoryEntry:self.currentItem];
     }
     
-    _currentIndex = currentIndex;
-    
     AGAudioItem * item = [self.queue properQueueForShuffleEnabled:self.shuffle][currentIndex];
     
     [self.bass playURL:item.playbackURL
         withIdentifier:item.playbackGUID];
     
+    _currentIndex = currentIndex;
+
     [self.delegate audioPlayer:self
         uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
 }
@@ -204,13 +228,24 @@
 }
 
 - (NSInteger)nextIndex {
+    return [self nextIndexAfterIndex:self.currentIndex];
+}
+
+- (NSInteger)nextIndexAfterIdentifier:(NSUUID *)identifier {
+    NSInteger idx = [self.queue properPositionForId:identifier
+                                  forShuffleEnabled:self.shuffle];
+    
+    return [self nextIndexAfterIndex:idx];
+}
+
+- (NSInteger)nextIndexAfterIndex:(NSInteger)idx {
     // looping a single track
     if (self.loopItem) {
-        return self.currentIndex;
+        return idx;
     }
     
     // last song in the current queue
-    if (self.currentIndex == self.queue.count) {
+    if (idx == self.queue.count) {
         // start the current queue from the beginning
         if(self.loopQueue) {
             return 0;
@@ -222,18 +257,26 @@
     }
     // there are still songs in the current queue
     else {
-        return self.currentIndex + 1;
+        return idx + 1;
     }
 }
 
 - (AGAudioItem *)nextItem {
-    NSInteger nextIndex = self.nextIndex;
+    return [self nextItemAfterIndex:self.currentIndex];
+}
+
+- (AGAudioItem *)nextItemAfterIdentifier:(NSUUID *)identifier {
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][[self nextIndexAfterIdentifier:identifier]];
+}
+
+- (AGAudioItem *)nextItemAfterIndex:(NSInteger)idx {
+    NSInteger nextIndex = [self nextIndexAfterIndex:idx];
     
     if(nextIndex == NSNotFound || nextIndex >= self.queue.count) {
         return nil;
     }
     
-    return [self.queue properQueueForShuffleEnabled:self.shuffle][self.nextIndex];
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][nextIndex];
 }
 
 - (AGAudioItem *)lastHistoryEntry {
@@ -427,19 +470,27 @@
 - (BOOL)BASSIsPlayingLastTrack:(nonnull ObjectiveBASS *)bass
                        withURL:(nonnull NSURL *)url
                  andIdentifier:(nonnull NSUUID *)identifier {
-    return self.queue.count - 1 == [self.queue properPositionForId:identifier
-                                                 forShuffleEnabled:self.shuffle];
+    BOOL last = self.queue.count - 1 == [self.queue properPositionForId:identifier
+                                                      forShuffleEnabled:self.shuffle];
+
+    [self debug:@"BASSIsPlayingLastTrack: %d", last];
+    
+    return last;
 }
 
 - (nonnull NSUUID *)BASSNextTrackIdentifier:(nonnull ObjectiveBASS *)bass
                                    afterURL:(nonnull NSURL *)url
                              withIdentifier:(nonnull NSUUID *)identifier {
-    return self.nextItem.playbackGUID;
+    NSUUID *guid = [self nextItemAfterIdentifier:identifier].playbackGUID;
+    [self debug:@"BASSNextTrackIdentifier: %@", guid.UUIDString];
+    return guid;
 }
 
 - (void)BASSLoadNextTrackURL:(nonnull ObjectiveBASS *)bass
                forIdentifier:(nonnull NSUUID *)identifier {
     NSURL *url = [self.queue itemForId:identifier].playbackURL;
+
+    [self debug:@"BASSLoadNextTrackURL: %@", url];
 
     [self.bass nextTrackURLLoaded:url];
 }

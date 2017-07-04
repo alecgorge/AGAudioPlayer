@@ -99,4 +99,8 @@
     return [NSString stringWithFormat:@"%d%@%@%@", (int)self.trackNumber, self.title, self.artist, self.album].hash;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ - #%d - %@ - %@ - %@", self.playbackGUID.UUIDString, (int)self.trackNumber, self.title, self.artist, self.album];
+}
+
 @end

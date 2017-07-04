@@ -36,10 +36,6 @@ typedef void(^MLAnimationCompletionBlock)(BOOL finished);
 @end
 
 @interface MarqueeLabel()
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
-// iOS 10 SDK has CAAnimationDelegate a formal protocol
-<CAAnimationDelegate>
-#endif
 
 @property (nonatomic, strong) UILabel *subLabel;
 
@@ -413,7 +409,7 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
             
         case MLLeftRight:
         {
-            self.homeLabelFrame = CGRectIntegral(CGRectMake(self.leadingBuffer, 0.0f, expectedLabelSize.width, expectedLabelSize.height));
+            self.homeLabelFrame = CGRectIntegral(CGRectMake(self.leadingBuffer, 0.0f, expectedLabelSize.width, self.bounds.size.height));
             self.awayOffset = self.bounds.size.width - (expectedLabelSize.width + self.leadingBuffer + self.trailingBuffer);
             
             // Calculate animation duration

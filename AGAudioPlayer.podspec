@@ -22,5 +22,11 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.ios.frameworks = 'MediaPlayer'
-  s.dependency 'HysteriaPlayer'
+  s.resource_bundle = { 'AGAudioPlayer' => ['AGAudioPlayer/UI/Icons.xcassets', 'AGAudioPlayer/**/*.xib'] }
+  
+  s.dependency 'Interpolate'
+  s.dependency 'BASSGaplessAudioPlayer'
+  s.dependency 'MarqueeLabel'
+  s.dependency 'NapySlider'
+  s.dependency 'BCColor'
 end
