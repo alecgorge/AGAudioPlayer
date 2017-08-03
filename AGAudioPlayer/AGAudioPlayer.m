@@ -34,22 +34,13 @@
 
 @end
 
-#if TARGET_OS_IPHONE
-@interface AGAudioPlayer () <AVAudioSessionDelegate, AGAudioPlayerUpNextQueueDelegate, ObjectiveBASSDelegate, ObjectiveBASSDataSource>
-#else
 @interface AGAudioPlayer () <AGAudioPlayerUpNextQueueDelegate, ObjectiveBASSDelegate, ObjectiveBASSDataSource>
-#endif
 {
 }
-
-@property BOOL registeredAudioSession;
-@property BOOL wasPlayingDuringInterruption;
 
 @property (nonatomic) ObjectiveBASS *bass;
 
 @property (nonatomic) NSMutableArray<AGAudioItem *> *playbackHistory;
-
-@property (nonatomic) NSTimer *playbackUpdateTimer;
 
 @end
 
@@ -217,6 +208,8 @@
 
 - (void)playItemAtIndex:(NSUInteger)idx {
     self.currentIndex = idx;
+    
+    [self resume];
 }
 
 - (AGAudioItem *)currentItem {
@@ -234,6 +227,10 @@
 - (NSInteger)nextIndexAfterIdentifier:(NSUUID *)identifier {
     NSInteger idx = [self.queue properPositionForId:identifier
                                   forShuffleEnabled:self.shuffle];
+    
+    if(idx == NSNotFound) {
+        return NSNotFound;
+    }
     
     return [self nextIndexAfterIndex:idx];
 }
@@ -266,7 +263,13 @@
 }
 
 - (AGAudioItem *)nextItemAfterIdentifier:(NSUUID *)identifier {
-    return [self.queue properQueueForShuffleEnabled:self.shuffle][[self nextIndexAfterIdentifier:identifier]];
+    NSInteger idx = [self nextIndexAfterIdentifier:identifier];
+    
+    if(idx == NSNotFound) {
+        return nil;
+    }
+    
+    return [self.queue properQueueForShuffleEnabled:self.shuffle][idx];
 }
 
 - (AGAudioItem *)nextItemAfterIndex:(NSInteger)idx {
@@ -499,6 +502,10 @@
     _currentIndex = -1;
     
     [self stop];
+}
+
+- (void)upNextQueueReplacedAllItems:(AGAudioPlayerUpNextQueue *)queue {
+    
 }
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue

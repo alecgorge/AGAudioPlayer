@@ -15,12 +15,14 @@ import MarqueeLabel
 import BCColor
 import NapySlider
 
-@objc class AGAudioPlayerViewController: UIViewController {
+@objc public class AGAudioPlayerViewController: UIViewController {
 
     @IBOutlet var uiPanGestureClose: VerticalPanDirectionGestureRecognizer!
+    @IBOutlet var uiPanGestureOpen: VerticalPanDirectionGestureRecognizer!
     
     @IBOutlet weak var uiTable: UITableView!
     @IBOutlet weak var uiHeaderView: UIView!
+    
     @IBOutlet weak var uiFooterView: UIView!
     @IBOutlet weak var uiProgressDownload: UIView!
     @IBOutlet weak var uiProgressDownloadCompleted: UIView!
@@ -45,6 +47,38 @@ import NapySlider
     
     @IBOutlet weak var uiWrapperEq: UIView!
     @IBOutlet weak var uiSliderEqBass: NapySlider!
+    
+    // mini player
+    @IBOutlet weak var uiMiniPlayerContainerView: UIView!
+    
+    public var barHeight : CGFloat {
+        get {
+            if let c = uiMiniPlayerContainerView {
+                return c.bounds.height
+            }
+            return 64.0
+        }
+    }
+    
+    @IBOutlet weak var uiMiniPlayerTopOffsetConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var uiMiniProgressDownloadCompletedView: UIView!
+    @IBOutlet weak var uiMiniProgressDownloadCompletedConstraint: NSLayoutConstraint!
+    @IBOutlet weak var uiMiniProgressPlayback: UIProgressView!
+    
+    @IBOutlet weak var uiMiniButtonPlay: UIButton!
+    @IBOutlet weak var uiMiniButtonPause: UIButton!
+
+    @IBOutlet weak var uiMiniLabelTitle: MarqueeLabel!
+    @IBOutlet weak var uiMiniLabelSubtitle: MarqueeLabel!
+    
+    @IBOutlet weak var uiMiniButtonDots: UIButton!
+    @IBOutlet weak var uiMiniButtonPlus: UIButton!
+    // end mini player
+    
+    public var presentationDelegate: AGAudioPlayerViewControllerPresentationDelegate? = nil
+    var dismissInteractor: DismissInteractor = DismissInteractor()
+    var openInteractor: OpenInteractor = OpenInteractor()
     
     // colors
     let ColorMain = UIColor(red:0.149, green:0.608, blue:0.737, alpha:1)
@@ -71,21 +105,25 @@ import NapySlider
     
     let player: AGAudioPlayer
     
-    init(player: AGAudioPlayer) {
+    required public init(player: AGAudioPlayer) {
         self.player = player
         
-        super.init(nibName: String(describing: AGAudioPlayerViewController.self), bundle: Bundle.main)
+        let bundle = Bundle(path: Bundle(for: AGAudioPlayerViewController.self).path(forResource: "AGAudioPlayer", ofType: "bundle")!)
+        super.init(nibName: String(describing: AGAudioPlayerViewController.self), bundle: bundle)
         
         self.transitioningDelegate = AGAudioPlayerViewController.defaultTransitionDelegate
         
         setupPlayer()
+        
+        dismissInteractor.viewController = self
+        openInteractor.viewController = self
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         setupTable()
@@ -94,20 +132,26 @@ import NapySlider
         setupPlayerUiActions()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         viewWillAppear_StretchyHeader()
         viewWillAppear_Table()
         updateUI()
+        
+        uiSliderVolume.isHidden = false
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        uiSliderVolume.isHidden = true
     }
 }
 
 extension AGAudioPlayerViewController : UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let pt = touch.location(in: uiHeaderView)
         
-        return !uiHeaderView.frame.contains(pt);
+        return uiHeaderView.frame.contains(pt);
     }
 }
 
@@ -126,12 +170,15 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     }
     
     func updatePlayPauseButtons() {
-        guard uiButtonPause != nil, uiButtonPlay != nil else {
+        guard uiButtonPause != nil, uiButtonPlay != nil, uiMiniButtonPause != nil, uiMiniButtonPlay != nil else {
             return
         }
         
         uiButtonPause.isHidden = !player.isPlaying && !player.isBuffering
         uiButtonPlay.isHidden = player.isPlaying
+        
+        uiMiniButtonPause.isHidden = uiButtonPause.isHidden
+        uiMiniButtonPlay.isHidden = uiButtonPlay.isHidden
     }
     
     func updatePreviousNextButtons() {
@@ -153,17 +200,16 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     }
     
     func updateNonTimeLabels() {
-        guard uiLabelTitle != nil, uiLabelSubtitle != nil else {
+        guard uiLabelTitle != nil, uiLabelSubtitle != nil, uiMiniLabelTitle != nil, uiLabelSubtitle != nil else {
             return
         }
         
         if let cur = player.currentItem {
-            print("updating text to:")
-            print(cur.displayText)
-            print(cur.displaySubtext)
-            
             uiLabelTitle.text = cur.displayText
             uiLabelSubtitle.text = cur.displaySubtext
+            
+            uiMiniLabelTitle.text = cur.displayText
+            uiMiniLabelSubtitle.text = cur.displaySubtext
         }
     }
     
@@ -177,17 +223,38 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     }
     
     func updatePlaybackProgress() {
-        guard uiScrubber != nil else {
+        guard uiScrubber != nil, uiMiniProgressPlayback != nil else {
             return
         }
 
         if !isCurrentlyScrubbing {
             uiScrubber.setProgress(progress: Float(player.percentElapsed))
+            uiMiniProgressPlayback.progress = Float(player.percentElapsed)
+            
             updateTimeLabels()
         }
     }
     
-    func audioPlayer(_ audioPlayer: AGAudioPlayer, uiNeedsRedrawFor reason: AGAudioPlayerRedrawReason) {
+    func updateDownloadProgress(pct: Double) {
+        guard uiProgressDownloadCompletedContraint != nil, uiMiniProgressDownloadCompletedConstraint != nil else {
+            return
+        }
+        
+        var p = pct
+        if p > 0.98 {
+            p = 1.0
+        }
+        
+        uiProgressDownloadCompletedContraint = uiProgressDownloadCompletedContraint.setMultiplier(multiplier: CGFloat(p))
+        uiProgressDownload.layoutIfNeeded()
+        
+        uiMiniProgressDownloadCompletedConstraint = uiMiniProgressDownloadCompletedConstraint.setMultiplier(multiplier: CGFloat(p))
+        uiMiniPlayerContainerView.layoutIfNeeded()
+        
+        uiMiniProgressDownloadCompletedView.isHidden = p == 0.0
+    }
+    
+    public func audioPlayer(_ audioPlayer: AGAudioPlayer, uiNeedsRedrawFor reason: AGAudioPlayerRedrawReason) {
         switch reason {
         case .buffering, .playing:
             updatePlayPauseButtons()
@@ -196,6 +263,9 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             uiLabelTitle.text = ""
             uiLabelSubtitle.text = ""
             
+            uiMiniLabelTitle.text = ""
+            uiMiniLabelSubtitle.text = ""
+            
             fallthrough
             
         case .paused, .error:
@@ -203,9 +273,9 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             
             
         case .trackChanged:
-            print("track changed")
             updatePreviousNextButtons()
             updateNonTimeLabels()
+            updateTimeLabels()
             uiTable.reloadData()
             
         default:
@@ -213,25 +283,23 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
         }
     }
     
-    func audioPlayer(_ audioPlayer: AGAudioPlayer, errorRaised error: Error, for url: URL) {
+    public func audioPlayer(_ audioPlayer: AGAudioPlayer, errorRaised error: Error, for url: URL) {
         print("CRAP")
         print(error)
         print(url)
     }
     
-    func audioPlayer(_ audioPlayer: AGAudioPlayer, downloadedBytesForActiveTrack downloadedBytes: UInt64, totalBytes: UInt64) {
+    public func audioPlayer(_ audioPlayer: AGAudioPlayer, downloadedBytesForActiveTrack downloadedBytes: UInt64, totalBytes: UInt64) {
         guard uiProgressDownloadCompleted != nil else {
             return
         }
         
         let progress = Double(downloadedBytes) / Double(totalBytes)
         
-        uiProgressDownloadCompletedContraint = uiProgressDownloadCompletedContraint.setMultiplier(multiplier: CGFloat(progress))
-        
-        uiProgressDownload.layoutIfNeeded()
+        updateDownloadProgress(pct: progress)
     }
     
-    func audioPlayer(_ audioPlayer: AGAudioPlayer, progressChanged elapsed: TimeInterval, withTotalDuration totalDuration: TimeInterval) {
+    public func audioPlayer(_ audioPlayer: AGAudioPlayer, progressChanged elapsed: TimeInterval, withTotalDuration totalDuration: TimeInterval) {
         updatePlaybackProgress()
     }
 }
@@ -252,13 +320,30 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         
         uiLabelTitle.isUserInteractionEnabled = true
         uiLabelSubtitle.isUserInteractionEnabled = true
+        
+        // mini player
+        uiMiniLabelTitle.trailingBuffer = 24
+        uiMiniLabelSubtitle.trailingBuffer = 16
+        
+        uiMiniLabelTitle.animationDelay = 5
+        uiMiniLabelTitle.rate = 16
+        
+        uiMiniLabelSubtitle.animationDelay = 5
+        uiMiniLabelSubtitle.rate = 16
+        
+        uiMiniLabelTitle.isUserInteractionEnabled = true
+        uiMiniLabelSubtitle.isUserInteractionEnabled = true
+        
+        updateDownloadProgress(pct: 0.0)
+        updatePlaybackProgress()
     }
     
-    func scrubberBar(bar: ScrubberBar, didScrubToProgress: Float, finished: Bool) {
+    public func scrubberBar(bar: ScrubberBar, didScrubToProgress: Float, finished: Bool) {
         isCurrentlyScrubbing = !finished
         
-        if let elapsed = uiLabelElapsed {
+        if let elapsed = uiLabelElapsed, let mp = uiMiniProgressPlayback {
             elapsed.text = TimeInterval(player.duration * Double(didScrubToProgress)).formatted()
+            mp.progress = didScrubToProgress
         }
         
         if finished {
@@ -301,25 +386,176 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
     
     @IBAction func uiActionPlus(_ sender: UIButton) {
     }
+    
+    @IBAction func uiOpenFullUi(_ sender: UIButton) {
+        self.presentationDelegate?.fullPlayerRequested()
+    }
+}
+
+public protocol AGAudioPlayerViewControllerPresentationDelegate {
+    func fullPlayerRequested()
+    func fullPlayerDismissRequested(fromProgress: CGFloat)
+    
+    func fullPlayerStartedDismissing()
+    func fullPlayerDismissUpdatedProgress(_ progress: CGFloat)
+    func fullPlayerDismissCancelled(fromProgress: CGFloat)
+
+    func fullPlayerOpenUpdatedProgress(_ progress: CGFloat)
+    func fullPlayerOpenCancelled(fromProgress: CGFloat)
+    func fullPlayerOpenRequested(fromProgress: CGFloat)
+}
+
+extension AGAudioPlayerViewController {
+    public func switchToMiniPlayer(animated: Bool) {
+        view.layoutIfNeeded()
+
+        UIView.animate(withDuration: 0.3) { 
+            self.switchToMiniPlayerProgress(1.0)
+        }
+    }
+    
+    public func switchToFullPlayer(animated: Bool) {
+        view.layoutIfNeeded()
+
+        UIView.animate(withDuration: 0.3) {
+            self.switchToMiniPlayerProgress(0.0)
+        }
+    }
+    
+    public func switchToMiniPlayerProgress(_ progress: CGFloat) {
+        self.uiMiniPlayerTopOffsetConstraint.constant = -1.0 * self.uiMiniPlayerContainerView.frame.height * (1.0 - progress)
+        self.view.layoutIfNeeded()
+    }
 }
 
 extension AGAudioPlayerViewController {
     @IBAction func handlePanToClose(_ sender: UIPanGestureRecognizer) {
-        if let del = transitioningDelegate as? AGAudioPlayerViewControllerTransitioningDelegate {
-            switch sender.state {
-            case .began:
-                uiScrubber.scrubbingEnabled = false
-            case .cancelled, .ended:
-                uiScrubber.scrubbingEnabled = true
-            default: break
-            }
+        let percentThreshold:CGFloat = 0.3
+        let inView = uiHeaderView
+        
+        // convert y-position to downward pull progress (percentage)
+        let translation = sender.translation(in: inView)
+        let verticalMovement = translation.y / view.bounds.height
+        let downwardMovement = fmaxf(Float(verticalMovement), 0.0)
+        let downwardMovementPercent = fminf(downwardMovement, 1.0)
+        let progress = CGFloat(downwardMovementPercent)
+        let interactor = dismissInteractor
+        
+        switch sender.state {
+        case .began:
+            uiScrubber.scrubbingEnabled = false
             
-            del.handleGesture(self, inView: uiHeaderView, sender: sender);
+            interactor.hasStarted = true
+            
+        case .changed:
+            interactor.shouldFinish = progress > percentThreshold
+            interactor.update(progress)
+            
+        case .cancelled:
+            uiScrubber.scrubbingEnabled = true
+            
+            interactor.hasStarted = false
+            interactor.cancel(progress)
+            
+        case .ended:
+            uiScrubber.scrubbingEnabled = true
+            
+            interactor.hasStarted = false
+            
+            if interactor.shouldFinish {
+                interactor.finish(progress)
+            }
+            else {
+                interactor.cancel(progress)
+            }
+        default:
+            break
         }
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
+    @IBAction func handlePanToOpen(_ sender: UIPanGestureRecognizer) {
+        let percentThreshold:CGFloat = 0.15
+        let inView = uiMiniPlayerContainerView
+        
+        // convert y-position to downward pull progress (percentage)
+        let translation = sender.translation(in: inView)
+        let verticalMovement = (-1.0 * translation.y) / view.bounds.height
+        let upwardMovement = fmaxf(Float(verticalMovement), 0.0)
+        let upwardMovementPercent = fminf(upwardMovement, 1.0)
+        let progress = CGFloat(upwardMovementPercent)
+        let interactor = openInteractor
+        
+        switch sender.state {
+        case .began:
+            interactor.hasStarted = true
+            
+        case .changed:
+            interactor.shouldFinish = progress > percentThreshold
+            interactor.update(progress)
+            
+        case .cancelled:
+            interactor.hasStarted = false
+            interactor.cancel(progress)
+            
+        case .ended:
+            interactor.hasStarted = false
+            
+            if interactor.shouldFinish {
+                interactor.finish(progress)
+            }
+            else {
+                interactor.cancel(progress)
+            }
+        default:
+            break
+        }
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
         return !isCurrentlyScrubbing
+    }
+}
+
+class DismissInteractor {
+    var hasStarted = false
+    var shouldFinish = false
+    
+    var viewController: AGAudioPlayerViewController? = nil
+    
+    var delegate: AGAudioPlayerViewControllerPresentationDelegate? {
+        get {
+            return viewController?.presentationDelegate
+        }
+    }
+    
+    public func update(_ progress: CGFloat) {
+        delegate?.fullPlayerDismissUpdatedProgress(progress)
+    }
+    
+    // restore
+    public func cancel(_ progress: CGFloat) {
+        delegate?.fullPlayerDismissCancelled(fromProgress: progress)
+    }
+    
+    // dismiss
+    public func finish(_ progress: CGFloat) {
+        delegate?.fullPlayerDismissRequested(fromProgress: progress)
+    }
+}
+
+class OpenInteractor : DismissInteractor {
+    public override func update(_ progress: CGFloat) {
+        delegate?.fullPlayerOpenUpdatedProgress(progress)
+    }
+    
+    // restore
+    public override func cancel(_ progress: CGFloat) {
+        delegate?.fullPlayerOpenCancelled(fromProgress: progress)
+    }
+    
+    // dismiss
+    public override func finish(_ progress: CGFloat) {
+        delegate?.fullPlayerOpenRequested(fromProgress: progress)
     }
 }
 
@@ -342,9 +578,9 @@ extension AGAudioPlayerViewController {
     func viewWillAppear_StretchyHeader() {
         interpolateBlock?(1.0)
         
-        let h = uiHeaderView.bounds.height
-        uiTable.contentInset = UIEdgeInsetsMake(h, 0, 0, 0)
-        uiTable.contentOffset = CGPoint(x: 0, y: -h)
+        let h = self.uiHeaderView.bounds.height
+        self.uiTable.contentInset = UIEdgeInsetsMake(h, 0, 0, 0)
+        self.uiTable.contentOffset = CGPoint(x: 0, y: -h)
     }
     
     func scrollViewDidScroll_StretchyHeader(_ scrollView: UIScrollView) {
@@ -378,15 +614,17 @@ extension AGAudioPlayerViewController {
     
         uiSliderVolume.tintColor = ColorAccent
         
+        /*
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 4
+        */
         
         uiSliderEqBass.tintColor = ColorBarPlaybackElapsed
         uiSliderEqBass.sliderUnselectedColor = ColorBarDownloads
         // uiSliderEqBass.
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }
@@ -411,11 +649,34 @@ extension AGAudioPlayerViewController {
 }
 
 extension AGAudioPlayerViewController : UITableViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollViewDidScroll_StretchyHeader(scrollView)
+    /*
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissInteractor.hasStarted = true
     }
+    */
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollViewDidScroll_StretchyHeader(scrollView)
+        
+//        let progress = (scrollView.contentOffset.y - scrollView.contentOffset.y) / view.frame.size.height
+//        
+//        dismissInteractor.update(progress)
+    }
+
+//    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        dismissInteractor.hasStarted = false
+//        
+//        let progress = (scrollView.contentOffset.y - scrollView.contentOffset.y) / view.frame.size.height
+//
+//        if progress > 0.1 {
+//            dismissInteractor.finish(progress)
+//        }
+//        else {
+//            dismissInteractor.cancel(progress)
+//        }
+//    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
             
         }
@@ -424,37 +685,37 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         print("\(indexPath) deselected")
     }
     
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section == SectionQueue
     }
     
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .none
     }
 }
 
 extension AGAudioPlayerViewController : UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return player.queue.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Queue"
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         guard indexPath.row < player.queue.count else {

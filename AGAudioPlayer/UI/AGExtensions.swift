@@ -38,9 +38,9 @@ extension NSLayoutConstraint {
             relatedBy: relation,
             toItem: secondItem,
             attribute: secondAttribute,
-            multiplier: multiplier,
+            multiplier: multiplier == 0 ? 1.0 : multiplier,
             constant: constant)
-        
+
         newConstraint.priority = priority
         newConstraint.shouldBeArchived = self.shouldBeArchived
         newConstraint.identifier = self.identifier

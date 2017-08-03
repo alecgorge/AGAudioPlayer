@@ -58,6 +58,10 @@
 }
 
 - (void)appendItem:(AGAudioItem *)item {
+    [self appendItem:item sendNotice:YES];
+}
+
+- (void)appendItem:(AGAudioItem *)item sendNotice:(BOOL)sendNotice {
     if(item == nil) return;
     
     [self.items addObject:item];
@@ -65,24 +69,42 @@
     [self.shuffledItems insertObject:item
                              atIndex:arc4random_uniform((u_int32_t)self.items.count)];
     
-    if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
     
-    if([self.delegate respondsToSelector:@selector(upNextQueue:addedItem:atIndex:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItem:atIndex:)]) {
         [self.delegate upNextQueue:self
                          addedItem:item
                            atIndex:self.items.count - 1];
     }
 }
 
-- (void)appendItems:(NSArray *)items {
+- (void)appendItems:(NSArray<AGAudioItem *> * _Nonnull)items sendNotice:(BOOL)sendNotice {
     for (AGAudioItem * i in items) {
-        [self appendItem:i];
+        [self appendItem:i sendNotice:NO];
+    }
+
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+        [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItems];
+    }
+    
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItems:atIndex:)]) {
+        [self.delegate upNextQueue:self
+                         addedItem:items
+                           atIndex:self.items.count - items.count];
     }
 }
 
+- (void)appendItems:(NSArray<AGAudioItem *> * _Nonnull)items {
+    [self appendItems:items sendNotice:YES];
+}
+
 - (void)prependItem:(AGAudioItem *)item {
+    [self prependItem:item sendNotice:YES];
+}
+
+- (void)prependItem:(AGAudioItem *)item sendNotice:(BOOL)sendNotice {
     if(item == nil) return;
     
     [self.items insertObject:item
@@ -91,11 +113,11 @@
     [self.shuffledItems insertObject:item
                              atIndex:arc4random_uniform((u_int32_t)self.items.count)];
     
-    if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItem];
     }
     
-    if([self.delegate respondsToSelector:@selector(upNextQueue:addedItem:atIndex:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItem:atIndex:)]) {
         [self.delegate upNextQueue:self
                          addedItem:item
                            atIndex:0];
@@ -103,8 +125,22 @@
 }
 
 - (void)prependItems:(NSArray *)items {
+    [self prependItems:items sendNotice:YES];
+}
+
+- (void)prependItems:(NSArray *)items sendNotice:(BOOL)sendNotice {
     for (AGAudioItem * i in items) {
-        [self prependItem:i];
+        [self prependItem:i sendNotice:NO];
+    }
+    
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+        [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueAddedItems];
+    }
+    
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItems:atIndex:)]) {
+        [self.delegate upNextQueue:self
+                         addedItem:items
+                           atIndex:self.items.count - items.count];
     }
 }
 
@@ -156,22 +192,38 @@
     }
 }
 
-- (void)clear {
+- (void)clear:(BOOL)sendNotice {
+    if(self.items.count == 0) {
+        return;
+    }
+    
     [self.items removeAllObjects];
     [self.shuffledItems removeAllObjects];
     
-    if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
         [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueRemovedAllItems];
     }
     
-    if([self.delegate respondsToSelector:@selector(upNextQueueRemovedAllItems:)]) {
+    if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueueRemovedAllItems:)]) {
         [self.delegate upNextQueueRemovedAllItems:self];
     }
 }
 
+- (void)clear {
+    [self clear:YES];
+}
+
 - (void)clearAndReplaceWithItems:(NSArray *)items {
-    [self clear];
-    [self appendItems:items];
+    [self clear:NO];
+    [self appendItems:items sendNotice:NO];
+    
+    if([self.delegate respondsToSelector:@selector(upNextQueueChanged:)]) {
+        [self.delegate upNextQueueChanged:AGAudioPlayerUpNextQueueReplacedAllItems];
+    }
+    
+    if([self.delegate respondsToSelector:@selector(upNextQueueReplacedAllItems:)]) {
+        [self.delegate upNextQueueReplacedAllItems:self];
+    }
 }
 
 - (void)removeItem:(AGAudioItem *)item {
