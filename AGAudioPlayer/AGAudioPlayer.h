@@ -49,6 +49,8 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
     progressChanged:(NSTimeInterval)elapsed
   withTotalDuration:(NSTimeInterval)totalDuration;
 
+- (void)audioPlayerAudioSessionSetUp:(AGAudioPlayer * _Nonnull)audioPlayer;
+
 @optional
 
 // OPTIONAL: if not implemented, will pause playback
@@ -105,8 +107,8 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
 - (void)pause;
 - (void)stop;
 
-- (void)forward;
-- (void)backward;
+- (BOOL)forward;
+- (BOOL)backward;
 
 - (void)seekTo:(NSTimeInterval)i;
 - (void)seekToPercent:(CGFloat)per;

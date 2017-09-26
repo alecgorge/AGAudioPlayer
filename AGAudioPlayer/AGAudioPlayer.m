@@ -137,21 +137,37 @@
     [self.bass stop];
 }
 
-- (void)forward {
-    self.currentIndex = self.nextIndex;
+- (BOOL)forward {
+    NSInteger nextIndex = self.nextIndex;
+    
+    if(nextIndex == NSNotFound) {
+        return NO;
+    }
+    
+    self.currentIndex = nextIndex;
     
     [self.bass nextTrackMayHaveChanged];
+    
+    return YES;
 }
 
-- (void)backward {
+- (BOOL)backward {
     if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
-        self.currentIndex = self.previousIndex;
+        NSInteger previousIndex = self.nextIndex;
+        
+        if(previousIndex == NSNotFound) {
+            return NO;
+        }
+
+        self.currentIndex = previousIndex;
         
         [self.bass nextTrackMayHaveChanged];
     }
     else {
         [self seekTo:0];
     }
+    
+    return YES;
 }
 
 - (void)seekTo:(NSTimeInterval)i {
@@ -387,6 +403,10 @@
                                        arguments:args];
     NSLog(@"[AGAudioPlayer] %@", s);
     va_end(args);
+}
+
+- (void)BASSAudioSessionSetUp {
+    [self.delegate audioPlayerAudioSessionSetUp:self];
 }
 
 -(void)BASSDownloadPlaybackStateChanged:(BassPlaybackState)state {

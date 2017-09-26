@@ -77,6 +77,10 @@ import NapySlider
     // end mini player
     
     public var presentationDelegate: AGAudioPlayerViewControllerPresentationDelegate? = nil
+    public var shouldPublishToNowPlayingCenter: Bool = true
+    
+    var remoteCommandManager : RemoteCommandManager? = nil
+
     var dismissInteractor: DismissInteractor = DismissInteractor()
     var openInteractor: OpenInteractor = OpenInteractor()
     
@@ -158,6 +162,12 @@ extension AGAudioPlayerViewController : UIGestureRecognizerDelegate {
 extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     func setupPlayer() {
         player.delegate = self
+    }
+    
+    public func audioPlayerAudioSessionSetUp(_ audioPlayer: AGAudioPlayer) {
+        remoteCommandManager = RemoteCommandManager(player: audioPlayer)
+        
+        remoteCommandManager?.activatePlaybackCommands(true)
     }
     
     func updateUI() {
@@ -255,6 +265,8 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     }
     
     public func audioPlayer(_ audioPlayer: AGAudioPlayer, uiNeedsRedrawFor reason: AGAudioPlayerRedrawReason) {
+        publishToNowPlayingCenter()
+        
         switch reason {
         case .buffering, .playing:
             updatePlayPauseButtons()
@@ -277,6 +289,9 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             updateNonTimeLabels()
             updateTimeLabels()
             uiTable.reloadData()
+        
+        case .queueChanged:
+            uiTable.reloadData()
             
         default:
             break
@@ -287,6 +302,8 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
         print("CRAP")
         print(error)
         print(url)
+        
+        publishToNowPlayingCenter()
     }
     
     public func audioPlayer(_ audioPlayer: AGAudioPlayer, downloadedBytesForActiveTrack downloadedBytes: UInt64, totalBytes: UInt64) {
@@ -301,6 +318,39 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     
     public func audioPlayer(_ audioPlayer: AGAudioPlayer, progressChanged elapsed: TimeInterval, withTotalDuration totalDuration: TimeInterval) {
         updatePlaybackProgress()
+        
+        publishToNowPlayingCenter()
+    }
+    
+    public func publishToNowPlayingCenter() {
+        guard shouldPublishToNowPlayingCenter else {
+            return
+        }
+        
+        if let item = player.currentItem {
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+                MPMediaItemPropertyMediaType        : NSNumber(value: MPMediaType.music.rawValue),
+
+                MPMediaItemPropertyTitle            : item.title,
+                MPMediaItemPropertyAlbumArtist      : item.artist,
+                MPMediaItemPropertyArtist           : item.artist,
+                MPMediaItemPropertyAlbumTitle       : item.album,
+                
+                MPMediaItemPropertyPlaybackDuration : NSNumber(value: item.duration),
+                MPMediaItemPropertyAlbumTrackNumber : NSNumber(value: item.trackNumber),
+                
+                MPNowPlayingInfoPropertyDefaultPlaybackRate : NSNumber(value: 1.0),
+                MPNowPlayingInfoPropertyElapsedPlaybackTime : NSNumber(value: player.elapsed),
+                
+                MPNowPlayingInfoPropertyPlaybackProgress    : NSNumber(value: Float(player.percentElapsed)),
+                MPNowPlayingInfoPropertyPlaybackQueueCount  : NSNumber(value: player.queue.count),
+                MPNowPlayingInfoPropertyPlaybackQueueIndex  : NSNumber(value: player.currentIndex),
+                MPNowPlayingInfoPropertyPlaybackRate        : NSNumber(value: player.isPlaying ? 1.0 : 0.0)
+            ]
+        }
+        else {
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        }
     }
 }
 

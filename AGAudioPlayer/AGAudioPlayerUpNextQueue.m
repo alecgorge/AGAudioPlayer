@@ -91,7 +91,7 @@
     
     if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItems:atIndex:)]) {
         [self.delegate upNextQueue:self
-                         addedItem:items
+                        addedItems:items
                            atIndex:self.items.count - items.count];
     }
 }
@@ -139,7 +139,7 @@
     
     if(sendNotice && [self.delegate respondsToSelector:@selector(upNextQueue:addedItems:atIndex:)]) {
         [self.delegate upNextQueue:self
-                         addedItem:items
+                        addedItems:items
                            atIndex:self.items.count - items.count];
     }
 }
