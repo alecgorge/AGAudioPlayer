@@ -44,6 +44,7 @@ import NapySlider
     @IBOutlet weak var uiButtonDots: UIButton!
     @IBOutlet weak var uiButtonPlus: UIButton!
     @IBOutlet weak var uiSliderVolume: MPVolumeView!
+    @IBOutlet weak var uiSpinnerBuffering: UIActivityIndicatorView!
     
     @IBOutlet weak var uiWrapperEq: UIView!
     @IBOutlet weak var uiSliderEqBass: NapySlider!
@@ -74,6 +75,7 @@ import NapySlider
     
     @IBOutlet weak var uiMiniButtonDots: UIButton!
     @IBOutlet weak var uiMiniButtonPlus: UIButton!
+    @IBOutlet weak var uiMiniSpinnerBuffering: UIActivityIndicatorView!
     // end mini player
     
     public var presentationDelegate: AGAudioPlayerViewControllerPresentationDelegate? = nil
@@ -180,9 +182,27 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     }
     
     func updatePlayPauseButtons() {
-        guard uiButtonPause != nil, uiButtonPlay != nil, uiMiniButtonPause != nil, uiMiniButtonPlay != nil else {
+        guard uiButtonPause != nil, uiButtonPlay != nil,
+            uiMiniButtonPause != nil, uiMiniButtonPlay != nil,
+            uiSpinnerBuffering != nil, uiMiniSpinnerBuffering != nil else {
             return
         }
+        
+        if player.isBuffering {
+            uiButtonPause.isHidden = true
+            uiButtonPlay.isHidden = true
+            
+            uiMiniButtonPause.isHidden = true
+            uiMiniButtonPlay.isHidden = true
+            
+            uiMiniSpinnerBuffering.isHidden = false
+            uiSpinnerBuffering.isHidden = false
+            
+            return
+        }
+        
+        uiMiniSpinnerBuffering.isHidden = true
+        uiSpinnerBuffering.isHidden = true
         
         uiButtonPause.isHidden = !player.isPlaying && !player.isBuffering
         uiButtonPlay.isHidden = player.isPlaying
@@ -339,7 +359,7 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
                 MPMediaItemPropertyPlaybackDuration : NSNumber(value: item.duration),
                 MPMediaItemPropertyAlbumTrackNumber : NSNumber(value: item.trackNumber),
                 
-                MPNowPlayingInfoPropertyDefaultPlaybackRate : NSNumber(value: 1.0),
+                // MPNowPlayingInfoPropertyDefaultPlaybackRate : NSNumber(value: 1.0),
                 MPNowPlayingInfoPropertyElapsedPlaybackTime : NSNumber(value: player.elapsed),
                 
                 MPNowPlayingInfoPropertyPlaybackProgress    : NSNumber(value: Float(player.percentElapsed)),

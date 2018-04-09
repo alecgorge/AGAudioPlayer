@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,6 +37,7 @@
                 <outlet property="uiMiniProgressDownloadCompletedConstraint" destination="GoN-zi-2Qq" id="aNY-Fr-zk6"/>
                 <outlet property="uiMiniProgressDownloadCompletedView" destination="yn7-gc-1cE" id="7Ha-4z-LlB"/>
                 <outlet property="uiMiniProgressPlayback" destination="ffl-ZD-4Ea" id="Q6x-DY-nIE"/>
+                <outlet property="uiMiniSpinnerBuffering" destination="N2m-Yk-dK1" id="ehh-5f-iAG"/>
                 <outlet property="uiPanGestureClose" destination="wNe-aW-vHn" id="yPj-Ah-SSA"/>
                 <outlet property="uiPanGestureOpen" destination="3sF-Nk-5sw" id="fVB-98-eOY"/>
                 <outlet property="uiProgressDownload" destination="QYP-TA-5ZA" id="5jM-w8-DwK"/>
@@ -45,6 +46,7 @@
                 <outlet property="uiScrubber" destination="vW0-b0-dwJ" id="0u5-Ma-f5K"/>
                 <outlet property="uiSliderEqBass" destination="gZf-xR-fDW" id="bhs-dY-tJk"/>
                 <outlet property="uiSliderVolume" destination="Lmy-OP-umA" id="66h-DD-9NK"/>
+                <outlet property="uiSpinnerBuffering" destination="dRI-dU-07B" id="Fz6-ro-G56"/>
                 <outlet property="uiTable" destination="kcD-xZ-oTq" id="OfB-wn-4Yf"/>
                 <outlet property="uiWrapperEq" destination="oST-vC-dTq" id="kaX-hd-Lwk"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -88,13 +90,18 @@
                                                 <action selector="uiActionPause:" destination="-1" eventType="touchUpInside" id="iVB-9v-sUc"/>
                                             </connections>
                                         </button>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="N2m-Yk-dK1">
+                                            <rect key="frame" x="16" y="22" width="20" height="20"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
+                                        <constraint firstItem="N2m-Yk-dK1" firstAttribute="centerX" secondItem="yax-39-EVD" secondAttribute="centerX" id="0p7-lJ-phJ"/>
                                         <constraint firstAttribute="trailing" secondItem="CNq-b4-9Bc" secondAttribute="trailing" id="2dW-Ne-I6K"/>
                                         <constraint firstItem="CNq-b4-9Bc" firstAttribute="leading" secondItem="yax-39-EVD" secondAttribute="leading" id="Dvo-ig-8VF"/>
                                         <constraint firstItem="vps-nv-hdq" firstAttribute="leading" secondItem="yax-39-EVD" secondAttribute="leading" id="EJN-qP-vN9"/>
                                         <constraint firstAttribute="width" constant="53.5" id="I1u-eR-I8a"/>
+                                        <constraint firstItem="N2m-Yk-dK1" firstAttribute="centerY" secondItem="yax-39-EVD" secondAttribute="centerY" id="JXw-wg-4Yt"/>
                                         <constraint firstItem="CNq-b4-9Bc" firstAttribute="top" secondItem="yax-39-EVD" secondAttribute="top" id="Kn7-YE-Nb1"/>
                                         <constraint firstAttribute="bottom" secondItem="CNq-b4-9Bc" secondAttribute="bottom" id="Saz-k6-PEm"/>
                                         <constraint firstAttribute="bottom" secondItem="vps-nv-hdq" secondAttribute="bottom" id="ozB-Ij-vLE"/>
@@ -451,17 +458,22 @@
                                                                 <action selector="uiActionPause:" destination="-1" eventType="touchUpInside" id="ooV-be-eXj"/>
                                                             </connections>
                                                         </button>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="dRI-dU-07B">
+                                                            <rect key="frame" x="16.5" y="22" width="20" height="20"/>
+                                                        </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="cQ9-7l-ey2" secondAttribute="trailing" id="Afy-Zw-UNg"/>
                                                         <constraint firstAttribute="bottom" secondItem="XGB-eO-wHZ" secondAttribute="bottom" id="CiR-2L-jZj"/>
                                                         <constraint firstItem="XGB-eO-wHZ" firstAttribute="leading" secondItem="TIw-2z-TyS" secondAttribute="leading" id="Jq8-1z-pmx"/>
+                                                        <constraint firstItem="dRI-dU-07B" firstAttribute="centerY" secondItem="TIw-2z-TyS" secondAttribute="centerY" id="Kn8-LB-Puw"/>
                                                         <constraint firstAttribute="trailing" secondItem="XGB-eO-wHZ" secondAttribute="trailing" id="SI4-vR-YrN"/>
                                                         <constraint firstItem="cQ9-7l-ey2" firstAttribute="top" secondItem="TIw-2z-TyS" secondAttribute="top" id="Xlo-ac-qIl"/>
                                                         <constraint firstItem="cQ9-7l-ey2" firstAttribute="leading" secondItem="TIw-2z-TyS" secondAttribute="leading" id="bwL-qh-vrP"/>
                                                         <constraint firstAttribute="bottom" secondItem="cQ9-7l-ey2" secondAttribute="bottom" id="d68-pC-awG"/>
                                                         <constraint firstItem="XGB-eO-wHZ" firstAttribute="top" secondItem="TIw-2z-TyS" secondAttribute="top" id="e9A-wS-xWG"/>
+                                                        <constraint firstItem="dRI-dU-07B" firstAttribute="centerX" secondItem="TIw-2z-TyS" secondAttribute="centerX" id="r0t-Nl-l3S"/>
                                                     </constraints>
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMu-ax-caM">
