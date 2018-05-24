@@ -520,6 +520,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstAttribute="height" constant="32" id="Qag-yY-rr8"/>
                                                 <constraint firstItem="Lmy-OP-umA" firstAttribute="centerY" secondItem="u19-BU-rIY" secondAttribute="centerY" id="fhd-ED-DBC"/>
                                                 <constraint firstAttribute="trailing" secondItem="Lmy-OP-umA" secondAttribute="trailing" constant="16" id="tyO-F0-z9M"/>
                                                 <constraint firstItem="Lmy-OP-umA" firstAttribute="leading" secondItem="u19-BU-rIY" secondAttribute="leading" constant="16" id="vIa-Sp-4I0"/>
@@ -532,7 +533,6 @@
                             <constraints>
                                 <constraint firstItem="PIw-JK-DDq" firstAttribute="top" secondItem="t08-2c-LqF" secondAttribute="top" id="74u-mv-koF"/>
                                 <constraint firstAttribute="height" constant="112" id="AZO-pP-wZH"/>
-                                <constraint firstAttribute="bottom" secondItem="PIw-JK-DDq" secondAttribute="bottom" id="Lfd-89-i9W"/>
                                 <constraint firstItem="PIw-JK-DDq" firstAttribute="leading" secondItem="t08-2c-LqF" secondAttribute="leading" id="e8w-Aw-plP"/>
                                 <constraint firstAttribute="trailing" secondItem="PIw-JK-DDq" secondAttribute="trailing" id="zkl-7c-wbO"/>
                             </constraints>

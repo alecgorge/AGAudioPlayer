@@ -682,7 +682,7 @@ extension AGAudioPlayerViewController {
         self.uiConstraintSpaceBetweenPlayers.constant = insets.top
         self.view.layoutIfNeeded()
         
-        self.uiConstraintBottomBarHeight.constant += insets.bottom
+        self.uiConstraintBottomBarHeight.constant += insets.bottom * 2
         self.uiFooterView.layoutIfNeeded()
     }
     
@@ -760,6 +760,12 @@ extension AGAudioPlayerViewController {
     }
     
     func viewWillAppear_Table() {
+    }
+    
+    public func tableReloadData() {
+        if let t = uiTable {
+            t.reloadData()
+        }
     }
 }
 
