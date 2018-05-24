@@ -49,13 +49,19 @@ import NapySlider
     @IBOutlet weak var uiWrapperEq: UIView!
     @IBOutlet weak var uiSliderEqBass: NapySlider!
     
+    @IBOutlet weak var uiConstraintTopTitleSpace: NSLayoutConstraint!
+    @IBOutlet weak var uiConstraintSpaceBetweenPlayers: NSLayoutConstraint!
+    @IBOutlet weak var uiConstraintBottomBarHeight: NSLayoutConstraint!
+    
     // mini player
     @IBOutlet weak var uiMiniPlayerContainerView: UIView!
     
     public var barHeight : CGFloat {
         get {
             if let c = uiMiniPlayerContainerView {
-                return c.bounds.height
+                var extra: CGFloat = UIApplication.shared.keyWindow!.rootViewController!.view.safeAreaInsets.bottom
+                
+                return c.bounds.height + extra
             }
             return 64.0
         }
@@ -79,6 +85,9 @@ import NapySlider
     // end mini player
     
     public var presentationDelegate: AGAudioPlayerViewControllerPresentationDelegate? = nil
+    public var cellDataSource: AGAudioPlayerViewControllerCellDataSource? = nil
+    public var delegate: AGAudioPlayerViewControllerDelegate? = nil
+    
     public var shouldPublishToNowPlayingCenter: Bool = true
     
     var remoteCommandManager : RemoteCommandManager? = nil
@@ -290,6 +299,8 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
         switch reason {
         case .buffering, .playing:
             updatePlayPauseButtons()
+            delegate?.audioPlayerViewController(self, trackChangedState: player.currentItem)
+            uiTable.reloadData()
             
         case .stopped:
             uiLabelTitle.text = ""
@@ -302,13 +313,15 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             
         case .paused, .error:
             updatePlayPauseButtons()
-            
+            delegate?.audioPlayerViewController(self, trackChangedState: player.currentItem)
+            uiTable.reloadData()
             
         case .trackChanged:
             updatePreviousNextButtons()
             updateNonTimeLabels()
             updateTimeLabels()
             uiTable.reloadData()
+            delegate?.audioPlayerViewController(self, changedTrackTo: player.currentItem)
         
         case .queueChanged:
             uiTable.reloadData()
@@ -446,15 +459,21 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
     @IBAction func uiActionPause(_ sender: UIButton) {
         player.pause()
     }
-    
+
     @IBAction func uiActionNext(_ sender: UIButton) {
         player.forward()
     }
     
     @IBAction func uiActionDots(_ sender: UIButton) {
+        if let item = self.player.currentItem {
+            delegate?.audioPlayerViewController(self, pressedDotsForAudioItem: item)
+        }
     }
     
     @IBAction func uiActionPlus(_ sender: UIButton) {
+        if let item = self.player.currentItem {
+            delegate?.audioPlayerViewController(self, pressedPlusForAudioItem: item)
+        }
     }
     
     @IBAction func uiOpenFullUi(_ sender: UIButton) {
@@ -475,6 +494,19 @@ public protocol AGAudioPlayerViewControllerPresentationDelegate {
     func fullPlayerOpenRequested(fromProgress: CGFloat)
 }
 
+public protocol AGAudioPlayerViewControllerCellDataSource {
+    func cell(inTableView tableView: UITableView, basedOnCell cell: UITableViewCell, atIndexPath: IndexPath, forPlaybackItem playbackItem: AGAudioItem, isCurrentlyPlaying: Bool) -> UITableViewCell
+    func heightForCell(inTableView tableView: UITableView, atIndexPath: IndexPath, forPlaybackItem playbackItem: AGAudioItem, isCurrentlyPlaying: Bool) -> CGFloat
+}
+
+public protocol AGAudioPlayerViewControllerDelegate {
+    func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, trackChangedState audioItem: AGAudioItem?)
+    func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, changedTrackTo audioItem: AGAudioItem?)
+
+    func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, pressedDotsForAudioItem audioItem: AGAudioItem)
+    func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, pressedPlusForAudioItem audioItem: AGAudioItem)
+}
+
 extension AGAudioPlayerViewController {
     public func switchToMiniPlayer(animated: Bool) {
         view.layoutIfNeeded()
@@ -493,7 +525,9 @@ extension AGAudioPlayerViewController {
     }
     
     public func switchToMiniPlayerProgress(_ progress: CGFloat) {
-        self.uiMiniPlayerTopOffsetConstraint.constant = -1.0 * self.uiMiniPlayerContainerView.frame.height * (1.0 - progress)
+        var maxHeight = self.uiMiniPlayerContainerView.frame.height
+        
+        self.uiMiniPlayerTopOffsetConstraint.constant = -1.0 * maxHeight * (1.0 - progress)
         self.view.layoutIfNeeded()
     }
 }
@@ -643,6 +677,13 @@ extension AGAudioPlayerViewController {
         headerInterpolate = Interpolate(from: 1.0, to: 1.3, function: BasicInterpolation.easeOut, apply: blk)
         
         interpolateBlock = blk
+        
+        let insets = UIApplication.shared.keyWindow!.rootViewController!.view.safeAreaInsets
+        self.uiConstraintSpaceBetweenPlayers.constant = insets.top
+        self.view.layoutIfNeeded()
+        
+        self.uiConstraintBottomBarHeight.constant += insets.bottom
+        self.uiFooterView.layoutIfNeeded()
     }
     
     func viewWillAppear_StretchyHeader() {
@@ -655,16 +696,20 @@ extension AGAudioPlayerViewController {
     
     func scrollViewDidScroll_StretchyHeader(_ scrollView: UIScrollView) {
         let y = scrollView.contentOffset.y + uiHeaderView.bounds.height
-        let np = CGFloat(abs(y).clamped(lower: CGFloat(0), upper: CGFloat(150))) / CGFloat(150)
+        
+        let base = view.safeAreaInsets.top
+        
+        let np = CGFloat(abs(y).clamped(lower: CGFloat(base + 0), upper: CGFloat(base + 150))) / CGFloat(base + 150)
         
         if y < 0 && headerInterpolate?.progress != np {
-            headerInterpolate?.progress = np
+//            headerInterpolate?.progress = np
         }
     }
 }
 
 extension AGAudioPlayerViewController {
     func setupColors() {
+        view.backgroundColor = ColorMain
         uiHeaderView.backgroundColor = ColorMain
         uiFooterView.backgroundColor = ColorMain
         
@@ -707,10 +752,10 @@ extension AGAudioPlayerViewController {
 //        uiTable.backgroundView?.backgroundColor = ColorMain
         
         uiTable.allowsSelection = true
-        uiTable.allowsSelectionDuringEditing = false
-        uiTable.allowsMultipleSelectionDuringEditing = true
+        uiTable.allowsSelectionDuringEditing = true
+        uiTable.allowsMultipleSelectionDuringEditing = false
         
-        uiTable.setEditing(false, animated: false)
+        uiTable.setEditing(true, animated: false)
         uiTable.reloadData()
     }
     
@@ -747,12 +792,9 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
 //    }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing {
-            
-        }
-        else {
-            player.currentIndex = indexPath.row
-        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        player.currentIndex = indexPath.row
     }
     
     public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -764,11 +806,15 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
+        if sourceIndexPath != destinationIndexPath {
+            player.queue.moveItem(at: sourceIndexPath.row, to: destinationIndexPath.row)
+            
+            tableView.reloadData()
+        }
     }
     
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
+        return .delete
     }
 }
 
@@ -796,8 +842,41 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
         let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
         let item = q[indexPath.row]
         
-        cell.textLabel?.text = (item.playbackGUID == player.currentItem?.playbackGUID ? "* " : "") + item.title
+        let currentlyPlaying = item.playbackGUID == player.currentItem?.playbackGUID
+        
+        if let d = cellDataSource {
+            return d.cell(inTableView: tableView, basedOnCell: cell, atIndexPath: indexPath, forPlaybackItem: item, isCurrentlyPlaying: currentlyPlaying)
+        }
+        
+        cell.textLabel?.text = (currentlyPlaying ? "* " : "") + item.title
         
         return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard indexPath.row < player.queue.count else {
+            return UITableViewAutomaticDimension
+        }
+        
+        let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
+        let item = q[indexPath.row]
+        
+        let currentlyPlaying = item.playbackGUID == player.currentItem?.playbackGUID
+        
+        if let d = cellDataSource {
+            return d.heightForCell(inTableView: tableView, atIndexPath: indexPath, forPlaybackItem: item, isCurrentlyPlaying: currentlyPlaying)
+        }
+        
+        return UITableViewAutomaticDimension
+    }
+    
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.performBatchUpdates({
+                player.queue.removeItem(at: indexPath.row)
+                
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }, completion: nil)
+        }
     }
 }

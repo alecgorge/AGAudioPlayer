@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,6 +20,9 @@
                 <outlet property="uiButtonPlus" destination="ifp-zG-ZLi" id="Y0p-Xf-hrz"/>
                 <outlet property="uiButtonPrevious" destination="Ex9-KA-TFl" id="ekN-oi-bnR"/>
                 <outlet property="uiButtonShuffle" destination="els-h5-lTD" id="GSR-RY-p0y"/>
+                <outlet property="uiConstraintBottomBarHeight" destination="AZO-pP-wZH" id="abn-Q9-2Mr"/>
+                <outlet property="uiConstraintSpaceBetweenPlayers" destination="zdl-Tt-x3q" id="oMl-Tr-GT7"/>
+                <outlet property="uiConstraintTopTitleSpace" destination="dF0-Td-BIu" id="pHT-cD-jlI"/>
                 <outlet property="uiFooterView" destination="t08-2c-LqF" id="4hz-ve-Sty"/>
                 <outlet property="uiHeaderView" destination="Z3c-Z9-Kas" id="qFk-gs-Xj8"/>
                 <outlet property="uiLabelDuration" destination="6TM-q9-o60" id="GLf-2D-3rV"/>
@@ -304,7 +307,7 @@
                                 <constraint firstItem="TVs-ib-6I1" firstAttribute="top" secondItem="Z3c-Z9-Kas" secondAttribute="top" id="axo-1S-Mb9"/>
                                 <constraint firstItem="QYP-TA-5ZA" firstAttribute="centerY" secondItem="vW0-b0-dwJ" secondAttribute="centerY" id="b7T-6M-0Ae"/>
                                 <constraint firstItem="7up-hA-coa" firstAttribute="trailing" secondItem="7hF-uW-Yvs" secondAttribute="trailing" id="bX6-XW-Plk"/>
-                                <constraint firstItem="7hF-uW-Yvs" firstAttribute="top" secondItem="Z3c-Z9-Kas" secondAttribute="top" constant="36" id="dF0-Td-BIu"/>
+                                <constraint firstItem="7hF-uW-Yvs" firstAttribute="top" secondItem="Z3c-Z9-Kas" secondAttribute="top" constant="24" id="dF0-Td-BIu"/>
                                 <constraint firstItem="QYP-TA-5ZA" firstAttribute="trailing" secondItem="vW0-b0-dwJ" secondAttribute="trailing" id="gzu-9q-hUg"/>
                                 <constraint firstItem="7up-hA-coa" firstAttribute="leading" secondItem="7hF-uW-Yvs" secondAttribute="leading" id="n2z-UG-6zJ"/>
                                 <constraint firstItem="vW0-b0-dwJ" firstAttribute="leading" secondItem="7hF-uW-Yvs" secondAttribute="leading" id="p7n-qh-JGF"/>

@@ -162,23 +162,23 @@ public class ScrubberBar: UIControl {
         elapsedBar.frame = CGRect(x: 0, y: centerY, width: CGFloat(horizontalPosition), height: frame.height / barDivisor)
     }
     
-    func touchStarted(){
+    @objc func touchStarted(){
         isDragging = true
     }
     
-    func touchEnded(){
+    @objc func touchEnded(){
         isDragging = false
         
         delegate?.scrubberBar(bar: self, didScrubToProgress: self.progress, finished: true)
     }
     
-    func touchCancel() {
+    @objc func touchCancel() {
         isDragging = false
 
         delegate?.scrubberBar(bar: self, didScrubToProgress: self.progress, finished: true)
     }
     
-    func touchMoved(object: AnyObject, event:UIEvent){
+    @objc func touchMoved(object: AnyObject, event:UIEvent){
         if let touch = event.touches(for: self)?.first, scrubbingEnabled == true {
             let pointInView = touch.location(in: self)
             let progress = progressFromPosition(position: Float(pointInView.x))

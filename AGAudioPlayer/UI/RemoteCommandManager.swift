@@ -181,25 +181,25 @@ import MediaPlayer
     // MARK: MPRemoteCommand handler methods.
     
     // MARK: Playback Command Handlers
-    func handlePauseCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handlePauseCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         player?.pause()
         
         return .success
     }
     
-    func handlePlayCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handlePlayCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         player?.resume()
         
         return .success
     }
     
-    func handleStopCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleStopCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         player?.stop()
         
         return .success
     }
     
-    func handleTogglePlayPauseCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleTogglePlayPauseCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let b = player?.isPlaying, b {
             player?.pause()
         }
@@ -211,7 +211,7 @@ import MediaPlayer
     }
     
     // MARK: Track Changing Command Handlers
-    func handleNextTrackCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleNextTrackCommandEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let p = player, p.forward() {
             return .success
         }
@@ -219,7 +219,7 @@ import MediaPlayer
         return .noSuchContent
     }
     
-    func handlePreviousTrackCommandEvent(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handlePreviousTrackCommandEvent(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let p = player, p.backward() {
             return .success
         }
@@ -228,7 +228,7 @@ import MediaPlayer
     }
     
     // MARK: Skip Interval Command Handlers
-    func handleSkipForwardCommandEvent(event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleSkipForwardCommandEvent(event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let p = player {
             p.seek(to: p.elapsed + event.interval)
         }
@@ -236,7 +236,7 @@ import MediaPlayer
         return .success
     }
     
-    func handleSkipBackwardCommandEvent(event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleSkipBackwardCommandEvent(event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let p = player {
             p.seek(to: p.elapsed - event.interval)
         }
@@ -244,7 +244,7 @@ import MediaPlayer
         return .success
     }
     
-    func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
         if let p = player {
             p.seek(to: event.positionTime)
         }
@@ -253,17 +253,17 @@ import MediaPlayer
     }
     
     // MARK: Feedback Command Handlers
-    func handleLikeCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleLikeCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
         print("Did recieve likeCommand for")
         return .noSuchContent
     }
     
-    func handleDislikeCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleDislikeCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
         print("Did recieve dislikeCommand for")
         return .noSuchContent
     }
     
-    func handleBookmarkCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func handleBookmarkCommandEvent(event: MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
         print("Did recieve bookmarkCommand for")
         return .noSuchContent
     }
