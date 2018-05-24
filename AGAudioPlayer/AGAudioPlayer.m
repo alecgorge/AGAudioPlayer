@@ -144,6 +144,8 @@
         return NO;
     }
     
+    [self.bass resume];
+    
     self.currentIndex = nextIndex;
     
     [self.bass nextTrackMayHaveChanged];
@@ -159,6 +161,8 @@
             return NO;
         }
 
+        [self.bass resume];
+        
         self.currentIndex = previousIndex;
         
         [self.bass nextTrackMayHaveChanged];
