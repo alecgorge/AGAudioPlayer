@@ -118,6 +118,9 @@ import NapySlider
     // non-jumpy seeking
     var isCurrentlyScrubbing = false
     
+    // for delegate notifications
+    var lastSeenProgress: Float? = nil
+    
     let player: AGAudioPlayer
     
     required public init(player: AGAudioPlayer) {
@@ -267,10 +270,19 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
         }
 
         if !isCurrentlyScrubbing {
-            uiScrubber.setProgress(progress: Float(player.percentElapsed))
-            uiMiniProgressPlayback.progress = Float(player.percentElapsed)
+            let floatProgress = Float(player.percentElapsed)
+            
+            uiScrubber.setProgress(progress: floatProgress)
+            uiMiniProgressPlayback.progress = floatProgress
             
             updateTimeLabels()
+            
+            // send this delegate once when it goes past 50%
+            if let lastProgress = lastSeenProgress, lastProgress < 0.5, floatProgress >= 0.5, let item = player.currentItem {
+                delegate?.audioPlayerViewController(self, passedHalfWayFor: item)
+            }
+            
+            lastSeenProgress = floatProgress
         }
     }
     
@@ -502,6 +514,7 @@ public protocol AGAudioPlayerViewControllerCellDataSource {
 public protocol AGAudioPlayerViewControllerDelegate {
     func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, trackChangedState audioItem: AGAudioItem?)
     func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, changedTrackTo audioItem: AGAudioItem?)
+    func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, passedHalfWayFor audioItem: AGAudioItem)
 
     func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, pressedDotsForAudioItem audioItem: AGAudioItem)
     func audioPlayerViewController(_ agAudio: AGAudioPlayerViewController, pressedPlusForAudioItem audioItem: AGAudioItem)

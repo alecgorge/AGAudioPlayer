@@ -210,10 +210,10 @@
                             </connections>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z3c-Z9-Kas">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="170"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
                             <subviews>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" text="Title Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7hF-uW-Yvs" customClass="MarqueeLabel">
-                                    <rect key="frame" x="16" y="36" width="343" height="33.5"/>
+                                    <rect key="frame" x="16" y="24" width="343" height="33.5"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="28"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -224,13 +224,13 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7up-hA-coa" customClass="MarqueeLabel">
-                                    <rect key="frame" x="16" y="77" width="343" height="24"/>
+                                    <rect key="frame" x="16" y="65" width="343" height="24"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QYP-TA-5ZA" userLabel="Download Progress">
-                                    <rect key="frame" x="16" y="116" width="343" height="6"/>
+                                    <rect key="frame" x="16" y="104" width="343" height="6"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N1S-bw-vqv">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="6"/>
@@ -246,7 +246,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vW0-b0-dwJ" userLabel="Playback Progress" customClass="ScrubberBar" customModule="AGAudioPlayer" customModuleProvider="target">
-                                    <rect key="frame" x="16" y="101" width="343" height="36"/>
+                                    <rect key="frame" x="16" y="89" width="343" height="36"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="qpU-vn-9I4"/>
@@ -272,19 +272,19 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6TM-q9-o60">
-                                    <rect key="frame" x="323.5" y="137" width="35.5" height="17"/>
+                                    <rect key="frame" x="323.5" y="125" width="35.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1k-1t-mAU">
-                                    <rect key="frame" x="16" y="137" width="35.5" height="17"/>
+                                    <rect key="frame" x="16" y="125" width="35.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVs-ib-6I1">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="106"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <connections>
                                         <outletCollection property="gestureRecognizers" destination="wNe-aW-vHn" appends="YES" id="Fgs-CK-943"/>
@@ -413,7 +413,7 @@
                             <rect key="frame" x="0.0" y="555" width="375" height="112"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="PIw-JK-DDq">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="96"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-sQ-CY6">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
@@ -507,10 +507,10 @@
                                             </constraints>
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u19-BU-rIY">
-                                            <rect key="frame" x="0.0" y="64" width="375" height="48"/>
+                                            <rect key="frame" x="0.0" y="64" width="375" height="32"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lmy-OP-umA" customClass="MPVolumeView">
-                                                    <rect key="frame" x="16" y="8" width="343" height="32"/>
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="32"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
