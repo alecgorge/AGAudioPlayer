@@ -15,6 +15,36 @@ import MarqueeLabel
 import BCColor
 import NapySlider
 
+public struct AGAudioPlayerColors {
+    let main: UIColor
+    let accent: UIColor
+    let accentWeak: UIColor
+    
+    let barNothing: UIColor
+    let barDownloads: UIColor
+    let barPlaybackElapsed: UIColor
+    let scrubberHandle: UIColor
+    
+    public init() {
+        let main = UIColor(red:0.149, green:0.608, blue:0.737, alpha:1)
+        let accent = UIColor.white
+
+        self.init(main: main, accent: accent)
+    }
+    
+    public init(main: UIColor, accent: UIColor) {
+        self.main = main
+        self.accent = accent
+        
+        accentWeak = accent.withAlphaComponent(0.7)
+        
+        barNothing = accent.withAlphaComponent(0.3)
+        barDownloads = accent.withAlphaComponent(0.4)
+        barPlaybackElapsed = accent
+        scrubberHandle = accent
+    }
+}
+
 @objc public class AGAudioPlayerViewController: UIViewController {
 
     @IBOutlet var uiPanGestureClose: VerticalPanDirectionGestureRecognizer!
@@ -96,14 +126,7 @@ import NapySlider
     var openInteractor: OpenInteractor = OpenInteractor()
     
     // colors
-    let ColorMain = UIColor(red:0.149, green:0.608, blue:0.737, alpha:1)
-    let ColorAccent = UIColor.white
-    let ColorAccentWeak = UIColor.white.withAlphaComponent(0.7)
-    
-    let ColorBarNothing = UIColor.white.withAlphaComponent(0.3)
-    let ColorBarDownloads = UIColor.white.withAlphaComponent(0.4)
-    let ColorBarPlaybackElapsed = UIColor.white
-    let ColorScrubberHandle = UIColor.white
+    var colors = AGAudioPlayerColors()
     
     // constants
     let SectionQueue = 0
@@ -722,34 +745,44 @@ extension AGAudioPlayerViewController {
 
 extension AGAudioPlayerViewController {
     func setupColors() {
-        view.backgroundColor = ColorMain
-        uiHeaderView.backgroundColor = ColorMain
-        uiFooterView.backgroundColor = ColorMain
+        applyColors(colors)
+    }
+    
+    public func applyColors(_ colors: AGAudioPlayerColors) {
+        self.colors = colors
         
-        uiLabelTitle.textColor = ColorAccent
-        uiLabelSubtitle.textColor = ColorAccent
+        view.backgroundColor = colors.main
+        uiMiniPlayerContainerView.backgroundColor = colors.main
         
-        uiLabelElapsed.textColor = ColorAccentWeak
-        uiLabelDuration.textColor = ColorAccentWeak
+        uiMiniLabelTitle.textColor = colors.accent
+        uiMiniLabelSubtitle.textColor = colors.accent
         
-        uiProgressDownload.backgroundColor = ColorBarNothing
-        uiProgressDownloadCompleted.backgroundColor = ColorBarDownloads
-        uiScrubber.elapsedColor = ColorBarPlaybackElapsed
-        uiScrubber.dragIndicatorColor = ColorScrubberHandle
+        uiHeaderView.backgroundColor = colors.main
+        uiFooterView.backgroundColor = colors.main
+        
+        uiLabelTitle.textColor = colors.accent
+        uiLabelSubtitle.textColor = colors.accent
+        
+        uiLabelElapsed.textColor = colors.accentWeak
+        uiLabelDuration.textColor = colors.accentWeak
+        
+        uiProgressDownload.backgroundColor = colors.barNothing
+        uiProgressDownloadCompleted.backgroundColor = colors.barDownloads
+        uiScrubber.elapsedColor = colors.barPlaybackElapsed
+        uiScrubber.dragIndicatorColor = colors.scrubberHandle
         
         uiWrapperEq.isHidden = true
-        uiWrapperEq.backgroundColor = ColorMain.darkenByPercentage(0.05)
-    
-        uiSliderVolume.tintColor = ColorAccent
+        uiWrapperEq.backgroundColor = colors.main.darkenByPercentage(0.05)
+        
+        uiSliderVolume.tintColor = colors.accent
         
         /*
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 4
-        */
+         view.layer.masksToBounds = true
+         view.layer.cornerRadius = 4
+         */
         
-        uiSliderEqBass.tintColor = ColorBarPlaybackElapsed
-        uiSliderEqBass.sliderUnselectedColor = ColorBarDownloads
-        // uiSliderEqBass.
+        uiSliderEqBass.tintColor = colors.barPlaybackElapsed
+        uiSliderEqBass.sliderUnselectedColor = colors.barDownloads
     }
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
