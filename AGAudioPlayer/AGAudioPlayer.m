@@ -371,6 +371,10 @@
     self.bass.dataSource = self;
 }
 
+- (void)prepareAudioSession {
+    [self.bass prepareAudioSession];
+}
+
 - (void)teardownBASS {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     
