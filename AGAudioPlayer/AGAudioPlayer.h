@@ -103,6 +103,9 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
 
 - (void)setIndex:(NSInteger)index;
 
+// prepareAudioSession automatically be called before playback, but is exposed if you'd like to prepare the session earlier.
+- (void)prepareAudioSession;
+
 - (void)resume;
 - (void)pause;
 - (void)stop;
