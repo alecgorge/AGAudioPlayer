@@ -155,7 +155,7 @@
 
 - (BOOL)backward {
     if(self.elapsed < 5.0f || self.backwardStyle == AGAudioPlayerBackwardStyleAlwaysPrevious) {
-        NSInteger previousIndex = self.nextIndex;
+        NSInteger previousIndex = self.previousIndex;
         
         if(previousIndex == NSNotFound) {
             return NO;
