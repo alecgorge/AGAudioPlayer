@@ -199,6 +199,8 @@ extension AGAudioPlayerViewController : UIGestureRecognizerDelegate {
 extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
     func setupPlayer() {
         player.delegate = self
+        player.prepareAudioSession()
+        publishToNowPlayingCenter()
     }
     
     public func audioPlayerAudioSessionSetUp(_ audioPlayer: AGAudioPlayer) {
