@@ -366,6 +366,8 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
         default:
             break
         }
+        
+        self.scrollQueueToPlayingTrack()
     }
     
     public func audioPlayer(_ audioPlayer: AGAudioPlayer, errorRaised error: Error, for url: URL) {
@@ -560,6 +562,7 @@ extension AGAudioPlayerViewController {
         UIView.animate(withDuration: 0.3) {
             self.switchToMiniPlayerProgress(0.0)
         }
+        self.scrollQueueToPlayingTrack()
     }
     
     public func switchToMiniPlayerProgress(_ progress: CGFloat) {
@@ -730,6 +733,8 @@ extension AGAudioPlayerViewController {
         let h = self.uiHeaderView.bounds.height
         self.uiTable.contentInset = UIEdgeInsetsMake(h, 0, 0, 0)
         self.uiTable.contentOffset = CGPoint(x: 0, y: -h)
+        
+        self.scrollQueueToPlayingTrack()
     }
     
     func scrollViewDidScroll_StretchyHeader(_ scrollView: UIScrollView) {
@@ -931,6 +936,23 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
                 
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }, completion: nil)
+        }
+    }
+    
+    private func scrollQueueToPlayingTrack() {
+        var itemRow = -1
+        let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
+        var curItemIndex = 0
+        for item in q {
+            if item.playbackGUID == player.currentItem?.playbackGUID {
+                itemRow = curItemIndex
+                break
+            }
+            curItemIndex += 1
+        }
+        
+        if itemRow > -1  && itemRow < uiTable.numberOfRows(inSection: 0) {
+            uiTable.scrollToRow(at: IndexPath(row: max(0, itemRow-1), section: 0), at: .top, animated: true)
         }
     }
 }
