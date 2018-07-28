@@ -261,6 +261,7 @@
         return idx;
     }
     
+    idx++;
     // last song in the current queue
     if (idx == self.queue.count) {
         // start the current queue from the beginning
@@ -272,10 +273,8 @@
             return NSNotFound;
         }
     }
-    // there are still songs in the current queue
-    else {
-        return idx + 1;
-    }
+    
+    return idx;
 }
 
 - (AGAudioItem *)nextItem {

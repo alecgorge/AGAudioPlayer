@@ -399,8 +399,9 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             return
         }
         
+        var nowPlayingInfo : [String : Any]? = nil
         if let item = player.currentItem {
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+            nowPlayingInfo = [
                 MPMediaItemPropertyMediaType        : NSNumber(value: MPMediaType.music.rawValue),
 
                 MPMediaItemPropertyTitle            : item.title,
@@ -420,9 +421,8 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
                 MPNowPlayingInfoPropertyPlaybackRate        : NSNumber(value: player.isPlaying ? 1.0 : 0.0)
             ]
         }
-        else {
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-        }
+        //print("Updating now playing info to \(nowPlayingInfo)")
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 }
 
