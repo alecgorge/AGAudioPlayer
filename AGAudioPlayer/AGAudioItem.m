@@ -7,6 +7,7 @@
 //
 
 #import "AGAudioItem.h"
+#import <UIKit/UIKit.h>
 
 @implementation AGAudioItem
 
@@ -28,7 +29,7 @@
 		self.duration		= [aDecoder decodeDoubleForKey:@"duration"];
 		self.displayText	= [aDecoder decodeObjectForKey:@"displayText"];
 		self.displaySubtext = [aDecoder decodeObjectForKey:@"displaySubtext"];
-        self.albumArt		= [aDecoder decodeObjectForKey:@"albumArt"];
+        self.albumArt		= [aDecoder decodeObjectForKey:@"albumArtImg"];
         self.playbackURL	= [aDecoder decodeObjectForKey:@"playbackURL"];
 	}
 	
@@ -61,7 +62,7 @@
 				  forKey:@"displaySubtext"];
     
     [aCoder encodeObject:self.albumArt
-                  forKey:@"albumArt"];
+                  forKey:@"albumArtImg"];
     
     [aCoder encodeObject:self.playbackURL
                   forKey:@"playbackURL"];

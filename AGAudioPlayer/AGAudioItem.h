@@ -10,7 +10,7 @@
 
 #import "AGAudioItemCollection.h"
 
-@class MPMediaItemArtwork;
+@class MPMediaItemArtwork, UIImage;
 
 @interface AGAudioItem : NSObject
 
@@ -30,7 +30,7 @@
 @property (nonatomic) NSString * _Nonnull displayText;
 @property (nonatomic) NSString * _Nonnull displaySubtext;
 
-@property (nonatomic) NSURL * _Nullable albumArt;
+@property (nonatomic) UIImage * _Nullable albumArt;
 @property (nonatomic) NSURL * _Nonnull playbackURL;
 // @property (nonatomic) NSDictionary *playbackRequestHTTPHeaders;
 

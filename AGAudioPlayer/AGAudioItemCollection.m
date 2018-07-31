@@ -7,6 +7,7 @@
 //
 
 #import "AGAudioItemCollection.h"
+#import <UIKit/UIKit.h>
 
 @implementation AGAudioItemCollection
 
@@ -21,7 +22,7 @@
 	if (self = [super init]) {
 		self.displayText	= [aDecoder decodeObjectForKey:@"displayText"];
 		self.displaySubtext = [aDecoder decodeObjectForKey:@"displaySubtext"];
-		self.albumArt		= [aDecoder decodeObjectForKey:@"albumArt"];
+		self.albumArt		= [aDecoder decodeObjectForKey:@"albumArtImg"];
 		self.items      	= [aDecoder decodeObjectForKey:@"items"];
 	}
 	
@@ -36,7 +37,7 @@
 				  forKey:@"displaySubtext"];
 	
 	[aCoder encodeObject:self.albumArt
-				  forKey:@"albumArt"];
+				  forKey:@"albumArtImg"];
 	
 	[aCoder encodeObject:self.items
 				  forKey:@"items"];
