@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class AGAudioItem;
+@class AGAudioItem, UIImage;
 
 @interface AGAudioItemCollection : NSObject<NSCoding>
 
 @property (nonatomic) NSString * _Nonnull displayText;
 @property (nonatomic) NSString * _Nonnull displaySubtext;
-@property (nonatomic) NSURL * _Nullable albumArt;
+@property (nonatomic) UIImage * _Nullable albumArt;
 
 @property (nonatomic) NSArray * _Nonnull items;
 

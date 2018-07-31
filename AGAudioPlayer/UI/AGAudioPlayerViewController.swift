@@ -420,6 +420,11 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
                 MPNowPlayingInfoPropertyPlaybackQueueIndex  : NSNumber(value: player.currentIndex),
                 MPNowPlayingInfoPropertyPlaybackRate        : NSNumber(value: player.isPlaying ? 1.0 : 0.0)
             ]
+            if let albumArt = item.albumArt {
+                nowPlayingInfo![MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: albumArt.size, requestHandler: { (_) -> UIImage in
+                    return albumArt
+                })
+            }
         }
         //print("Updating now playing info to \(nowPlayingInfo)")
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
