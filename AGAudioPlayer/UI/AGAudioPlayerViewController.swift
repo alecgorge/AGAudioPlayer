@@ -109,7 +109,7 @@ public struct AGAudioPlayerColors {
     @IBOutlet weak var uiMiniLabelTitle: MarqueeLabel!
     @IBOutlet weak var uiMiniLabelSubtitle: MarqueeLabel!
     
-    @IBOutlet weak var uiMiniButtonDots: UIButton!
+    @IBOutlet public weak var uiMiniButtonDots: UIButton!
     @IBOutlet weak var uiMiniButtonPlus: UIButton!
     @IBOutlet weak var uiMiniSpinnerBuffering: UIActivityIndicatorView!
     // end mini player
