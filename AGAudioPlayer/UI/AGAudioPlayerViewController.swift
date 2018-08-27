@@ -278,6 +278,13 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             uiMiniLabelTitle.text = cur.displayText
             uiMiniLabelSubtitle.text = cur.displaySubtext
         }
+        else {
+            uiLabelTitle.text = " "
+            uiLabelSubtitle.text = " "
+            
+            uiMiniLabelTitle.text = " "
+            uiMiniLabelSubtitle.text = " "   
+        }
     }
     
     func updateTimeLabels() {
@@ -285,8 +292,14 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             return
         }
         
-        uiLabelElapsed.text = player.elapsed.formatted()
-        uiLabelDuration.text = player.duration.formatted()
+        if player.duration == 0.0 {
+            uiLabelElapsed.text = " "
+            uiLabelDuration.text = " "
+        }
+        else {
+            uiLabelElapsed.text = player.elapsed.formatted()
+            uiLabelDuration.text = player.duration.formatted()
+        }
     }
     
     func updatePlaybackProgress() {
