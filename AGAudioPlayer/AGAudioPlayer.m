@@ -361,7 +361,7 @@
     [self.playbackHistory removeAllObjects];
 }
 
-#pragma mark - FreeStreamer management
+#pragma mark - ObjectiveBASS management
 
 - (void)setupBASS {
     self.bass = ObjectiveBASS.new;
@@ -408,8 +408,29 @@
     va_start(args, str);
     NSString *s = [NSString.alloc initWithFormat:str
                                        arguments:args];
-    NSLog(@"[AGAudioPlayer] %@", s);
+    NSString *l = [NSString stringWithFormat:@"[AGAudioPlayer] %@", s];
+    
+    if([self.loggingDelegate respondsToSelector:@selector(audioPlayer:loggedLine:)]) {
+        [self.loggingDelegate audioPlayer:self loggedLine:l];
+    }
+    else {
+        NSLog(l);
+    }
+    
     va_end(args);
+}
+
+- (void)BASSLoggedLine:(NSString *)line {
+    [self debug:line];
+}
+
+- (void)BASSLoggedFailedAssertion:(NSString *)line {
+    if([self.loggingDelegate respondsToSelector:@selector(audioPlayer:loggedErrorLine:)]) {
+        [self.loggingDelegate audioPlayer:self loggedErrorLine:line];
+    }
+    else {
+        [self debug: line];
+    }
 }
 
 - (void)BASSAudioSessionSetUp {

@@ -62,6 +62,16 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
 
 @end
 
+@protocol AGAudioPlayerLoggingDelegate <NSObject>
+
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
+         loggedLine:(nonnull NSString *)line;
+
+- (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
+    loggedErrorLine:(nonnull NSString *)line;
+
+@end
+
 // delegate for redraw with reason
 
 @interface AGAudioPlayer : NSObject
@@ -69,6 +79,7 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
 - (_Nonnull instancetype)initWithQueue:(AGAudioPlayerUpNextQueue * _Nonnull)queue;
 
 @property (nonatomic, weak) id<AGAudioPlayerDelegate> _Nullable delegate;
+@property (nonatomic, weak) id<AGAudioPlayerLoggingDelegate> _Nullable loggingDelegate;
 
 @property (nonatomic) AGAudioPlayerUpNextQueue * _Nonnull queue;
 
