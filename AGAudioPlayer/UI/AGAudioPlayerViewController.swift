@@ -75,6 +75,7 @@ public struct AGAudioPlayerColors {
     @IBOutlet weak var uiButtonPlus: UIButton!
     @IBOutlet weak var uiSliderVolume: MPVolumeView!
     @IBOutlet weak var uiSpinnerBuffering: UIActivityIndicatorView!
+    @IBOutlet weak var uiButtonStack: UIStackView!
     
     @IBOutlet weak var uiWrapperEq: UIView!
     @IBOutlet weak var uiSliderEqBass: NapySlider!
@@ -109,6 +110,7 @@ public struct AGAudioPlayerColors {
     @IBOutlet weak var uiMiniLabelTitle: MarqueeLabel!
     @IBOutlet weak var uiMiniLabelSubtitle: MarqueeLabel!
     
+    @IBOutlet weak var uiMiniButtonStack: UIStackView!
     @IBOutlet public weak var uiMiniButtonDots: UIButton!
     @IBOutlet weak var uiMiniButtonPlus: UIButton!
     @IBOutlet weak var uiMiniSpinnerBuffering: UIActivityIndicatorView!
@@ -166,6 +168,11 @@ public struct AGAudioPlayerColors {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        
+        uiMiniButtonStack.removeArrangedSubview(uiMiniButtonPlus)
+        
+        uiMiniButtonPlus.isHidden = true
+        uiButtonPlus.alpha = 0.0
         
         setupTable()
         setupStretchyHeader()
@@ -283,7 +290,7 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
             uiLabelSubtitle.text = " "
             
             uiMiniLabelTitle.text = " "
-            uiMiniLabelSubtitle.text = " "   
+            uiMiniLabelSubtitle.text = " "
         }
     }
     

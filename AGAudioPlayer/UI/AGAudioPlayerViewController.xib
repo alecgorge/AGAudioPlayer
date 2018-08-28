@@ -19,6 +19,7 @@
                 <outlet property="uiButtonPlus" destination="ifp-zG-ZLi" id="Y0p-Xf-hrz"/>
                 <outlet property="uiButtonPrevious" destination="Ex9-KA-TFl" id="ekN-oi-bnR"/>
                 <outlet property="uiButtonShuffle" destination="els-h5-lTD" id="GSR-RY-p0y"/>
+                <outlet property="uiButtonStack" destination="z9u-sQ-CY6" id="67F-h2-IJu"/>
                 <outlet property="uiConstraintBottomBarHeight" destination="AZO-pP-wZH" id="abn-Q9-2Mr"/>
                 <outlet property="uiConstraintSpaceBetweenPlayers" destination="zdl-Tt-x3q" id="oMl-Tr-GT7"/>
                 <outlet property="uiConstraintTopTitleSpace" destination="dF0-Td-BIu" id="pHT-cD-jlI"/>
@@ -32,6 +33,7 @@
                 <outlet property="uiMiniButtonPause" destination="vps-nv-hdq" id="PVP-Bt-OcF"/>
                 <outlet property="uiMiniButtonPlay" destination="CNq-b4-9Bc" id="7LL-eT-nGn"/>
                 <outlet property="uiMiniButtonPlus" destination="GCt-5J-qpA" id="hLo-5S-btQ"/>
+                <outlet property="uiMiniButtonStack" destination="0z9-ra-zkO" id="oLK-mA-MJZ"/>
                 <outlet property="uiMiniLabelSubtitle" destination="t5s-bW-saf" id="uDt-9m-xCP"/>
                 <outlet property="uiMiniLabelTitle" destination="zis-2F-bXq" id="hsL-gT-IPN"/>
                 <outlet property="uiMiniPlayerContainerView" destination="9lM-PD-7a0" id="VjX-Cx-jTW"/>
@@ -581,7 +583,7 @@
     </objects>
     <resources>
         <image name="backward" width="24" height="24"/>
-        <image name="dots" width="16" height="16"/>
+        <image name="dots" width="24" height="24"/>
         <image name="forward" width="24" height="24"/>
         <image name="loop" width="16" height="16"/>
         <image name="pause" width="24" height="24"/>
