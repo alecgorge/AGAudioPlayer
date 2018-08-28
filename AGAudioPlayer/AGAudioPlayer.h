@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, AGAudioPlayerRedrawReason) {
 
 /// all methods are always called on the main thread
 @protocol AGAudioPlayerDelegate <NSObject>
-
+@optional
 - (void)audioPlayer:(AGAudioPlayer * _Nonnull)audioPlayer
 uiNeedsRedrawForReason:(AGAudioPlayerRedrawReason)reason;
 
@@ -50,15 +50,6 @@ downloadedBytesForActiveTrack:(uint64_t)downloadedBytes
   withTotalDuration:(NSTimeInterval)totalDuration;
 
 - (void)audioPlayerAudioSessionSetUp:(AGAudioPlayer * _Nonnull)audioPlayer;
-
-@optional
-
-// OPTIONAL: if not implemented, will pause playback
-- (void)audioPlayerBeginInterruption:(AGAudioPlayer * _Nonnull)audioPlayer;
-
-// OPTIONAL: if not implemented, will resume playback if resume == YES
-- (void)audioPlayerEndInterruption:(AGAudioPlayer * _Nonnull)audioPlayer
-                      shouldResume:(BOOL)resume;
 
 @end
 

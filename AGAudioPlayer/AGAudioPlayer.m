@@ -222,8 +222,10 @@
     
     _currentIndex = currentIndex;
 
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
+    }
 }
 
 - (void)playItemAtIndex:(NSUInteger)idx {
@@ -434,46 +436,52 @@
 }
 
 - (void)BASSAudioSessionSetUp {
-    [self.delegate audioPlayerAudioSessionSetUp:self];
+    if ([self.delegate respondsToSelector:@selector(audioPlayerAudioSessionSetUp:)]) {
+        [self.delegate audioPlayerAudioSessionSetUp:self];
+    }
 }
 
 -(void)BASSDownloadPlaybackStateChanged:(BassPlaybackState)state {
+    AGAudioPlayerRedrawReason reason = AGAudioPlayerRedrawReasonStopped;
     switch (state) {
         case BassPlaybackStatePaused:
-            [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonPaused];
-            
+            reason = AGAudioPlayerRedrawReasonPaused;
             break;
             
         case BassPlaybackStatePlaying:
-            [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonPlaying];
+            reason = AGAudioPlayerRedrawReasonPlaying;
             
             break;
             
         case BassPlaybackStateStalled:
-            [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonBuffering];
+            reason = AGAudioPlayerRedrawReasonBuffering;
             
             break;
             
         case BassPlaybackStateStopped:
-            [self.delegate audioPlayer:self
-                uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonStopped];
+            reason = AGAudioPlayerRedrawReasonStopped;
             
             break;
             
         default:
             break;
     }
+    
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:reason];
+        
+    }
 }
 
 - (void)BASSErrorStartingStream:(NSError *)error
                          forURL:(NSURL *)url
                  withIdentifier:(NSUUID *)identifier {
-    [self.delegate audioPlayer:self
-                   errorRaised:error
-                        forURL:url];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:errorRaised:forURL:)]) {
+        [self.delegate audioPlayer:self
+                       errorRaised:error
+                            forURL:url];
+    }
 }
 
 - (void)BASSDownloadProgressChanged:(BOOL)forActiveTrack
@@ -481,16 +489,20 @@
                          totalBytes:(uint64_t)totalBytes {
     if(!forActiveTrack) return;
     
-    [self.delegate audioPlayer:self
- downloadedBytesForActiveTrack:downloadedBytes
-                    totalBytes:totalBytes];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:downloadedBytesForActiveTrack:totalBytes:)]) {
+        [self.delegate audioPlayer:self
+     downloadedBytesForActiveTrack:downloadedBytes
+                        totalBytes:totalBytes];
+    }
 }
 
 - (void)BASSPlaybackProgressChanged:(NSTimeInterval)elapsed
                   withTotalDuration:(NSTimeInterval)totalDuration {
-    [self.delegate audioPlayer:self
-               progressChanged:elapsed
-             withTotalDuration:totalDuration];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:progressChanged:withTotalDuration:)]) {
+        [self.delegate audioPlayer:self
+                   progressChanged:elapsed
+                 withTotalDuration:totalDuration];
+    }
 }
 
 - (void)BASSFinishedPlayingGUID:(nonnull NSUUID *)identifier
@@ -500,8 +512,11 @@
         
         _currentIndex = self.nextIndex;
         
-        [self.delegate audioPlayer:self
-            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
+        
+        if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+            [self.delegate audioPlayer:self
+                uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonTrackChanged];
+        }
     }
     else {
         [self debug:@"Finished playing something that wasn't the active track!? %@ %@", identifier, url];
@@ -565,8 +580,10 @@
     
     [self.bass nextTrackMayHaveChanged];
     
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    }
 }
 
 - (void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
@@ -582,8 +599,10 @@
         [self.bass nextTrackMayHaveChanged];
     }
     
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    }
 }
 
 -(void)upNextQueue:(AGAudioPlayerUpNextQueue *)queue
@@ -606,8 +625,10 @@
     
     [self.bass nextTrackMayHaveChanged];
     
-    [self.delegate audioPlayer:self
-        uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:uiNeedsRedrawForReason:)]) {
+        [self.delegate audioPlayer:self
+            uiNeedsRedrawForReason:AGAudioPlayerRedrawReasonQueueChanged];
+    }
 }
 
 @end
