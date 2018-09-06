@@ -125,13 +125,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		7C3FF8331AB67093003BAE01 /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Cache;
-			sourceTree = "<group>";
-		};
 		7C4B52481AB383C800A57843 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,7 +192,6 @@
 		7CC250961A447901009F91C8 /* AGAudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				7C3FF8331AB67093003BAE01 /* Cache */,
 				7C4B52481AB383C800A57843 /* UI */,
 				7CC250BE1A44792F009F91C8 /* AGAudioPlayer.h */,
 				7CC250BF1A44792F009F91C8 /* AGAudioPlayer.m */,
