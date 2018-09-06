@@ -289,19 +289,19 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVs-ib-6I1">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron" translatesAutoresizingMaskIntoConstraints="NO" id="PCZ-ES-Ut5">
-                                            <rect key="frame" x="169" y="-3" width="36" height="30"/>
+                                        <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeH-fp-mYI">
+                                            <rect key="frame" x="175" y="0.0" width="24" height="24"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="36" id="8Wh-tm-bdL"/>
-                                                <constraint firstAttribute="height" constant="30" id="R3W-HN-Fnn"/>
-                                            </constraints>
-                                        </imageView>
+                                            <state key="normal" image="chevron"/>
+                                            <connections>
+                                                <action selector="handleChevronTapped:" destination="-2" eventType="touchUpInside" id="eWq-bi-Swi"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstItem="PCZ-ES-Ut5" firstAttribute="centerX" secondItem="TVs-ib-6I1" secondAttribute="centerX" id="EBu-tc-pkP"/>
-                                        <constraint firstItem="PCZ-ES-Ut5" firstAttribute="centerY" secondItem="TVs-ib-6I1" secondAttribute="top" constant="12" id="Qg6-3w-UMV"/>
+                                        <constraint firstItem="CeH-fp-mYI" firstAttribute="centerY" secondItem="TVs-ib-6I1" secondAttribute="top" constant="12" id="Xu2-TQ-QPg"/>
+                                        <constraint firstItem="CeH-fp-mYI" firstAttribute="centerX" secondItem="TVs-ib-6I1" secondAttribute="centerX" id="idT-3X-Kdq"/>
                                     </constraints>
                                     <connections>
                                         <outletCollection property="gestureRecognizers" destination="wNe-aW-vHn" appends="YES" id="Fgs-CK-943"/>
