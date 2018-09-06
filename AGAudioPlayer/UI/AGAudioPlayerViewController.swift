@@ -684,6 +684,10 @@ extension AGAudioPlayerViewController {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
         return !isCurrentlyScrubbing
     }
+    
+    @IBAction func handleChevronTapped(_ sender: UIButton) {
+        dismissInteractor.finish(1.0)
+    }
 }
 
 class DismissInteractor {

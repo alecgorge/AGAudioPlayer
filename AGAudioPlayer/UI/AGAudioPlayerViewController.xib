@@ -4,7 +4,9 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -286,7 +288,21 @@
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVs-ib-6I1">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
+                                    <subviews>
+                                        <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeH-fp-mYI">
+                                            <rect key="frame" x="175" y="0.0" width="24" height="24"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="chevron"/>
+                                            <connections>
+                                                <action selector="handleChevronTapped:" destination="-2" eventType="touchUpInside" id="eWq-bi-Swi"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="CeH-fp-mYI" firstAttribute="centerY" secondItem="TVs-ib-6I1" secondAttribute="top" constant="12" id="Xu2-TQ-QPg"/>
+                                        <constraint firstItem="CeH-fp-mYI" firstAttribute="centerX" secondItem="TVs-ib-6I1" secondAttribute="centerX" id="idT-3X-Kdq"/>
+                                    </constraints>
                                     <connections>
                                         <outletCollection property="gestureRecognizers" destination="wNe-aW-vHn" appends="YES" id="Fgs-CK-943"/>
                                     </connections>
@@ -583,7 +599,8 @@
     </objects>
     <resources>
         <image name="backward" width="24" height="24"/>
-        <image name="dots" width="24" height="24"/>
+        <image name="chevron" width="24" height="24"/>
+        <image name="dots" width="16" height="16"/>
         <image name="forward" width="24" height="24"/>
         <image name="loop" width="16" height="16"/>
         <image name="pause" width="24" height="24"/>
