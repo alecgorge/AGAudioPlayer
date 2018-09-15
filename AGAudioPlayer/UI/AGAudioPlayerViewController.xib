@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -82,7 +81,7 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CNq-b4-9Bc">
                                             <rect key="frame" x="0.0" y="0.0" width="53.5" height="64"/>
-                                            <accessibility key="accessibilityConfiguration" label="Shuffle"/>
+                                            <accessibility key="accessibilityConfiguration" label="Play"/>
                                             <state key="normal" image="play"/>
                                             <connections>
                                                 <action selector="uiActionPlay:" destination="-1" eventType="touchUpInside" id="XHM-tv-1Mj"/>
@@ -90,7 +89,7 @@
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vps-nv-hdq">
                                             <rect key="frame" x="0.0" y="0.0" width="53.5" height="64"/>
-                                            <accessibility key="accessibilityConfiguration" label="Shuffle"/>
+                                            <accessibility key="accessibilityConfiguration" label="Pause"/>
                                             <state key="normal" image="pause"/>
                                             <connections>
                                                 <action selector="uiActionPause:" destination="-1" eventType="touchUpInside" id="iVB-9v-sUc"/>
@@ -164,6 +163,7 @@
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Igj-Ax-uK2">
                                     <rect key="frame" x="268" y="0.0" width="53.5" height="64"/>
+                                    <accessibility key="accessibilityConfiguration" label="Mini Dots"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="53.5" id="cyr-cT-UYa"/>
                                     </constraints>
@@ -291,6 +291,7 @@
                                     <subviews>
                                         <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeH-fp-mYI">
                                             <rect key="frame" x="175" y="0.0" width="24" height="24"/>
+                                            <accessibility key="accessibilityConfiguration" label="Close Full Player"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" image="chevron"/>
                                             <connections>
@@ -445,7 +446,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PeT-3F-GaM">
                                                     <rect key="frame" x="53.5" y="0.0" width="53.5" height="64"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Shuffle"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Loop"/>
                                                     <state key="normal" image="loop"/>
                                                     <connections>
                                                         <action selector="uiActionToggleLoop:" destination="-1" eventType="touchUpInside" id="Uy6-9A-ET5"/>
@@ -453,7 +454,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ex9-KA-TFl">
                                                     <rect key="frame" x="107" y="0.0" width="53.5" height="64"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Shuffle"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Previous"/>
                                                     <state key="normal" image="backward"/>
                                                     <connections>
                                                         <action selector="uiActionPrevious:" destination="-1" eventType="touchUpInside" id="6mE-S4-Wou"/>
@@ -498,7 +499,7 @@
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMu-ax-caM">
                                                     <rect key="frame" x="214.5" y="0.0" width="53.5" height="64"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Shuffle"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Next"/>
                                                     <state key="normal" image="forward"/>
                                                     <connections>
                                                         <action selector="uiActionNext:" destination="-1" eventType="touchUpInside" id="9Ld-51-rAp"/>
@@ -506,6 +507,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YOe-Ec-x3k">
                                                     <rect key="frame" x="268" y="0.0" width="53.5" height="64"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Dots"/>
                                                     <state key="normal" image="dots"/>
                                                     <connections>
                                                         <action selector="uiActionDots:" destination="-1" eventType="touchUpInside" id="tre-0K-Z9z"/>
@@ -513,6 +515,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ifp-zG-ZLi">
                                                     <rect key="frame" x="321.5" y="0.0" width="53.5" height="64"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Plus"/>
                                                     <state key="normal" image="plus"/>
                                                     <connections>
                                                         <action selector="uiActionPlus:" destination="-1" eventType="touchUpInside" id="bdL-62-jrk"/>
