@@ -158,7 +158,7 @@ extension NSNumber: Interpolatable {
      - returns: IPValue
      */
     public func vectorize() -> IPValue {
-        return IPValue(type: .nsNumber, vectors: [CGFloat(self)])
+        return IPValue(type: .nsNumber, vectors: [CGFloat(truncating: self)])
     }
 }
 
@@ -245,7 +245,7 @@ open class IPValue {
             case .nsNumber:
                 return NSNumber(value: Double(vectors[0]))
             case .uiEdgeInsets:
-                return UIEdgeInsetsMake(vectors[0], vectors[1], vectors[2], vectors[3])
+                return UIEdgeInsets(top: vectors[0], left: vectors[1], bottom: vectors[2], right: vectors[3])
         }
     }
     

@@ -90,7 +90,7 @@ public struct AGAudioPlayerColors {
     public var barHeight : CGFloat {
         get {
             if let c = uiMiniPlayerContainerView {
-                var extra: CGFloat = UIApplication.shared.keyWindow!.rootViewController!.view.safeAreaInsets.bottom
+                let extra: CGFloat = UIApplication.shared.keyWindow!.rootViewController!.view.safeAreaInsets.bottom
                 
                 return c.bounds.height + extra
             }
@@ -591,7 +591,7 @@ extension AGAudioPlayerViewController {
     }
     
     public func switchToMiniPlayerProgress(_ progress: CGFloat) {
-        var maxHeight = self.uiMiniPlayerContainerView.frame.height
+        let maxHeight = self.uiMiniPlayerContainerView.frame.height
         
         self.uiMiniPlayerTopOffsetConstraint.constant = -1.0 * maxHeight * (1.0 - progress)
         self.view.layoutIfNeeded()
@@ -968,7 +968,7 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
         }
     }
     
-    private func scrollQueueToPlayingTrack() {
+    fileprivate func scrollQueueToPlayingTrack() {
         var itemRow = -1
         let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
         var curItemIndex = 0

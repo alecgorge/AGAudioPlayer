@@ -414,7 +414,7 @@
         [self.loggingDelegate audioPlayer:self loggedLine:l];
     }
     else {
-        NSLog(l);
+        NSLog(@"%@", l);
     }
     
     va_end(args);
