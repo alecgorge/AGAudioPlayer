@@ -740,7 +740,7 @@ extension AGAudioPlayerViewController {
                 s.uiHeaderView.transform = CGAffineTransform(scaleX: CGFloat(fontScale), y: CGFloat(fontScale))
                 
                 let h = s.uiHeaderView.bounds.height * CGFloat(fontScale)
-                s.uiTable.scrollIndicatorInsets = UIEdgeInsetsMake(h, 0, 0, 0)
+                s.uiTable.scrollIndicatorInsets = UIEdgeInsets.init(top: h, left: 0, bottom: 0, right: 0)
             }
         }
         
@@ -760,7 +760,7 @@ extension AGAudioPlayerViewController {
         interpolateBlock?(1.0)
         
         let h = self.uiHeaderView.bounds.height
-        self.uiTable.contentInset = UIEdgeInsetsMake(h, 0, 0, 0)
+        self.uiTable.contentInset = UIEdgeInsets.init(top: h, left: 0, bottom: 0, right: 0)
         self.uiTable.contentOffset = CGPoint(x: 0, y: -h)
         
         self.scrollQueueToPlayingTrack()
@@ -901,7 +901,7 @@ extension AGAudioPlayerViewController : UITableViewDelegate {
         }
     }
     
-    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
 }
@@ -943,7 +943,7 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard indexPath.row < player.queue.count else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
         
         let q = player.queue.properQueue(forShuffleEnabled: player.shuffle)
@@ -955,10 +955,10 @@ extension AGAudioPlayerViewController : UITableViewDataSource {
             return d.heightForCell(inTableView: tableView, atIndexPath: indexPath, forPlaybackItem: item, isCurrentlyPlaying: currentlyPlaying)
         }
         
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
-    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.performBatchUpdates({
                 player.queue.removeItem(at: indexPath.row)
