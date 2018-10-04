@@ -4,9 +4,9 @@ inhibit_all_warnings!
 use_frameworks!
 
 target "AGAudioPlayer" do
-    platform :ios, '9.0'
+    platform :ios, '11.0'
 
-    pod 'Interpolate'
+    pod 'Interpolate', :git => "https://github.com/farktronix/Interpolate"
     pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
     pod 'MarqueeLabel', '~> 3.0.1'
     pod 'NapySlider', :path => '../NapySlider'
@@ -24,7 +24,7 @@ end
 
 =begin
 target "AGAudioPlayerOSX" do
-    platform :osx, '10.10'
+    platform :osx, '10.11'
     
     pod 'FreeStreamer'
     # pod 'HysteriaPlayer', :head
