@@ -215,7 +215,12 @@
         [self addHistoryEntry:self.currentItem];
     }
     
-    AGAudioItem * item = [self.queue properQueueForShuffleEnabled:self.shuffle][currentIndex];
+    NSArray<AGAudioItem *> *queue = [self.queue properQueueForShuffleEnabled:self.shuffle];
+    if (currentIndex < 0 || currentIndex > queue.count) {
+        return;
+    }
+    
+    AGAudioItem * item = queue[currentIndex];
     
     [self.bass playURL:item.playbackURL
         withIdentifier:item.playbackGUID];
