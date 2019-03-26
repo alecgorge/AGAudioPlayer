@@ -10,7 +10,6 @@ target "AGAudioPlayer" do
     pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
     pod 'MarqueeLabel'
     pod 'NapySlider', :path => '../NapySlider'
-    pod 'BCColor'
     # pod 'HysteriaPlayer', :head
 end
 
