@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
   s.osx.deployment_target = '10.11'
   s.requires_arc = true
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 
   s.source_files = 'AGAudioPlayer/**/*.{h,m,swift}'
 

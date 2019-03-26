@@ -335,7 +335,7 @@
 					7CC250931A447901009F91C8 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = HT7ELV3Q35;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 					C1511AB01BDD9F6E003B4E6C = {
 						CreatedOnToolsVersion = 7.0;
@@ -622,6 +622,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AGAudioPlayer/UI/AGAudioPlayer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -654,6 +655,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alecgorge.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AGAudioPlayer/UI/AGAudioPlayer-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
