@@ -12,7 +12,6 @@ import MediaPlayer
 
 import Interpolate
 import MarqueeLabel
-import BCColor
 import NapySlider
 
 public struct AGAudioPlayerColors {

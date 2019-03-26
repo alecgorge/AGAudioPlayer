@@ -29,5 +29,4 @@ Pod::Spec.new do |s|
   s.dependency 'BASSGaplessAudioPlayer'
   s.dependency 'MarqueeLabel'
   s.dependency 'NapySlider'
-  s.dependency 'BCColor'
 end
