@@ -30,10 +30,14 @@ extension NSLayoutConstraint {
      - returns: NSLayoutConstraint
      */
     public func setMultiplier(multiplier:CGFloat) -> NSLayoutConstraint {
+        guard firstItem != nil else {
+            return self
+        }
+        
         NSLayoutConstraint.deactivate([self])
         
         let newConstraint = NSLayoutConstraint(
-            item: firstItem,
+            item: firstItem!,
             attribute: firstAttribute,
             relatedBy: relation,
             toItem: secondItem,
