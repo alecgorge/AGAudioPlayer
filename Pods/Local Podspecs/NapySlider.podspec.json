@@ -14,7 +14,7 @@
   "platforms": {
     "ios": "8.4"
   },
-  "swift_version": "4.2",
+  "swift_versions": "4.2",
   "requires_arc": true,
   "source_files": "NapySlider/NapySlider.swift"
 }

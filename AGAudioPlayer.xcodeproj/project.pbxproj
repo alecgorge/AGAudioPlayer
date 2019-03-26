@@ -392,7 +392,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BASSGaplessAudioPlayer/BASSGaplessAudioPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/BCColor/BCColor.framework",
 				"${BUILT_PRODUCTS_DIR}/Interpolate/Interpolate.framework",
@@ -409,7 +409,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AGAudioPlayer/Pods-AGAudioPlayer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		507E1C2B9F108F11D7674FFA /* [CP] Check Pods Manifest.lock */ = {
@@ -588,7 +588,7 @@
 		};
 		7CC250B81A447901009F91C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0181C9D9776D8A68554582E9 /* Pods-AGAudioPlayer.debug.xcconfig */;
+			baseConfigurationReference = 7C12F7681C493219006FA021 /* Pods-AGAudioPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -621,7 +621,7 @@
 		};
 		7CC250B91A447901009F91C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B7B0EBDDDA4C85817C274304 /* Pods-AGAudioPlayer.release.xcconfig */;
+			baseConfigurationReference = 7C12F7691C493219006FA021 /* Pods-AGAudioPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
