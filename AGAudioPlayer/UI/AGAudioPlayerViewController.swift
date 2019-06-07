@@ -459,10 +459,10 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         
         // uiLabelTitle.animationDuration = 2
         uiLabelTitle.animationDelay = 5
-        uiLabelTitle.rate = 25
+        uiLabelTitle.speed = .rate(25)
         
         uiLabelSubtitle.animationDelay = 5
-        uiLabelSubtitle.rate = 25
+        uiLabelSubtitle.speed = .rate(25)
         
         uiLabelTitle.isUserInteractionEnabled = true
         uiLabelSubtitle.isUserInteractionEnabled = true
@@ -472,10 +472,10 @@ extension AGAudioPlayerViewController : ScrubberBarDelegate {
         uiMiniLabelSubtitle.trailingBuffer = 16
         
         uiMiniLabelTitle.animationDelay = 5
-        uiMiniLabelTitle.rate = 16
+        uiMiniLabelTitle.speed = .rate(16)
         
         uiMiniLabelSubtitle.animationDelay = 5
-        uiMiniLabelSubtitle.rate = 16
+        uiMiniLabelSubtitle.speed = .rate(16)
         
         uiMiniLabelTitle.isUserInteractionEnabled = true
         uiMiniLabelSubtitle.isUserInteractionEnabled = true
