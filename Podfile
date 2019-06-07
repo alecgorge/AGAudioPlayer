@@ -6,7 +6,7 @@ use_frameworks!
 target "AGAudioPlayer" do
     platform :ios, '11.0'
 
-    pod 'Interpolate'
+    pod 'Interpolate', :path => '../Interpolate'
     pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
     pod 'MarqueeLabel'
     pod 'NapySlider', :path => '../NapySlider'
