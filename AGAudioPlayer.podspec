@@ -27,6 +27,6 @@ Pod::Spec.new do |s|
   
   s.dependency 'Interpolate'
   s.dependency 'BASSGaplessAudioPlayer'
-  s.dependency 'MarqueeLabel'
+  s.dependency 'MarqueeLabel', '~> 3.2.1'
   s.dependency 'NapySlider'
 end
