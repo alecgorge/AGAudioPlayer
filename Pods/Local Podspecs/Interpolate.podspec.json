@@ -23,5 +23,6 @@
   "frameworks": [
     "QuartzCore",
     "Foundation"
-  ]
+  ],
+  "swift_version": "5.0"
 }

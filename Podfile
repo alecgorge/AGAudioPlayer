@@ -8,7 +8,7 @@ target "AGAudioPlayer" do
 
     pod 'Interpolate', :path => '../Interpolate'
     pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
-    pod 'MarqueeLabel'
+    pod 'MarqueeLabel', '~> 3.2.1' # Version locked for now beacuse Relisten is hitting some weird crashes with the all-Swift 4.0.0 version due to its use of MarqueeLabel in nibs
     pod 'NapySlider', :path => '../NapySlider'
     # pod 'HysteriaPlayer', :head
 end
