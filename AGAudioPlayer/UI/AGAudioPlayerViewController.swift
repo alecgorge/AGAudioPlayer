@@ -452,36 +452,37 @@ extension AGAudioPlayerViewController : AGAudioPlayerDelegate {
 
 extension AGAudioPlayerViewController : ScrubberBarDelegate {
     func setupPlayerUiActions() {
+
         uiScrubber.delegate = self
-        
-        uiLabelTitle.trailingBuffer = 32
-        uiLabelSubtitle.trailingBuffer = 24
-        
-        // uiLabelTitle.animationDuration = 2
-        uiLabelTitle.animationDelay = 5
-        uiLabelTitle.rate = 25
-        
-        uiLabelSubtitle.animationDelay = 5
-        uiLabelSubtitle.rate = 25
-        
+
         uiLabelTitle.isUserInteractionEnabled = true
         uiLabelSubtitle.isUserInteractionEnabled = true
-        
-        // mini player
-        uiMiniLabelTitle.trailingBuffer = 24
-        uiMiniLabelSubtitle.trailingBuffer = 16
-        
-        uiMiniLabelTitle.animationDelay = 5
-        uiMiniLabelTitle.rate = 16
-        
-        uiMiniLabelSubtitle.animationDelay = 5
-        uiMiniLabelSubtitle.rate = 16
-        
+
         uiMiniLabelTitle.isUserInteractionEnabled = true
         uiMiniLabelSubtitle.isUserInteractionEnabled = true
         
         updateDownloadProgress(pct: 0.0)
         updatePlaybackProgress()
+        
+        /*
+        Assign in XIB as per MarqueeLabel docs
+
+        uiLabelTitle.scrollRate = 25
+        uiLabelTitle.trailingBuffer = 32
+        uiLabelTitle.animationDelay = 5
+
+        uiLabelSubtitle.scrollRate = 25
+        uiLabelSubtitle.trailingBuffer = 24
+        uiLabelSubtitle.animationDelay = 5
+
+        uiMiniLabelTitle.scrollRate = 16
+        uiMiniLabelTitle.trailingBuffer = 24
+        uiMiniLabelTitle.animationDelay = 5
+
+        uiMiniLabelSubtitle.scrollRate = 16
+        uiMiniLabelSubtitle.trailingBuffer = 16
+        uiMiniLabelSubtitle.animationDelay = 5
+        */
     }
     
     public func scrubberBar(bar: ScrubberBar, didScrubToProgress: Float, finished: Bool) {

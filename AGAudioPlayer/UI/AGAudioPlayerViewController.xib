@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AGAudioPlayerViewController" customModule="AGAudioPlayer" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AGAudioPlayerViewController">
             <connections>
                 <outlet property="uiButtonDots" destination="YOe-Ec-x3k" id="kDl-AW-jHK"/>
                 <outlet property="uiButtonLoop" destination="PeT-3F-GaM" id="5ZB-RG-YiF"/>
@@ -96,7 +93,7 @@
                                             </connections>
                                         </button>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="N2m-Yk-dK1">
-                                            <rect key="frame" x="16" y="22" width="20" height="20"/>
+                                            <rect key="frame" x="17" y="22" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -117,7 +114,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xex-FG-HB8">
                                     <rect key="frame" x="53.5" y="0.0" width="214.5" height="64"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zis-2F-bXq" customClass="MarqueeLabel">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zis-2F-bXq" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                             <rect key="frame" x="0.0" y="12" width="214.5" height="19.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="19.5" id="aFK-cr-sb4"/>
@@ -125,8 +122,19 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="scrollRate">
+                                                    <real key="value" value="16"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="trailingBuffer">
+                                                    <real key="value" value="24"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                                    <real key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t5s-bW-saf" customClass="MarqueeLabel">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t5s-bW-saf" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                             <rect key="frame" x="0.0" y="37.5" width="214.5" height="14.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14.5" id="7Lc-lR-jCo"/>
@@ -134,6 +142,17 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="scrollRate">
+                                                    <real key="value" value="16"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="trailingBuffer">
+                                                    <real key="value" value="16"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                                    <real key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ebK-4v-Xpo">
                                             <rect key="frame" x="0.0" y="0.0" width="214.5" height="64"/>
@@ -213,27 +232,44 @@
                             </connections>
                         </tableView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z3c-Z9-Kas">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="158.5"/>
                             <subviews>
-                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" text="Title Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7hF-uW-Yvs" customClass="MarqueeLabel">
+                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" text="Title Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7hF-uW-Yvs" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                     <rect key="frame" x="16" y="24" width="343" height="33.5"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="28"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="marqueeType">
-                                            <integer key="value" value="0"/>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="scrollRate">
+                                            <real key="value" value="25"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="trailingBuffer">
+                                            <real key="value" value="32"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                            <real key="value" value="5"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </label>
-                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7up-hA-coa" customClass="MarqueeLabel">
-                                    <rect key="frame" x="16" y="65" width="343" height="24"/>
+                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7up-hA-coa" customClass="MarqueeLabel" customModule="MarqueeLabel">
+                                    <rect key="frame" x="16" y="65.5" width="343" height="24"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="scrollRate">
+                                            <real key="value" value="25"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="trailingBuffer">
+                                            <real key="value" value="24"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                            <real key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QYP-TA-5ZA" userLabel="Download Progress">
-                                    <rect key="frame" x="16" y="104" width="343" height="6"/>
+                                    <rect key="frame" x="16" y="104.5" width="343" height="6"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N1S-bw-vqv">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="6"/>
@@ -249,7 +285,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vW0-b0-dwJ" userLabel="Playback Progress" customClass="ScrubberBar" customModule="AGAudioPlayer" customModuleProvider="target">
-                                    <rect key="frame" x="16" y="89" width="343" height="36"/>
+                                    <rect key="frame" x="16" y="89.5" width="343" height="36"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="qpU-vn-9I4"/>
@@ -275,22 +311,22 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6TM-q9-o60">
-                                    <rect key="frame" x="323.5" y="125" width="35.5" height="17"/>
+                                    <rect key="frame" x="323.5" y="125.5" width="35.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1k-1t-mAU">
-                                    <rect key="frame" x="16" y="125" width="35.5" height="17"/>
+                                    <rect key="frame" x="16" y="125.5" width="35.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TVs-ib-6I1">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="94.5"/>
                                     <subviews>
                                         <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeH-fp-mYI">
-                                            <rect key="frame" x="175" y="0.0" width="24" height="24"/>
+                                            <rect key="frame" x="163.5" y="-12" width="48" height="48"/>
                                             <accessibility key="accessibilityConfiguration" label="Close Full Player"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" image="chevron"/>
@@ -380,16 +416,16 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BASS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J63-OR-Hnw">
-                                    <rect key="frame" x="37" y="168" width="35" height="16"/>
+                                    <rect key="frame" x="37.5" y="168" width="35" height="16"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EaK-pf-HmN">
-                                    <rect key="frame" x="140" y="16" width="94" height="136"/>
+                                    <rect key="frame" x="140.5" y="16" width="94" height="136"/>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIDRANGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wRo-G9-win">
-                                    <rect key="frame" x="152" y="168" width="70.5" height="16"/>
+                                    <rect key="frame" x="152.5" y="168" width="70.5" height="16"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -398,7 +434,7 @@
                                     <rect key="frame" x="273.5" y="16" width="93.5" height="136"/>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TREBLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w45-dK-5ST">
-                                    <rect key="frame" x="295" y="168" width="49.5" height="16"/>
+                                    <rect key="frame" x="295.5" y="168" width="49.5" height="16"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -480,7 +516,7 @@
                                                             </connections>
                                                         </button>
                                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="dRI-dU-07B">
-                                                            <rect key="frame" x="16.5" y="22" width="20" height="20"/>
+                                                            <rect key="frame" x="17" y="22" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -588,12 +624,12 @@
             </constraints>
             <point key="canvasLocation" x="35.5" y="54.5"/>
         </view>
-        <panGestureRecognizer delaysTouchesBegan="YES" minimumNumberOfTouches="1" id="3sF-Nk-5sw" customClass="VerticalPanDirectionGestureRecognizer" customModule="AGAudioPlayer" customModuleProvider="target">
+        <panGestureRecognizer delaysTouchesBegan="YES" minimumNumberOfTouches="1" id="3sF-Nk-5sw" customClass="VerticalPanDirectionGestureRecognizer">
             <connections>
                 <action selector="handlePanToOpen:" destination="-1" id="wkD-Hh-hQX"/>
             </connections>
         </panGestureRecognizer>
-        <panGestureRecognizer delaysTouchesBegan="YES" minimumNumberOfTouches="1" id="wNe-aW-vHn" customClass="VerticalPanDirectionGestureRecognizer" customModule="AGAudioPlayer" customModuleProvider="target">
+        <panGestureRecognizer delaysTouchesBegan="YES" minimumNumberOfTouches="1" id="wNe-aW-vHn" customClass="VerticalPanDirectionGestureRecognizer">
             <connections>
                 <action selector="handlePanToClose:" destination="-1" id="dbc-GX-cic"/>
                 <outlet property="delegate" destination="-1" id="4wy-kh-lxG"/>
