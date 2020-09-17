@@ -4,31 +4,32 @@ PODS:
   - MarqueeLabel (3.2.1):
     - MarqueeLabel/ObjC (= 3.2.1)
   - MarqueeLabel/ObjC (3.2.1)
-  - NapySlider (0.3.5)
+  - NapySlider (0.3.6)
 
 DEPENDENCIES:
   - BASSGaplessAudioPlayer (from `../gapless-audio-bass-ios`)
-  - Interpolate
+  - Interpolate (from `../Interpolate`)
   - MarqueeLabel
   - NapySlider (from `../NapySlider`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Interpolate
     - MarqueeLabel
 
 EXTERNAL SOURCES:
   BASSGaplessAudioPlayer:
     :path: "../gapless-audio-bass-ios"
+  Interpolate:
+    :path: "../Interpolate"
   NapySlider:
     :path: "../NapySlider"
 
 SPEC CHECKSUMS:
   BASSGaplessAudioPlayer: 5b074495769769192b720c70aa2a60f6f33751f3
-  Interpolate: c786b88ad860c7110d606ae2776fad616e2b3724
+  Interpolate: 090ee71b9bac8a926ed7f60512c6bfdb9fb921e5
   MarqueeLabel: 2daf039bf916937c8a4c9adfc13577cc5e51b4ce
-  NapySlider: 155fb983a305629ad18ed7207f3d0a6f76f290cf
+  NapySlider: faba6c6695ca3e2a4e00846eb3e906bc8e896a13
 
-PODFILE CHECKSUM: 49d61c1644687e52759df527698f964ca915ffb2
+PODFILE CHECKSUM: ab4d7fcaddb47d7bcf2f85b200288e7ea3805492
 
 COCOAPODS: 1.7.0.beta.1
