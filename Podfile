@@ -1,5 +1,3 @@
-# Uncomment this line to define a global platform for your project
-source 'https://github.com/CocoaPods/Specs.git'
 inhibit_all_warnings!
 use_frameworks!
 
@@ -9,7 +7,7 @@ target "AGAudioPlayer" do
     pod 'Interpolate'
     pod 'BASSGaplessAudioPlayer', :path => '../gapless-audio-bass-ios'
     pod 'MarqueeLabel'
-    pod 'NapySlider', :path => '../NapySlider'
+    pod 'NapySlider'
     # pod 'HysteriaPlayer', :head
 end
 
