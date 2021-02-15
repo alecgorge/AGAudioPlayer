@@ -146,10 +146,15 @@ public struct AGAudioPlayerColors {
     // for delegate notifications
     var lastSeenProgress: Float? = nil
     
+    var uiCastButton: GCKUICastButton
+    
     let player: AGAudioPlayer
     
     @objc required public init(player: AGAudioPlayer) {
         self.player = player
+        
+        // Calling this more than once freezes the app. Instead, create a singleton and move it around the UI as needed
+        self.uiCastButton = GCKUICastButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         
         let bundle = Bundle(path: Bundle(for: AGAudioPlayerViewController.self).path(forResource: "AGAudioPlayer", ofType: "bundle")!)
         super.init(nibName: String(describing: AGAudioPlayerViewController.self), bundle: bundle)
@@ -174,9 +179,8 @@ public struct AGAudioPlayerColors {
         uiMiniButtonPlus.isHidden = true
         uiButtonPlus.alpha = 0.0
         
-        let castButton = GCKUICastButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        castButton.tintColor = UIColor.white
-        uiMiniButtonStack.insertArrangedSubview(castButton, at: uiMiniPlayerContainerView.subviews.count - 1)
+        uiCastButton.tintColor = UIColor.white
+        uiMiniButtonStack.insertArrangedSubview(uiCastButton, at: uiMiniPlayerContainerView.subviews.count - 1)
         
         setupTable()
         setupStretchyHeader()
@@ -579,14 +583,18 @@ public protocol AGAudioPlayerViewControllerDelegate {
 
 extension AGAudioPlayerViewController {
     public func switchToMiniPlayer(animated: Bool) {
+        uiButtonStack.removeArrangedSubview(uiCastButton)
+        uiMiniButtonStack.insertArrangedSubview(uiCastButton, at: uiMiniButtonStack.arrangedSubviews.count - 1)
         view.layoutIfNeeded()
 
-        UIView.animate(withDuration: 0.3) { 
+        UIView.animate(withDuration: 0.3) {
             self.switchToMiniPlayerProgress(1.0)
         }
     }
     
     public func switchToFullPlayer(animated: Bool) {
+        uiMiniButtonStack.removeArrangedSubview(uiCastButton)
+        uiButtonStack.insertArrangedSubview(uiCastButton, at: uiButtonStack.arrangedSubviews.count - 2)
         view.layoutIfNeeded()
 
         UIView.animate(withDuration: 0.3) {
