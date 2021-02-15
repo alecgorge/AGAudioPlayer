@@ -25,8 +25,10 @@ Pod::Spec.new do |s|
   s.ios.frameworks = 'MediaPlayer'
   s.resource_bundle = { 'AGAudioPlayer' => ['AGAudioPlayer/UI/Icons.xcassets', 'AGAudioPlayer/**/*.xib'] }
   
+  s.static_framework = true
   s.dependency 'Interpolate'
   s.dependency 'BASSGaplessAudioPlayer'
+  s.dependency 'google-cast-sdk'
   s.dependency 'MarqueeLabel'
   s.dependency 'NapySlider'
 end

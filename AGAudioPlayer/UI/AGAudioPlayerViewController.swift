@@ -10,6 +10,7 @@ import UIKit
 import QuartzCore
 import MediaPlayer
 
+import GoogleCast
 import Interpolate
 import MarqueeLabel
 import NapySlider
@@ -172,6 +173,10 @@ public struct AGAudioPlayerColors {
         
         uiMiniButtonPlus.isHidden = true
         uiButtonPlus.alpha = 0.0
+        
+        let castButton = GCKUICastButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        castButton.tintColor = UIColor.white
+        uiMiniButtonStack.insertArrangedSubview(castButton, at: uiMiniPlayerContainerView.subviews.count - 1)
         
         setupTable()
         setupStretchyHeader()
